@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity
 @Data //do lombok
-public class Administrator extends UserDetails {
+public class Administrator implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
