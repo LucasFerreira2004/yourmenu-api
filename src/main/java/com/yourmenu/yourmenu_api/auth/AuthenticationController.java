@@ -1,5 +1,7 @@
 package com.yourmenu.yourmenu_api.auth;
 
+import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
+import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,5 +32,6 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public LoginResponseDTO register(@RequestBody @Valid )
+    public LoginResponseDTO register(@RequestBody @Valid AdministratorRegisterDTO dto){
+    }
 }

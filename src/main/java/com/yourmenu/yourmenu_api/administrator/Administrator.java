@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.administrator;
 
+import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -38,6 +39,13 @@ public class Administrator implements UserDetails {
     @NotBlank
     private String password;
 
+    //esse construtor e funções associadas devem sumir com o uso do dataMapper
+    public Administrator(String firstName, String lastName, String email, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+    }
 
     //userDetails
     @Override
