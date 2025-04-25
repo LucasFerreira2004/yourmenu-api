@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+@Table
 @Entity
 @Data //do lombok
 public class Administrator implements UserDetails {
