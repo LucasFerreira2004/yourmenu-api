@@ -25,6 +25,7 @@ public class Administrator implements UserDetails {
 
     @NotNull
     @NotBlank
+    @Column(columnDefinition = "text")
     private String lastName;
 
     @NotNull
