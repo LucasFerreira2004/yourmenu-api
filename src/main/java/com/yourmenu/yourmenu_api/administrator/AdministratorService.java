@@ -22,7 +22,7 @@ public class AdministratorService {
         String lastName = splitLastName(dto.fullName());
         Administrator adm = new Administrator(firstName, lastName, dto.email(), encryptedPassword);
         administratorRepository.save(adm);
-        return new ResponseEntity(HttpStatus.CREATED);
+        return ResponseEntity.ok().build(); //alterar para created depois
     }
 
     private String splitFirstName(String fullName){

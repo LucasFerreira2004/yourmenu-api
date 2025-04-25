@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.auth;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
+import com.yourmenu.yourmenu_api.administrator.AdministratorService;
 import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginResponseDTO;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -20,7 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("auth")
 public class AuthenticationController {
     @Autowired
-    public AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private AdministratorService administratorService;
 
     @Operation(summary = "Autentica um usuario e retorna um token de accesso")
     @PostMapping("/login")
@@ -32,6 +37,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public LoginResponseDTO register(@RequestBody @Valid AdministratorRegisterDTO dto){
+    public ResponseEntity register(@RequestBody @Valid AdministratorRegisterDTO dto){
+        return administratorService.save(dto);
     }
 }
