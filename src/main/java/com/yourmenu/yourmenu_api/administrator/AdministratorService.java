@@ -14,7 +14,7 @@ public class AdministratorService {
     private AdministratorRepository administratorRepository;
 
     public ResponseEntity save(AdministratorRegisterDTO dto) {
-        if(this.administratorRepository.findByEmail(dto.email()) != null){
+        if(this.administratorRepository.findByEmail(dto.email()).isPresent()){
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());

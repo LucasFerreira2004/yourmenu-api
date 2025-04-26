@@ -15,6 +15,7 @@ import java.util.List;
 @Table
 @Entity
 @Data //do lombok
+@NoArgsConstructor
 public class Administrator implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)

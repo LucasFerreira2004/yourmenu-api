@@ -1,10 +1,12 @@
 package com.yourmenu.yourmenu_api.auth;
 
+import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
 import com.yourmenu.yourmenu_api.administrator.AdministratorService;
 import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginResponseDTO;
+import com.yourmenu.yourmenu_api.auth.token.TokenService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +29,17 @@ public class AuthenticationController {
     @Autowired
     private AdministratorService administratorService;
 
+    @Autowired
+    private TokenService tokenService;
+
     @Operation(summary = "Autentica um usuario e retorna um token de accesso")
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody @Valid LoginDTO data){
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 
-        return new LoginResponseDTO(null);
+        String token = tokenService.generateToken((Administrator) auth.getPrincipal());
+        return new LoginResponseDTO(token);
     }
 
     @PostMapping("/register")
