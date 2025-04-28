@@ -1,7 +1,7 @@
 FROM maven:3.8.5-openjdk-17 AS builder
 WORKDIR /build
 
-COPY ../dockerDatabase .
+COPY ../ .
 
 # Cria o .jar da aplicacao
 RUN mvn -e clean install -DskipTests
