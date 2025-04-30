@@ -8,4 +8,9 @@ import java.util.Optional;
 
     public interface AdministratorRepository extends JpaRepository<Administrator, String> {
         Optional<Administrator> findByEmail(String email);
+
+        @Query(nativeQuery = true, value = """
+            select * from administrator where id = :id
+        """)
+        Administrator findByIdUserDetails(String id);
     }

@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.auth.security;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
 import com.yourmenu.yourmenu_api.auth.token.TokenService;
+import com.yourmenu.yourmenu_api.globalExceptions.UserNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             String AdministratorId = tokenService.validateToken(token);
-            UserDetails user = administratorRepository.findById(AdministratorId).get();
+            UserDetails user = administratorRepository.findByIdUserDetails(AdministratorId);
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
