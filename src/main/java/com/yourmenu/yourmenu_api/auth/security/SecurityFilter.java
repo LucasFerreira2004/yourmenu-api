@@ -29,7 +29,8 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             String AdministratorId = tokenService.validateToken(token);
-            UserDetails user = administratorRepository.findByIdUserDetails(AdministratorId);
+            UserDetails user = administratorRepository.findById(AdministratorId).orElseThrow();
+            //dessa forma, caso o login não corresponda a nenhum usuário abre uma exception e lança 403, pode existir forma melhor de tratar isso
 
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
