@@ -5,7 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 
 public record AdministratorRegisterDTO (
         @NotBlank (message = "O nome não pode estar em branco")
-        String username,
         String fullName,
         @Email(message = "O e-mail deve ser válido")
         @NotBlank(message = "O e-mail é obrigatório")
