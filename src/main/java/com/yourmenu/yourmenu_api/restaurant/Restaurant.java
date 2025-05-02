@@ -19,11 +19,11 @@ public class Restaurant {
     @Column(nullable = false)
     private String name;
 
-    private Integer delivery_time_min;
+    private Integer deliveryTimeMin;
 
-    private Integer delivery_time_max;
+    private Integer deliveryTimeMax;
 
-    private Boolean open;
+    private Boolean isOpen;
 
     @Column(columnDefinition = "text")
     private String profilePicUrl;
