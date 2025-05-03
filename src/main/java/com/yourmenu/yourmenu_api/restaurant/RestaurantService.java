@@ -17,9 +17,11 @@ public class RestaurantService {
     private RestaurantMapper restaurantMapper;
 
     @Transient
-    public Restaurant saveRestaurant(RestaurantSaveDTO dto) {
-        Restaurant restaurant = new Restaurant();
+    public RestaurantDTO save(RestaurantSaveDTO dto) {
+        Restaurant restaurant = restaurantMapper.toEntity(dto);
+        restaurant.setIsOpen(false);
+        restaurant.setSlug("restaurant001");
         restaurantRepository.save(restaurant);
-        return
+        return restaurantMapper.toDTO(restaurant);
     }
 }

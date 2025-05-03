@@ -12,15 +12,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URI;
 
-@RestController("restaurant")
+@RestController
+@RequestMapping(value="/restaurant")
 public class RestaurantController {
     @Autowired
     RestaurantService restaurantService;
 
-
     @PostMapping
-    @RequestMapping("/save")
-    public ResponseEntity<RestaurantDTO>(@RequestBody @Valid RestaurantSaveDTO dto) {
+    public ResponseEntity<RestaurantDTO> save(@RequestBody @Valid RestaurantSaveDTO dto) {
         RestaurantDTO createdRestaurant = restaurantService.save(dto);
 
         URI location = URI.create("/restaurants/" + createdRestaurant.slug());
