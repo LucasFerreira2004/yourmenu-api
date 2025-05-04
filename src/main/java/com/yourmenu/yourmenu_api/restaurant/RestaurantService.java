@@ -16,11 +16,14 @@ public class RestaurantService {
     @Autowired
     private RestaurantMapper restaurantMapper;
 
+    @Autowired
+    private RestaurantSlugService restaurantSlugService;
+
     @Transient
     public RestaurantDTO save(RestaurantSaveDTO dto) {
         Restaurant restaurant = restaurantMapper.toEntity(dto);
         restaurant.setIsOpen(false);
-        restaurant.setSlug("restaurant001");
+        restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
     }
