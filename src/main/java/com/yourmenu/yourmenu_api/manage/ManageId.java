@@ -4,10 +4,11 @@ import jakarta.persistence.Embeddable;
 import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Embeddable
 @EqualsAndHashCode
 public class ManageId implements Serializable {
-    private Long administratorId;
-    private Long restaurantId;
+    private String administratorId;
+    private String restaurantId;
 }
