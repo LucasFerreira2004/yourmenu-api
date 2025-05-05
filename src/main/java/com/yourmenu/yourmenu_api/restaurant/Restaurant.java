@@ -1,7 +1,9 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Table

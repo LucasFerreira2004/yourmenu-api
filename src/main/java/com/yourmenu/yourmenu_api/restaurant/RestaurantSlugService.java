@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.Normalizer;
-import java.util.Arrays;
 import java.util.Locale;
 
 @Service
@@ -18,7 +17,7 @@ public class RestaurantSlugService {
         }
         String slug = toSlug(name);
         int count = 1;
-        while(!isFree(slug)){ //acho que essa abordagem pode melhorar, pq muitas buscas podem ser realizadas no BD.
+        while(!isFree(slug)){ //a melhor forma de fazer isso é fazendo uma só consulta no bd que retorna o último slug registrado dentro do padrão do slug
             if(count == 1) slug = slug + '-';
             slug = removeLastNumber(slug) + count++;
         }
@@ -26,7 +25,9 @@ public class RestaurantSlugService {
     }
     public boolean isFree(String slug) {
         return restaurantRepository.findBySlug(slug) == null;
-    }
+    } //essa função se tornará desnecessária
+
+    //as funções abaixo poderiam estar em uma classe de utils
     private String removeLastNumber(String slug) {
         return slug.replaceFirst("\\d+$", "");
     }
