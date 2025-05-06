@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
+import com.yourmenu.yourmenu_api.administrator.Administrator;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,6 +15,10 @@ public class Restaurant {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @ManyToOne
+    @JoinColumn(name = "administrator_id", nullable = false)
+    private Administrator administrator;
 
     @Column(unique = true, nullable = false)
     private String slug;
