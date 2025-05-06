@@ -40,4 +40,17 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(UserNotAuthenticated.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(UserNotAuthenticated e) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        System.out.println("passou aqui e vai retornar");
+        return ResponseEntity.status(status).body(error);
+    }
+
 }
