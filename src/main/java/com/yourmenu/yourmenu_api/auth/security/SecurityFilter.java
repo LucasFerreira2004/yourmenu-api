@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.auth.security;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
 import com.yourmenu.yourmenu_api.auth.token.TokenService;
+import com.yourmenu.yourmenu_api.globalExceptions.UserNotAuthenticated;
 import com.yourmenu.yourmenu_api.globalExceptions.UserNotFoundException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -29,9 +30,9 @@ public class SecurityFilter extends OncePerRequestFilter {
         var token = this.recoverToken(request);
         if (token != null) {
             String AdministratorId = tokenService.validateToken(token);
-            UserDetails user = administratorRepository.findById(AdministratorId).orElseThrow();
-            //dessa forma, caso o login não corresponda a nenhum usuário abre uma exception e lança 403, pode existir forma melhor de tratar isso
-
+            UserDetails user = administratorRepository.findById(AdministratorId)
+                    .orElseThrow(() -> new UserNotAuthenticated("token"));
+            //para mandar de forma tratada para o user eu teria que criar um try catch para capturar essa exceção e montar o json
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }

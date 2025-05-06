@@ -49,6 +49,7 @@ public class GlobalExceptionHandler {
                 status.value(),
                 status.getReasonPhrase()
         );
+        System.out.println("passou aqui e vai retornar");
         return ResponseEntity.status(status).body(error);
     }
 
