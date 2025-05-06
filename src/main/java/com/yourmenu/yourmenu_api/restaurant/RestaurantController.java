@@ -22,8 +22,8 @@ public class RestaurantController {
 
     @PostMapping
     public ResponseEntity<RestaurantDTO> save(@RequestBody @Valid RestaurantSaveDTO dto, @CurrentUser Administrator currentUser) {
-        System.out.println("ID DO USER: " + currentUser.getId());
-        RestaurantDTO createdRestaurant = restaurantService.save(dto);
+        System.out.println("ID DO USER: " + currentUser.getId()); //linha apenas para depuração
+        RestaurantDTO createdRestaurant = restaurantService.save(dto, currentUser.getId());
 
         URI location = URI.create("/restaurants/" + createdRestaurant.slug());
         return ResponseEntity

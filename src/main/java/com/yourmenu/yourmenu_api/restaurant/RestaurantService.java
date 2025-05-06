@@ -20,7 +20,7 @@ public class RestaurantService {
     private RestaurantSlugService restaurantSlugService;
 
     @Transient
-    public RestaurantDTO save(RestaurantSaveDTO dto) {
+    public RestaurantDTO save(RestaurantSaveDTO dto, String adminId) {
         Restaurant restaurant = restaurantMapper.toEntity(dto);
         restaurant.setIsOpen(false);
         restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
