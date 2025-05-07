@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.globalExceptions;
 
+import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

@@ -1,9 +1,8 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
-import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
 import com.yourmenu.yourmenu_api.globalExceptions.DeniedAccessException;
 import com.yourmenu.yourmenu_api.globalExceptions.UserNotFoundException;
-import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFound;
+import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,6 @@ public class RestaurantValidateService {
         }
     }
     public void existentRestaurant(Restaurant restaurant, String errorField) {
-        if (restaurant == null) throw new RestaurantNotFound(errorField);
+        if (restaurant == null) throw new RestaurantNotFoundException(errorField);
     }
 }
