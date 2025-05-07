@@ -25,6 +25,9 @@ public class RestaurantService {
     @Autowired
     private RestaurantSlugService restaurantSlugService;
 
+    @Autowired
+    private RestaurantValidateService restaurantValidateService;
+
     @Transient
     public RestaurantDTO save(RestaurantSaveDTO dto, String adminId) {
         Restaurant restaurant = restaurantMapper.toEntity(dto);
@@ -36,7 +39,12 @@ public class RestaurantService {
     }
 
     @Transient
-    public RestaurantDTO openClose(@Valid OpenDTO isOpen, String adminId) {
-
+    public RestaurantDTO openClose(@Valid OpenDTO dto, String adminId) {
+        Restaurant restaurant = restaurantRepository.findBySlug(dto.restaurantSlug());
+        restaurantValidateService.existentRestaurant(restaurant, dto.restaurantSlug());
+        restaurantValidateService.authorizeAdministratorAccess(restaurant, adminId);
+        restaurant.setIsOpen(dto.isOpen());
+        restaurantRepository.save(restaurant);
+        return restaurantMapper.toDTO(restaurant);
     }
 }

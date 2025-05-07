@@ -1,7 +1,9 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
+import com.yourmenu.yourmenu_api.globalExceptions.DeniedAccessException;
 import com.yourmenu.yourmenu_api.globalExceptions.UserNotFoundException;
+import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,11 @@ public class RestaurantValidateService {
         if (administratorId == null) {
             throw new UserNotFoundException("administratorId");
         }
-
+        if(!restaurant.getAdministrator().getId().equals(administratorId)) {
+            throw new DeniedAccessException("administratorId", "Você não tem permissão para modificar este restaurante");
+        }
+    }
+    public void existentRestaurant(Restaurant restaurant, String errorField) {
+        if (restaurant == null) throw new RestaurantNotFound(errorField);
     }
 }
