@@ -41,9 +41,9 @@ public class RestaurantService {
     }
 
     @Transient
-    public RestaurantDTO openClose(@Valid OpenDTO dto, String adminId) {
-        Restaurant restaurant = restaurantRepository.findBySlug(dto.restaurantSlug());
-        restaurantValidateService.doAllValidations(restaurant, adminId, dto.restaurantSlug());
+    public RestaurantDTO openClose(@Valid OpenDTO dto, String restaurantId, String adminId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
         restaurant.setIsOpen(dto.isOpen());
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);

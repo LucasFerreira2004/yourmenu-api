@@ -30,9 +30,9 @@ public class RestaurantController {
                 .body(createdRestaurant);
     }
 
-    @PatchMapping("/is-open")
-    public ResponseEntity<RestaurantDTO> openClose(@RequestBody @Valid OpenDTO isOpen, @CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.openClose(isOpen, currentUser.getId());
+    @PatchMapping("/is-open/{restaurantId}")
+    public ResponseEntity<RestaurantDTO> openClose(@RequestBody @Valid OpenDTO isOpen, @PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.openClose(isOpen, restaurantId,currentUser.getId());
         return ResponseEntity
                 .ok()
                 .body(response);
