@@ -65,6 +65,8 @@ public class RestaurantService {
     }
 
     private Restaurant updateRestaurantData(Restaurant restaurant, RestaurantSaveDTO dto){
+        if(generateSlugNeeded(restaurant, dto.name()))
+            restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         restaurant.setName(dto.name());
         restaurant.setDeliveryTimeMin(dto.deliveryTimeMin());
         restaurant.setDeliveryTimeMax(dto.deliveryTimeMax());
@@ -74,8 +76,6 @@ public class RestaurantService {
             restaurant.setBannerPicUrl(dto.bannerPictureUrl());
         if(dto.isOpen() != null)
             restaurant.setIsOpen(dto.isOpen());
-        if(generateSlugNeeded(restaurant, dto.name()))
-            restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         return restaurant;
     }
 }
