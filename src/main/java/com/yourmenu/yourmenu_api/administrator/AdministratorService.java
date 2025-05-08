@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.administrator;
 
 import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
+import com.yourmenu.yourmenu_api.globalExceptions.UserNotFoundException;
 import com.yourmenu.yourmenu_api.shared.utils.NameDivider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,10 @@ public class AdministratorService {
         Administrator adm = new Administrator(firstName, lastName, dto.email(), encryptedPassword);
         administratorRepository.save(adm);
         return ResponseEntity.ok().build(); //alterar para created depois
+    }
+
+    public Administrator findByid(String id) {
+        return administratorRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)); //remover para produção
     }
 
 }

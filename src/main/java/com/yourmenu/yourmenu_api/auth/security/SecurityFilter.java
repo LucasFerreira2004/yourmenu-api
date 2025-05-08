@@ -2,8 +2,7 @@ package com.yourmenu.yourmenu_api.auth.security;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
 import com.yourmenu.yourmenu_api.auth.token.TokenService;
-import com.yourmenu.yourmenu_api.globalExceptions.UserNotAuthenticated;
-import com.yourmenu.yourmenu_api.globalExceptions.UserNotFoundException;
+import com.yourmenu.yourmenu_api.globalExceptions.UserNotAuthenticatedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +30,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             String AdministratorId = tokenService.validateToken(token);
             UserDetails user = administratorRepository.findById(AdministratorId)
-                    .orElseThrow(() -> new UserNotAuthenticated("token"));
+                    .orElseThrow(() -> new UserNotAuthenticatedException("token"));
             //para mandar de forma tratada para o user eu teria que criar um try catch para capturar essa exceção e montar o json
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);

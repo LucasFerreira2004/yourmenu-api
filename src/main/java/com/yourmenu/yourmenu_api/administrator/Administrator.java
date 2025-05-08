@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.administrator;
 
 import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
+import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -20,6 +21,9 @@ public class Administrator implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+
+    @OneToMany(mappedBy = "administrator")
+    private List<Restaurant> restaurants;
 
     @NotNull
     @NotBlank

@@ -1,11 +1,10 @@
 package com.yourmenu.yourmenu_api.globalExceptions;
 
+import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
@@ -40,8 +39,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
-    @ExceptionHandler(UserNotAuthenticated.class)
-    public ResponseEntity<ErrorResponseDTO> handleException(UserNotAuthenticated e) {
+    @ExceptionHandler(UserNotAuthenticatedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(UserNotAuthenticatedException e) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
         ErrorResponseDTO error = new ErrorResponseDTO(
                 e.getField(),
@@ -53,4 +52,15 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(DeniedAccessException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(DeniedAccessException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
 }
