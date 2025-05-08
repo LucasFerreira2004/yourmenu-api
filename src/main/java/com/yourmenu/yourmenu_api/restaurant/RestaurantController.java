@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping(value="/restaurant")
@@ -44,4 +45,23 @@ public class RestaurantController {
                 .ok()
                 .body(response);
     }
+
+    @GetMapping
+    public ResponseEntity<List<RestaurantDTO>> findAllByLoggedUser(@CurrentUser Administrator currentUser) {
+        List<RestaurantDTO> response = restaurantService.findAllByLoggedUser(currentUser.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{slug}")
+    public ResponseEntity<RestaurantDTO> findBySlug(@PathVariable String slug, @CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.findBySlug(slug, currentUser.getId());
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/{slug}")
+    public ResponseEntity<Void> delete(@PathVariable String slug, @CurrentUser Administrator currentUser) {
+        restaurantService.delete(slug, currentUser.getId());
+        return ResponseEntity.noContent().build();
+    }
+
 }

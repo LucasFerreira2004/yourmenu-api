@@ -16,7 +16,7 @@ public class RestaurantValidateService {
             throw new UserNotFoundException("administratorId");
         }
         if(!restaurant.getAdministrator().getId().equals(administratorId)) {
-            throw new DeniedAccessException("administratorId", "Você não tem permissão para modificar este restaurante");
+            throw new DeniedAccessException("administratorId", "Você não tem permissão para acessar ou modificar este restaurante");
         }
     }
     public void existentRestaurant(Restaurant restaurant, String errorField) {

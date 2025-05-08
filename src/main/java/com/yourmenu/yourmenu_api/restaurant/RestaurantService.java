@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.beans.Transient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RestaurantService {
@@ -77,5 +80,16 @@ public class RestaurantService {
         if(dto.isOpen() != null)
             restaurant.setIsOpen(dto.isOpen());
         return restaurant;
+    }
+
+    public List<RestaurantDTO> findAllByLoggedUser(String adminId) {
+        List<Restaurant> restaurants = restaurantRepository.findAllByAdministratorId(adminId);
+        return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant)).toList();
+    }
+
+    public RestaurantDTO findBySlug(String slug, String id) {
+    }
+
+    public void delete(String slug, String id) {
     }
 }
