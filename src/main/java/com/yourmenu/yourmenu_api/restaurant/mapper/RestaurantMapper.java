@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 public class RestaurantMapper {
     public RestaurantDTO toDTO(Restaurant restaurant) {
         RestaurantDTO dto = new RestaurantDTO(
+                restaurant.getId(),
                 restaurant.getSlug(),
                 restaurant.getName(),
                 restaurant.getDeliveryTimeMin(),

@@ -30,17 +30,17 @@ public class RestaurantController {
                 .body(createdRestaurant);
     }
 
-    @PatchMapping("/is-open")
-    public ResponseEntity<RestaurantDTO> openClose(@RequestBody @Valid OpenDTO isOpen, @CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.openClose(isOpen, currentUser.getId());
+    @PatchMapping("/is-open/{restaurantId}")
+    public ResponseEntity<RestaurantDTO> openClose(@RequestBody @Valid OpenDTO isOpen, @PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.openClose(isOpen, restaurantId,currentUser.getId());
         return ResponseEntity
                 .ok()
                 .body(response);
     }
 
-    @PutMapping("/{slug}")
-    public ResponseEntity<RestaurantDTO> update(@RequestBody @Valid RestaurantSaveDTO dto, @PathVariable String slug ,@CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.update(dto, slug, currentUser.getId());
+    @PutMapping("/{restaurantId}")
+    public ResponseEntity<RestaurantDTO> update(@RequestBody @Valid RestaurantSaveDTO dto, @PathVariable String restaurantId ,@CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.update(dto, restaurantId, currentUser.getId());
         return ResponseEntity
                 .ok()
                 .body(response);
@@ -52,15 +52,15 @@ public class RestaurantController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{slug}")
-    public ResponseEntity<RestaurantDTO> findBySlug(@PathVariable String slug, @CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.findBySlug(slug, currentUser.getId());
+    @GetMapping("/{restaurantId}")
+    public ResponseEntity<RestaurantDTO> findBySlug(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.findById(restaurantId, currentUser.getId());
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{slug}")
-    public ResponseEntity<Void> delete(@PathVariable String slug, @CurrentUser Administrator currentUser) {
-        restaurantService.delete(slug, currentUser.getId());
+    @DeleteMapping("/{restaurantId}")
+    public ResponseEntity<Void> delete(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
+        restaurantService.delete(restaurantId, currentUser.getId());
         return ResponseEntity.noContent().build();
     }
 
