@@ -50,9 +50,9 @@ public class RestaurantService {
     }
 
     @Transient
-    public RestaurantDTO update(@Valid RestaurantSaveDTO dto, String slug,  String adminId) {
-        Restaurant restaurant = restaurantRepository.findBySlug(slug);
-        restaurantValidateService.doAllValidations(restaurant, adminId, slug);
+    public RestaurantDTO update(@Valid RestaurantSaveDTO dto, String restaurantId,  String adminId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
         restaurant = updateRestaurantData(restaurant, dto);
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);

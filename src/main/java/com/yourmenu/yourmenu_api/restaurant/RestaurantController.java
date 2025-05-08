@@ -38,9 +38,9 @@ public class RestaurantController {
                 .body(response);
     }
 
-    @PutMapping("/{slug}")
-    public ResponseEntity<RestaurantDTO> update(@RequestBody @Valid RestaurantSaveDTO dto, @PathVariable String slug ,@CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.update(dto, slug, currentUser.getId());
+    @PutMapping("/{restaurantId}")
+    public ResponseEntity<RestaurantDTO> update(@RequestBody @Valid RestaurantSaveDTO dto, @PathVariable String restaurantId ,@CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.update(dto, restaurantId, currentUser.getId());
         return ResponseEntity
                 .ok()
                 .body(response);
