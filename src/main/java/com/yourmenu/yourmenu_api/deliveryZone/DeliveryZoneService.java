@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DeliveryZoneService {
 
@@ -25,8 +27,8 @@ public class DeliveryZoneService {
         return deliveryZoneMapper.toDto(deliveryZoneRepository.save(entity));
     }
 
-    public Page<DeliveryZoneDto> findAll(Pageable pageable) {
-        return deliveryZoneMapper.toPageDto(deliveryZoneRepository.findAll(pageable));
+    public List<DeliveryZoneDto> findAll() {
+        return deliveryZoneMapper.toPageDto(deliveryZoneRepository.findAll());
     }
 
     public DeliveryZoneDto findById(Long id) {
