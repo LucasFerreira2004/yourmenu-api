@@ -92,7 +92,9 @@ public class RestaurantService {
         return restaurantMapper.toDTO(restaurant);
     }
 
-    public void delete(String slug, String id) {
-
+    public void delete(String slug, String adminId) {
+        Restaurant restaurant = restaurantRepository.findBySlug(slug);
+        restaurantValidateService.doAllValidations(restaurant, adminId, slug);
+        restaurantRepository.delete(restaurant);
     }
 }
