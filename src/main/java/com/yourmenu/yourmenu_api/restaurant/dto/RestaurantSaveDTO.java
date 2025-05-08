@@ -7,6 +7,9 @@ public record RestaurantSaveDTO (
         String name,
 
         Integer deliveryTimeMin,
-        Integer deliveryTimeMax
+        Integer deliveryTimeMax,
+        Boolean isOpen,
+        String profilePictureUrl,
+        String bannerPictureUrl
         //isOpen foi ignorado, campos de imagem não foram implementados ainda.
 ){}

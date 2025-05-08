@@ -24,7 +24,7 @@ public class RestaurantValidateService {
     }
 
     public void validateToUpdate(Restaurant restaurant, String administratorId, String errorField) {
-        authorizeAdministratorAccess(restaurant, administratorId);
         existentRestaurant(restaurant, errorField);
+        authorizeAdministratorAccess(restaurant, administratorId);
     }
 }

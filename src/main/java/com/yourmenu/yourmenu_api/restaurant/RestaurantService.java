@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
 import com.yourmenu.yourmenu_api.restaurant.mapper.RestaurantMapper;
+import com.yourmenu.yourmenu_api.shared.utils.SlugFormater;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,13 +51,31 @@ public class RestaurantService {
     public RestaurantDTO update(@Valid RestaurantSaveDTO dto, String slug,  String adminId) {
         Restaurant restaurant = restaurantRepository.findBySlug(slug);
         restaurantValidateService.validateToUpdate(restaurant, adminId, slug);
-        Restaurant updatedRestaurant = restaurantMapper.toEntity(dto);
-        if (restaurant.getSlug().equals(slug) {}
-        updatedRestaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
-
+        restaurant = updateRestaurantData(restaurant, dto);
+        restaurantRepository.save(restaurant);
+        return restaurantMapper.toDTO(restaurant);
     }
 
-    private void conditionalGenerateSlug(Restaurant restaurant, RestaurantDTO dto){
+    private boolean generateSlugNeeded(Restaurant restaurant, String dtoRestaurantName){
+        String normmalizedRestaurantName = SlugFormater.normalize(restaurant.getName());
+        String normalizedDtoName = SlugFormater.normalize(dtoRestaurantName);
+        if (normmalizedRestaurantName.equals(normalizedDtoName))
+            return false;
+        return true;
+    }
 
+    private Restaurant updateRestaurantData(Restaurant restaurant, RestaurantSaveDTO dto){
+        restaurant.setName(dto.name());
+        restaurant.setDeliveryTimeMin(dto.deliveryTimeMin());
+        restaurant.setDeliveryTimeMax(dto.deliveryTimeMax());
+        if (dto.profilePictureUrl() != null)
+            restaurant.setProfilePicUrl(dto.profilePictureUrl());
+        if(dto.bannerPictureUrl() != null)
+            restaurant.setBannerPicUrl(dto.bannerPictureUrl());
+        if(dto.isOpen() != null)
+            restaurant.setIsOpen(dto.isOpen());
+        if(generateSlugNeeded(restaurant, dto.name()))
+            restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
+        return restaurant;
     }
 }
