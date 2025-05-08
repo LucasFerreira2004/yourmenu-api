@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.beans.Transient;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RestaurantService {
@@ -45,15 +43,16 @@ public class RestaurantService {
     @Transient
     public RestaurantDTO openClose(@Valid OpenDTO dto, String adminId) {
         Restaurant restaurant = restaurantRepository.findBySlug(dto.restaurantSlug());
-        restaurantValidateService.validateToUpdate(restaurant, adminId, dto.restaurantSlug());
+        restaurantValidateService.doAllValidations(restaurant, adminId, dto.restaurantSlug());
         restaurant.setIsOpen(dto.isOpen());
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
     }
 
+    @Transient
     public RestaurantDTO update(@Valid RestaurantSaveDTO dto, String slug,  String adminId) {
         Restaurant restaurant = restaurantRepository.findBySlug(slug);
-        restaurantValidateService.validateToUpdate(restaurant, adminId, slug);
+        restaurantValidateService.doAllValidations(restaurant, adminId, slug);
         restaurant = updateRestaurantData(restaurant, dto);
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
@@ -87,9 +86,13 @@ public class RestaurantService {
         return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant)).toList();
     }
 
-    public RestaurantDTO findBySlug(String slug, String id) {
+    public RestaurantDTO findBySlug(String slug, String adminId) {
+        Restaurant restaurant = restaurantRepository.findBySlug(slug);
+        restaurantValidateService.doAllValidations(restaurant, adminId, slug);
+        return restaurantMapper.toDTO(restaurant);
     }
 
     public void delete(String slug, String id) {
+
     }
 }

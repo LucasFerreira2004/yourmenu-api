@@ -23,7 +23,7 @@ public class RestaurantValidateService {
         if (restaurant == null) throw new RestaurantNotFoundException(errorField);
     }
 
-    public void validateToUpdate(Restaurant restaurant, String administratorId, String errorField) {
+    public void doAllValidations(Restaurant restaurant, String administratorId, String errorField) {
         existentRestaurant(restaurant, errorField);
         authorizeAdministratorAccess(restaurant, administratorId);
     }
