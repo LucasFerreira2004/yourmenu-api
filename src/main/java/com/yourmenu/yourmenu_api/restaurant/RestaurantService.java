@@ -41,10 +41,22 @@ public class RestaurantService {
     @Transient
     public RestaurantDTO openClose(@Valid OpenDTO dto, String adminId) {
         Restaurant restaurant = restaurantRepository.findBySlug(dto.restaurantSlug());
-        restaurantValidateService.existentRestaurant(restaurant, dto.restaurantSlug());
-        restaurantValidateService.authorizeAdministratorAccess(restaurant, adminId);
+        restaurantValidateService.validateToUpdate(restaurant, adminId, dto.restaurantSlug());
         restaurant.setIsOpen(dto.isOpen());
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
+    }
+
+    public RestaurantDTO update(@Valid RestaurantSaveDTO dto, String slug,  String adminId) {
+        Restaurant restaurant = restaurantRepository.findBySlug(slug);
+        restaurantValidateService.validateToUpdate(restaurant, adminId, slug);
+        Restaurant updatedRestaurant = restaurantMapper.toEntity(dto);
+        if (restaurant.getSlug().equals(slug) {}
+        updatedRestaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
+
+    }
+
+    private void conditionalGenerateSlug(Restaurant restaurant, RestaurantDTO dto){
+
     }
 }
