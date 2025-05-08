@@ -14,4 +14,6 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, String> 
     select * from restaurant where administrator_id = :adminId
 """)
     List<Restaurant> findAllByAdministratorId(String adminId);
+
+    Restaurant findByid(String id);
 }

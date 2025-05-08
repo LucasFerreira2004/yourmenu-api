@@ -52,15 +52,15 @@ public class RestaurantController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/{slug}")
-    public ResponseEntity<RestaurantDTO> findBySlug(@PathVariable String slug, @CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.findBySlug(slug, currentUser.getId());
+    @GetMapping("/{restaurantId}")
+    public ResponseEntity<RestaurantDTO> findBySlug(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.findById(restaurantId, currentUser.getId());
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/{slug}")
-    public ResponseEntity<Void> delete(@PathVariable String slug, @CurrentUser Administrator currentUser) {
-        restaurantService.delete(slug, currentUser.getId());
+    @DeleteMapping("/{restaurantId}")
+    public ResponseEntity<Void> delete(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
+        restaurantService.delete(restaurantId, currentUser.getId());
         return ResponseEntity.noContent().build();
     }
 

@@ -86,15 +86,15 @@ public class RestaurantService {
         return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant)).toList();
     }
 
-    public RestaurantDTO findBySlug(String slug, String adminId) {
-        Restaurant restaurant = restaurantRepository.findBySlug(slug);
-        restaurantValidateService.doAllValidations(restaurant, adminId, slug);
+    public RestaurantDTO findById(String restaurantId, String adminId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
         return restaurantMapper.toDTO(restaurant);
     }
 
-    public void delete(String slug, String adminId) {
-        Restaurant restaurant = restaurantRepository.findBySlug(slug);
-        restaurantValidateService.doAllValidations(restaurant, adminId, slug);
+    public void delete(String restaurantId, String adminId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
         restaurantRepository.delete(restaurant);
     }
 }
