@@ -17,7 +17,7 @@ public record DeliveryZonePostDto(
         @Min(message = "O valor da entrega deve ser maior que zero", value = 0)
         BigDecimal deliveryFee,
 
-        @NotNull(message = "O restaurante é obrigatório")
-        Restaurant restaurant
+        @NotBlank(message = "O slug do restaurante é obrigatório")
+        String restaurantSlug
 ) {
 }

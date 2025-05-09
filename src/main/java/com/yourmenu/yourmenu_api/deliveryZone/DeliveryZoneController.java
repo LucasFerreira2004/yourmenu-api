@@ -1,7 +1,9 @@
 package com.yourmenu.yourmenu_api.deliveryZone;
 
+import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.deliveryZone.dto.DeliveryZoneDto;
 import com.yourmenu.yourmenu_api.deliveryZone.dto.DeliveryZonePostDto;
+import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("delivery-zone")
+@RequestMapping("/delivery-zone")
 @Tag(name = "Delivery Zone", description = "delivery rates for different areas")
 public class DeliveryZoneController {
     @Autowired
@@ -28,7 +30,8 @@ public class DeliveryZoneController {
             @ApiResponse(responseCode = "200", description = "Zonas de entrega encontradas")
     })
     public ResponseEntity<List<DeliveryZoneDto>> findAll() {
-        return ResponseEntity.ok(deliveryZoneService.findAll());
+        List<DeliveryZoneDto> zones = deliveryZoneService.findAll();
+        return ResponseEntity.ok(zones);
     }
 
     @GetMapping("/{id}")
@@ -38,7 +41,8 @@ public class DeliveryZoneController {
             @ApiResponse(responseCode = "200", description = "Zonas de entrega encontradas")
     })
     public ResponseEntity<DeliveryZoneDto> findById(@PathVariable Long id) {
-        return ResponseEntity.ok(deliveryZoneService.findById(id));
+        DeliveryZoneDto zone = deliveryZoneService.findById(id);
+        return ResponseEntity.ok(zone);
     }
 
     @PostMapping()
@@ -49,8 +53,11 @@ public class DeliveryZoneController {
             @ApiResponse(responseCode = "400", description = "Zona de entrega já cadastrada"),
             @ApiResponse(responseCode = "404", description = "Restaurante não encontrado")
     })
-    public ResponseEntity<DeliveryZoneDto> save(@RequestBody DeliveryZonePostDto deliveryZone) {
-        return ResponseEntity.ok(deliveryZoneService.save(deliveryZone));
+    public ResponseEntity<DeliveryZoneDto> save(
+            @RequestBody @Valid DeliveryZonePostDto deliveryZone,
+            @CurrentUser Administrator currentUser) {
+        DeliveryZoneDto createdZone = deliveryZoneService.save(deliveryZone, currentUser.getId());
+        return ResponseEntity.ok(createdZone);
     }
 
     @PutMapping("/{id}")
@@ -62,7 +69,7 @@ public class DeliveryZoneController {
             @ApiResponse(responseCode = "404", description = "Zona de entrega não encontrada")
     })
     public ResponseEntity<DeliveryZoneDto> update(@PathVariable Long id, @Valid @RequestBody DeliveryZonePostDto deliveryZone) {
-        return ResponseEntity.ok(deliveryZoneService.save(deliveryZone));
+        return ResponseEntity.ok(deliveryZoneService.update(id, deliveryZone));
     }
 
     @DeleteMapping("/{id}")
@@ -74,6 +81,6 @@ public class DeliveryZoneController {
     })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         deliveryZoneService.delete(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

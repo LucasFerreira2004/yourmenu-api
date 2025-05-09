@@ -2,10 +2,10 @@ package com.yourmenu.yourmenu_api.deliveryZone;
 
 import com.yourmenu.yourmenu_api.deliveryZone.dto.DeliveryZoneDto;
 import com.yourmenu.yourmenu_api.deliveryZone.dto.DeliveryZonePostDto;
-import com.yourmenu.yourmenu_api.restaurant.RestaurantService;
+import com.yourmenu.yourmenu_api.restaurant.Restaurant;
+import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
+import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +20,21 @@ public class DeliveryZoneService {
     private DeliveryZoneMapper deliveryZoneMapper;
 
     @Autowired
-    private RestaurantService restaurantService;
+    private RestaurantRepository restaurantRepository;
 
-    public DeliveryZoneDto save(DeliveryZonePostDto deliveryZone) {
+    @Autowired
+    private RestaurantValidateService restaurantValidateService;
+
+    public DeliveryZoneDto save(DeliveryZonePostDto deliveryZone, String adminId) {
         DeliveryZone entity = deliveryZoneMapper.toEntity(deliveryZone);
+        
+        // Busca o restaurante pelo slug
+        Restaurant restaurant = restaurantRepository.findBySlug(deliveryZone.restaurantSlug());
+        
+        // Valida se o restaurante existe e se o administrador tem permissão
+        restaurantValidateService.doAllValidations(restaurant, adminId, deliveryZone.restaurantSlug());
+        
+        entity.setRestaurant(restaurant);
         return deliveryZoneMapper.toDto(deliveryZoneRepository.save(entity));
     }
 
@@ -33,6 +44,24 @@ public class DeliveryZoneService {
 
     public DeliveryZoneDto findById(Long id) {
         return deliveryZoneMapper.toDto(deliveryZoneRepository.findById(id).orElse(null));
+    }
+
+    public DeliveryZoneDto update(Long id, DeliveryZonePostDto deliveryZone) {
+        DeliveryZone existingZone = deliveryZoneRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Zona de entrega não encontrada"));
+
+        // Busca o restaurante pelo slug
+        Restaurant restaurant = restaurantRepository.findBySlug(deliveryZone.restaurantSlug());
+        
+        // Valida se o restaurante existe e se o administrador tem permissão
+        restaurantValidateService.doAllValidations(restaurant, existingZone.getRestaurant().getAdministrator().getId(), 
+            deliveryZone.restaurantSlug());
+
+        existingZone.setZone(deliveryZone.zone());
+        existingZone.setDeliveryFee(deliveryZone.deliveryFee());
+        existingZone.setRestaurant(restaurant);
+
+        return deliveryZoneMapper.toDto(deliveryZoneRepository.save(existingZone));
     }
 
     public void delete(Long id) {
