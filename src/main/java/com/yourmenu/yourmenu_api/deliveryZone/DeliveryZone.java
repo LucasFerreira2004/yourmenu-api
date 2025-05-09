@@ -17,7 +17,7 @@ public class DeliveryZone {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "zone", nullable = false, unique = true)
+    @Column(name = "zone", nullable = false)
     private String zone;
 
     @Column(name = "delivery_fee", nullable = false)
