@@ -4,7 +4,6 @@ import com.yourmenu.yourmenu_api.businessHours.BusinessHours;
 import com.yourmenu.yourmenu_api.businessHours.BusinessHoursRepository;
 import com.yourmenu.yourmenu_api.businessHours.Weekday;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
-import com.yourmenu.yourmenu_api.restaurant.mapper.RestaurantMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

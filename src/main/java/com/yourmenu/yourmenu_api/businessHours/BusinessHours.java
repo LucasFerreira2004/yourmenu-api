@@ -29,6 +29,4 @@ public class BusinessHours {
 
     @Column(name = "closing_time", nullable = true)
     private LocalTime closingTime = null;
-
-    private Boolean isOpen = false;
 }
