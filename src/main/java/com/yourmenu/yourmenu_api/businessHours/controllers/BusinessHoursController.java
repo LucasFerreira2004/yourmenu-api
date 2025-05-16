@@ -4,6 +4,7 @@ import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursDTO;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursPeriodDTO;
 import com.yourmenu.yourmenu_api.businessHours.services.ListingAllBusinessHoursUseCase;
+import com.yourmenu.yourmenu_api.businessHours.services.RegisterUptimeUseCase;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,9 @@ public class BusinessHoursController {
     @Autowired
     ListingAllBusinessHoursUseCase listingAllBusinessHoursUseCase;
 
+    @Autowired
+    RegisterUptimeUseCase registerUptimeUseCase;
+
     @GetMapping("/{restaurantId}")
     public ResponseEntity<List<BusinessHoursDTO>> findAllByRestaurant(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
         List<BusinessHoursDTO> response = listingAllBusinessHoursUseCase.execute(restaurantId);
@@ -27,8 +31,9 @@ public class BusinessHoursController {
 
     @PutMapping("/{restaurantId}")
     public ResponseEntity<List<BusinessHoursDTO>> update(@PathVariable String restaurantId, @CurrentUser Administrator currentUser, @RequestBody BusinessHoursPeriodDTO businessHoursPeriodDTO) {
-        System.out.println(businessHoursPeriodDTO);
-        System.out.println("prestou");
+
+        registerUptimeUseCase.execute(restaurantId, businessHoursPeriodDTO);
+
         return ResponseEntity.noContent().build();
     }
 
