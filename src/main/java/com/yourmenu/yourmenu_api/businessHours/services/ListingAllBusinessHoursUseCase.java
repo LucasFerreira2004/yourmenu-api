@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
 
 @Service
-public class ListingBusinessHoursUseCase {
+public class ListingAllBusinessHoursUseCase {
 
     @Autowired
     BusinessHoursRepository businessHoursRepository;
@@ -20,11 +20,18 @@ public class ListingBusinessHoursUseCase {
     @Autowired
     BusinessHoursMapper businessHoursMapper;
 
+    //versão 2 - pretendo retornar apenas as que possuem horario, pois as nulas significam que não serão abertas no dia
     public List<BusinessHoursDTO> execute(String restaurantId) {
-        List<BusinessHours> businessHoursList = businessHoursRepository.findAllByRestaurantIdOrderByWeekday(restaurantId);
+        List<BusinessHours> lista = businessHoursRepository.findAllByRestaurantId(restaurantId);
 
-        return businessHoursList.stream()
+        TreeSet<BusinessHours> businessHoursSet = new TreeSet<>( //para ordenar os objetos de acordo com a ordem natural do Enum
+                Comparator.comparing(BusinessHours::getWeekday)
+        );
+
+        businessHoursSet.addAll(lista);
+
+        return businessHoursSet.stream()
                 .map(businessHoursMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 }
