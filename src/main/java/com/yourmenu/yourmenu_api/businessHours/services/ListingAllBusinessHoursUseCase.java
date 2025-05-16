@@ -28,6 +28,14 @@ public class ListingAllBusinessHoursUseCase {
                 Comparator.comparing(BusinessHours::getWeekday)
         );
 
+        /*
+        businessHoursSet.addAll(
+        lista.stream()
+            .filter(bh -> bh.getOpeningTime() != null && bh.getClosingTime() != null)
+            .toList()
+        );
+        */
+
         businessHoursSet.addAll(lista);
 
         return businessHoursSet.stream()
