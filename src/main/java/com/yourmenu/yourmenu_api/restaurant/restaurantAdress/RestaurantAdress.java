@@ -16,7 +16,7 @@ public class RestaurantAdress {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "restaurant_id", nullable = false)
+    @JoinColumn(name = "restaurant_id", nullable = false, unique = true)
     private Restaurant restaurant;
 
     @Column(columnDefinition = "numeric(8)", nullable = false)
