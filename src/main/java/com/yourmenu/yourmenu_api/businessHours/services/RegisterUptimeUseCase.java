@@ -4,8 +4,13 @@ import com.yourmenu.yourmenu_api.businessHours.BusinessHours;
 import com.yourmenu.yourmenu_api.businessHours.BusinessHoursRepository;
 import com.yourmenu.yourmenu_api.businessHours.Weekday;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursPeriodDTO;
+import com.yourmenu.yourmenu_api.restaurant.Restaurant;
+import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
+import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class RegisterUptimeUseCase {
@@ -13,7 +18,13 @@ public class RegisterUptimeUseCase {
     @Autowired
     BusinessHoursRepository businessHoursRepository;
 
+    @Autowired
+    RestaurantRepository restaurantRepository;
+
     public void execute(String id_restaurant, BusinessHoursPeriodDTO dto) {
+
+        this.restaurantRepository.findById(id_restaurant)
+                .orElseThrow(() -> new RestaurantNotFoundException("id_restaurant"));
 
         BusinessHours businessHourSet;
 
