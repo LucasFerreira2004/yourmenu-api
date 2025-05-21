@@ -59,7 +59,6 @@ public class RegisterUptimeUseCase {
         }
     }
 
-    //lançar exception
     private BusinessHours findBusinessHoursByRestaurantIdAndWeekday(String id_restaurant, Weekday weekday) {
         BusinessHours businessHoursOpt = businessHoursRepository
                 .findByRestaurantIdAndWeekday(id_restaurant, weekday);
