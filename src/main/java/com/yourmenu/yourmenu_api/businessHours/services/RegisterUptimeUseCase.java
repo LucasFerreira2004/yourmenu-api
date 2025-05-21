@@ -4,13 +4,10 @@ import com.yourmenu.yourmenu_api.businessHours.BusinessHours;
 import com.yourmenu.yourmenu_api.businessHours.BusinessHoursRepository;
 import com.yourmenu.yourmenu_api.businessHours.Weekday;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursPeriodDTO;
-import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class RegisterUptimeUseCase {
@@ -43,7 +40,6 @@ public class RegisterUptimeUseCase {
             businessHourSet.setOpeningTime(dto.openingTime());
             businessHourSet.setClosingTime(dto.closingTime());
             businessHoursRepository.save(businessHourSet);
-            System.out.println("abre as: " + Weekday.values()[start]); //depuração
 
         }else if(start > end){
             while(start != end){
@@ -52,7 +48,6 @@ public class RegisterUptimeUseCase {
                     businessHourSet.setOpeningTime(dto.openingTime());
                     businessHourSet.setClosingTime(dto.closingTime());
                     businessHoursRepository.save(businessHourSet);
-                    System.out.println("abre as: " + Weekday.values()[start]); //depuração
                     start = 0;
                     continue;
                 }
@@ -60,30 +55,25 @@ public class RegisterUptimeUseCase {
                 businessHourSet.setOpeningTime(dto.openingTime());
                 businessHourSet.setClosingTime(dto.closingTime());
                 businessHoursRepository.save(businessHourSet);
-                System.out.println("abre as: " + Weekday.values()[start]); //depuração
                 start++;
             }
             businessHourSet = findBusinessHoursByRestaurantIdAndWeekday(id_restaurant, Weekday.values()[start]);
             businessHourSet.setOpeningTime(dto.openingTime());
             businessHourSet.setClosingTime(dto.closingTime());
             businessHoursRepository.save(businessHourSet);
-            System.out.println("abre as: " + Weekday.values()[start]); //depuração
         }else{
             while(start != end){
                 businessHourSet = findBusinessHoursByRestaurantIdAndWeekday(id_restaurant, Weekday.values()[start]);
                 businessHourSet.setOpeningTime(dto.openingTime());
                 businessHourSet.setClosingTime(dto.closingTime());
                 businessHoursRepository.save(businessHourSet);
-                System.out.println("abre as: " + Weekday.values()[start]); //depuração
                 start++;
             }
             businessHourSet = findBusinessHoursByRestaurantIdAndWeekday(id_restaurant, Weekday.values()[start]);
             businessHourSet.setOpeningTime(dto.openingTime());
             businessHourSet.setClosingTime(dto.closingTime());
             businessHoursRepository.save(businessHourSet);
-            System.out.println("abre as: " + Weekday.values()[start]); //depuração
         }
-        System.out.println("----------------------------"); //depuração
     }
 
     //lançar exception

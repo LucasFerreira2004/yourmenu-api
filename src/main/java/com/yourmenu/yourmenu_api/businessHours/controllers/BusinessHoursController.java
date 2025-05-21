@@ -6,6 +6,7 @@ import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursPeriodDTO;
 import com.yourmenu.yourmenu_api.businessHours.services.ListingAllBusinessHoursUseCase;
 import com.yourmenu.yourmenu_api.businessHours.services.RegisterUptimeUseCase;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +31,7 @@ public class BusinessHoursController {
     }
 
     @PutMapping("/{restaurantId}")
-    public ResponseEntity<List<BusinessHoursDTO>> update(@PathVariable String restaurantId, @CurrentUser Administrator currentUser, @RequestBody BusinessHoursPeriodDTO businessHoursPeriodDTO) {
+    public ResponseEntity<List<BusinessHoursDTO>> update(@PathVariable String restaurantId, @CurrentUser Administrator currentUser, @Valid  @RequestBody BusinessHoursPeriodDTO businessHoursPeriodDTO) {
 
         registerUptimeUseCase.execute(restaurantId, businessHoursPeriodDTO);
 
