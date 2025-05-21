@@ -1,9 +1,9 @@
-package com.yourmenu.yourmenu_api.restaurant.restaurantAdress.mapper;
+package com.yourmenu.yourmenu_api.restaurantAdress.mapper;
 
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
-import com.yourmenu.yourmenu_api.restaurant.restaurantAdress.RestaurantAdress;
-import com.yourmenu.yourmenu_api.restaurant.restaurantAdress.dto.RestaurantAdressDTO;
-import com.yourmenu.yourmenu_api.restaurant.restaurantAdress.dto.RestaurantAdressSaveDTO;
+import com.yourmenu.yourmenu_api.restaurantAdress.RestaurantAdress;
+import com.yourmenu.yourmenu_api.restaurantAdress.dto.RestaurantAdressDTO;
+import com.yourmenu.yourmenu_api.restaurantAdress.dto.RestaurantAdressSaveDTO;
 
 public class RestaurantAdressMapper {
 

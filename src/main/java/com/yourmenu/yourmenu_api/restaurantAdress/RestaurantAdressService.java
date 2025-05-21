@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.restaurant.restaurantAdress;
+package com.yourmenu.yourmenu_api.restaurantAdress;
 
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;

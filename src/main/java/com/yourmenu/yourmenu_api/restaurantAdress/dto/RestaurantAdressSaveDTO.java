@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.restaurant.restaurantAdress.dto;
+package com.yourmenu.yourmenu_api.restaurantAdress.dto;
 
 import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
