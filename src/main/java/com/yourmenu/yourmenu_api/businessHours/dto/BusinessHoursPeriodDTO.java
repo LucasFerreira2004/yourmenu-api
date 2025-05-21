@@ -10,9 +10,9 @@ public record BusinessHoursPeriodDTO(
         Weekday weekday_start,
         @NotNull(message = "Dia de fim não pode ser nulo")
         Weekday weekday_end,
-        @NotNull(message = "A hora de abertura não pode ser nula")
+        @NotNull(message = "Horário de abertura não pode ser nula")
         LocalTime openingTime,
-        @NotNull(message = "A hota de encerramento não pode ser nulo")
+        @NotNull(message = "Horário de fechamento não pode ser nulo")
         LocalTime closingTime
 ) {
 }
