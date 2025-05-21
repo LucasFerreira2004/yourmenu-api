@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorService;
+import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursUseCase;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
@@ -30,6 +31,9 @@ public class RestaurantService {
     @Autowired
     private RestaurantValidateService restaurantValidateService;
 
+    @Autowired
+    CreateBusinessHoursUseCase createBusinessHoursUseCase;
+
     @Transient
     public RestaurantDTO save(RestaurantSaveDTO dto, String adminId) {
         Restaurant restaurant = restaurantMapper.toEntity(dto);
@@ -37,6 +41,7 @@ public class RestaurantService {
         restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         restaurant.setAdministrator(administratorService.findByid(adminId));
         restaurantRepository.save(restaurant);
+        createBusinessHoursUseCase.execute(restaurant);
         return restaurantMapper.toDTO(restaurant);
     }
 

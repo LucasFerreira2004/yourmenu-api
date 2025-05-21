@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.Administrator;
+import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursUseCase;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
