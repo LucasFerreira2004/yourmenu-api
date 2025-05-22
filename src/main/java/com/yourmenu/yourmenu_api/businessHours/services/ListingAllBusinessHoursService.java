@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 @Service
-public class ListingAllBusinessHoursUseCase {
+public class ListingAllBusinessHoursService {
 
     @Autowired
     BusinessHoursRepository businessHoursRepository;
@@ -36,13 +36,7 @@ public class ListingAllBusinessHoursUseCase {
         TreeSet<BusinessHours> businessHoursSet = new TreeSet<>( //para ordenar os objetos de acordo com a ordem natural do Enum
                 Comparator.comparing(BusinessHours::getWeekday)
         );
-        /*
-        businessHoursSet.addAll(
-        lista.stream()
-            .filter(bh -> bh.getOpeningTime() != null && bh.getClosingTime() != null)
-            .toList()
-        );
-        */
+
         businessHoursSet.addAll(lista);
 
         return businessHoursSet.stream()

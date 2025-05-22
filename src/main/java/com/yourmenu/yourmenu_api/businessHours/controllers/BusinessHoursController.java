@@ -3,8 +3,8 @@ package com.yourmenu.yourmenu_api.businessHours.controllers;
 import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursDTO;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursPeriodDTO;
-import com.yourmenu.yourmenu_api.businessHours.services.ListingAllBusinessHoursUseCase;
-import com.yourmenu.yourmenu_api.businessHours.services.RegisterUptimeUseCase;
+import com.yourmenu.yourmenu_api.businessHours.services.ListingAllBusinessHoursService;
+import com.yourmenu.yourmenu_api.businessHours.services.RegisterUptimeService;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +19,21 @@ public class BusinessHoursController {
 
 
     @Autowired
-    ListingAllBusinessHoursUseCase listingAllBusinessHoursUseCase;
+    ListingAllBusinessHoursService listingAllBusinessHoursService;
 
     @Autowired
-    RegisterUptimeUseCase registerUptimeUseCase;
+    RegisterUptimeService registerUptimeService;
 
     @GetMapping("/{restaurantId}")
     public ResponseEntity<List<BusinessHoursDTO>> findAllByRestaurant(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
-        List<BusinessHoursDTO> response = listingAllBusinessHoursUseCase.execute(restaurantId);
+        List<BusinessHoursDTO> response = listingAllBusinessHoursService.execute(restaurantId);
         return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{restaurantId}")
     public ResponseEntity<List<BusinessHoursDTO>> update(@PathVariable String restaurantId, @CurrentUser Administrator currentUser, @Valid  @RequestBody BusinessHoursPeriodDTO businessHoursPeriodDTO) {
 
-        registerUptimeUseCase.execute(restaurantId, businessHoursPeriodDTO);
+        registerUptimeService.execute(restaurantId, businessHoursPeriodDTO);
 
         return ResponseEntity.noContent().build();
     }
