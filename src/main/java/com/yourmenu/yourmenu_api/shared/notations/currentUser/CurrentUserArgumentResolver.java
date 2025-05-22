@@ -1,6 +1,6 @@
 package com.yourmenu.yourmenu_api.shared.notations.currentUser;
 
-import com.yourmenu.yourmenu_api.globalExceptions.UserNotAuthenticatedException;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.UserNotAuthenticatedException;
 import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;

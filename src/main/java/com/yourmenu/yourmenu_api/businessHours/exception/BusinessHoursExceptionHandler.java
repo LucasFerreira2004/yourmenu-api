@@ -2,7 +2,7 @@ package com.yourmenu.yourmenu_api.businessHours.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.yourmenu.yourmenu_api.businessHours.dto.SimpleErrorResponse;
-import com.yourmenu.yourmenu_api.globalExceptions.ErrorResponseDTO;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ErrorResponseDTO;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;

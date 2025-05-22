@@ -33,4 +33,10 @@ public class RestaurantAdressService {
         restaurantAdressRepository.save(restaurantAdress);
         return RestaurantAdressMapper.toDTO(restaurantAdress);
     }
+
+    public RestaurantAdressDTO getRestaurantAdress(String restaurantId){
+        restaurantAdressValidateService.validateAdressExists(restaurantId);
+        RestaurantAdress adress = restaurantAdressRepository.findByRestaurantId(restaurantId);
+        return RestaurantAdressMapper.toDTO(adress);
+    }
 }
