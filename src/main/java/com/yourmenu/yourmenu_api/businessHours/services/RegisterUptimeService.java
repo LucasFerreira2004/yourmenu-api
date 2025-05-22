@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 
 @Service
-public class RegisterUptimeUseCase {
+public class RegisterUptimeService {
 
     @Autowired
     BusinessHoursRepository businessHoursRepository;

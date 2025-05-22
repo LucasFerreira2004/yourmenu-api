@@ -4,7 +4,7 @@ import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursDTO;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursPeriodDTO;
 import com.yourmenu.yourmenu_api.businessHours.services.ListingAllBusinessHoursService;
-import com.yourmenu.yourmenu_api.businessHours.services.RegisterUptimeUseCase;
+import com.yourmenu.yourmenu_api.businessHours.services.RegisterUptimeService;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class BusinessHoursController {
     ListingAllBusinessHoursService listingAllBusinessHoursService;
 
     @Autowired
-    RegisterUptimeUseCase registerUptimeUseCase;
+    RegisterUptimeService registerUptimeService;
 
     @GetMapping("/{restaurantId}")
     public ResponseEntity<List<BusinessHoursDTO>> findAllByRestaurant(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
@@ -33,7 +33,7 @@ public class BusinessHoursController {
     @PutMapping("/{restaurantId}")
     public ResponseEntity<List<BusinessHoursDTO>> update(@PathVariable String restaurantId, @CurrentUser Administrator currentUser, @Valid  @RequestBody BusinessHoursPeriodDTO businessHoursPeriodDTO) {
 
-        registerUptimeUseCase.execute(restaurantId, businessHoursPeriodDTO);
+        registerUptimeService.execute(restaurantId, businessHoursPeriodDTO);
 
         return ResponseEntity.noContent().build();
     }
