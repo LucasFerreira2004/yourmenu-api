@@ -22,7 +22,7 @@ public class RestaurantAdress {
     @Column(columnDefinition = "numeric(8)", nullable = false)
     private Integer cep;
 
-    @Column(columnDefinition = "numeric(8)", nullable = false)
+    @Column(nullable = false)
     private String state;
 
     @Column(columnDefinition = "text", nullable = false)

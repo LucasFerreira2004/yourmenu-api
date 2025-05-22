@@ -8,7 +8,7 @@ public record RestaurantAdressSaveDTO(
         @NotBlank
         String restaurantId,
 
-        @NotNull @NotBlank
+        @NotNull
         Integer cep,
 
         @NotBlank
