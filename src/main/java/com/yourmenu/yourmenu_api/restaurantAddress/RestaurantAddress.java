@@ -1,6 +1,5 @@
-package com.yourmenu.yourmenu_api.restaurantAdress;
+package com.yourmenu.yourmenu_api.restaurantAddress;
 
-import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-public class RestaurantAdress {
+public class RestaurantAddress {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,14 +1,14 @@
-package com.yourmenu.yourmenu_api.restaurantAdress.mapper;
+package com.yourmenu.yourmenu_api.restaurantAddress.mapper;
 
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
-import com.yourmenu.yourmenu_api.restaurantAdress.RestaurantAdress;
-import com.yourmenu.yourmenu_api.restaurantAdress.dto.RestaurantAdressDTO;
-import com.yourmenu.yourmenu_api.restaurantAdress.dto.RestaurantAdressSaveDTO;
+import com.yourmenu.yourmenu_api.restaurantAddress.RestaurantAddress;
+import com.yourmenu.yourmenu_api.restaurantAddress.dto.RestaurantAddressDTO;
+import com.yourmenu.yourmenu_api.restaurantAddress.dto.RestaurantAddressSaveDTO;
 
-public class RestaurantAdressMapper {
+public class RestaurantAddressMapper {
 
-    public static RestaurantAdress toEntity(RestaurantAdressSaveDTO dto, Restaurant restaurant) {
-        RestaurantAdress adress = new RestaurantAdress();
+    public static RestaurantAddress toEntity(RestaurantAddressSaveDTO dto, Restaurant restaurant) {
+        RestaurantAddress adress = new RestaurantAddress();
         adress.setRestaurant(restaurant);
         adress.setCep(dto.cep());
         adress.setState(dto.state());
@@ -21,8 +21,8 @@ public class RestaurantAdressMapper {
         return adress;
     }
 
-    public static RestaurantAdressDTO toDTO(RestaurantAdress adress) {
-        return new RestaurantAdressDTO(
+    public static RestaurantAddressDTO toDTO(RestaurantAddress adress) {
+        return new RestaurantAddressDTO(
                 adress.getId().toString(),
                 adress.getRestaurant().getId(),
                 adress.getCep(),

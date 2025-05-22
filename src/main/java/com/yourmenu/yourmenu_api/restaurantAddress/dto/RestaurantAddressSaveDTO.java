@@ -1,10 +1,9 @@
-package com.yourmenu.yourmenu_api.restaurantAdress.dto;
+package com.yourmenu.yourmenu_api.restaurantAddress.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-public record RestaurantAdressSaveDTO(
+public record RestaurantAddressSaveDTO(
         @NotBlank
         String restaurantId,
 
