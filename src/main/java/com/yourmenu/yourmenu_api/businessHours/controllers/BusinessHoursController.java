@@ -3,7 +3,7 @@ package com.yourmenu.yourmenu_api.businessHours.controllers;
 import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursDTO;
 import com.yourmenu.yourmenu_api.businessHours.dto.BusinessHoursPeriodDTO;
-import com.yourmenu.yourmenu_api.businessHours.services.ListingAllBusinessHoursUseCase;
+import com.yourmenu.yourmenu_api.businessHours.services.ListingAllBusinessHoursService;
 import com.yourmenu.yourmenu_api.businessHours.services.RegisterUptimeUseCase;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
@@ -19,14 +19,14 @@ public class BusinessHoursController {
 
 
     @Autowired
-    ListingAllBusinessHoursUseCase listingAllBusinessHoursUseCase;
+    ListingAllBusinessHoursService listingAllBusinessHoursService;
 
     @Autowired
     RegisterUptimeUseCase registerUptimeUseCase;
 
     @GetMapping("/{restaurantId}")
     public ResponseEntity<List<BusinessHoursDTO>> findAllByRestaurant(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
-        List<BusinessHoursDTO> response = listingAllBusinessHoursUseCase.execute(restaurantId);
+        List<BusinessHoursDTO> response = listingAllBusinessHoursService.execute(restaurantId);
         return ResponseEntity.ok(response);
     }
 

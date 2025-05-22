@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 @Service
-public class ListingAllBusinessHoursUseCase {
+public class ListingAllBusinessHoursService {
 
     @Autowired
     BusinessHoursRepository businessHoursRepository;
