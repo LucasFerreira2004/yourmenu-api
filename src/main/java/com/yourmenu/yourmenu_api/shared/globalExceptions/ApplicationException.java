@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.globalExceptions;
+package com.yourmenu.yourmenu_api.shared.globalExceptions;
 
 import lombok.Getter;
 

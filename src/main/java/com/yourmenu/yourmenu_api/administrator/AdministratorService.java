@@ -1,6 +1,8 @@
 package com.yourmenu.yourmenu_api.administrator;
 
 import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.UserNotFoundException;
+import com.yourmenu.yourmenu_api.shared.utils.NameDivider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,26 +20,15 @@ public class AdministratorService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already exists");
         }
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
-        String firstName = splitFirstName(dto.fullName());
-        String lastName = splitLastName(dto.fullName());
+        String firstName = NameDivider.getFirstName(dto.fullName()); //NameDivider está no pacote shared.utils
+        String lastName = NameDivider.getLastname(dto.fullName());
         Administrator adm = new Administrator(firstName, lastName, dto.email(), encryptedPassword);
         administratorRepository.save(adm);
         return ResponseEntity.ok().build(); //alterar para created depois
     }
 
-    private String splitFirstName(String fullName){
-        String[] splitted = fullName.split(" ");
-        return splitted[0];
+    public Administrator findByid(String id) {
+        return administratorRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)); //remover para produção
     }
-    private String splitLastName(String fullName){
-        String[] splitted = fullName.split(" ");
-        StringBuilder lastName = new StringBuilder();
-        for(int i = 1; i < splitted.length; i++){
-            lastName.append(splitted[i]);
-            if (i != splitted.length - 1){
-                lastName.append(" ");
-            }
-        }
-        return lastName.toString();
-    }
+
 }
