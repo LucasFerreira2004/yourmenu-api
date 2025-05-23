@@ -63,7 +63,7 @@ public class RestaurantService {
         return restaurantMapper.toDTO(restaurant);
     }
 
-    private boolean generateSlugNeeded(Restaurant restaurant, String dtoRestaurantName){
+    private boolean shouldGenerateSlug(Restaurant restaurant, String dtoRestaurantName){
         String normmalizedRestaurantName = SlugFormater.normalize(restaurant.getName());
         String normalizedDtoName = SlugFormater.normalize(dtoRestaurantName);
         if (normmalizedRestaurantName.equals(normalizedDtoName))
@@ -72,7 +72,7 @@ public class RestaurantService {
     }
 
     private Restaurant updateRestaurantData(Restaurant restaurant, RestaurantSaveDTO dto){
-        if(generateSlugNeeded(restaurant, dto.name()))
+        if(shouldGenerateSlug(restaurant, dto.name()))
             restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         restaurant.setName(dto.name());
         restaurant.setDeliveryTimeMin(dto.deliveryTimeMin());

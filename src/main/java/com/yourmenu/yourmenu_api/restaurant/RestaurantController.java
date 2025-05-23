@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+
 @RestController
 @RequestMapping(value="/restaurant")
 public class RestaurantController {
@@ -24,7 +25,7 @@ public class RestaurantController {
         System.out.println("ID DO USER: " + currentUser.getId()); //linha apenas para depuração
         RestaurantDTO createdRestaurant = restaurantService.save(dto, currentUser.getId());
 
-        URI location = URI.create("/restaurants/" + createdRestaurant.slug());
+        URI location = URI.create("/restaurant/" + createdRestaurant.slug());
         return ResponseEntity
                 .created(location) // define o status 201 e o header Location
                 .body(createdRestaurant);

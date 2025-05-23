@@ -2,7 +2,7 @@ package com.yourmenu.yourmenu_api.auth.security;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorRepository;
 import com.yourmenu.yourmenu_api.auth.token.TokenService;
-import com.yourmenu.yourmenu_api.globalExceptions.UserNotAuthenticatedException;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.UserNotAuthenticatedException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

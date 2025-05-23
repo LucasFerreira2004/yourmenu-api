@@ -1,6 +1,6 @@
 package com.yourmenu.yourmenu_api.businessHours.exception;
 
-import com.yourmenu.yourmenu_api.globalExceptions.ApplicationException;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ApplicationException;
 
 public class BusinessHoursInvalidException extends ApplicationException {
     public BusinessHoursInvalidException(String field, String message) {
