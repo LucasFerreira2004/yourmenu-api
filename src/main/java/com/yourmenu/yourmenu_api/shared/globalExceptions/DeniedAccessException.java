@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.globalExceptions;
+package com.yourmenu.yourmenu_api.shared.globalExceptions;
 
 public class DeniedAccessException extends ApplicationException {
     public DeniedAccessException(String field, String message) {

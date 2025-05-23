@@ -1,7 +1,6 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.Administrator;
-import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursUseCase;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
@@ -26,7 +25,7 @@ public class RestaurantController {
         System.out.println("ID DO USER: " + currentUser.getId()); //linha apenas para depuração
         RestaurantDTO createdRestaurant = restaurantService.save(dto, currentUser.getId());
 
-        URI location = URI.create("/restaurants/" + createdRestaurant.slug());
+        URI location = URI.create("/restaurant/" + createdRestaurant.slug());
         return ResponseEntity
                 .created(location) // define o status 201 e o header Location
                 .body(createdRestaurant);

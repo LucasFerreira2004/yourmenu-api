@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.globalExceptions;
+package com.yourmenu.yourmenu_api.shared.globalExceptions;
 
 public class UserNotAuthenticatedException extends ApplicationException {
     public UserNotAuthenticatedException(String field, String message) {

@@ -1,6 +1,4 @@
-package com.yourmenu.yourmenu_api.globalExceptions;
-
-import lombok.AllArgsConstructor;
+package com.yourmenu.yourmenu_api.shared.globalExceptions;
 
 public class UserNotFoundException extends ApplicationException {
     public UserNotFoundException(String field) {
