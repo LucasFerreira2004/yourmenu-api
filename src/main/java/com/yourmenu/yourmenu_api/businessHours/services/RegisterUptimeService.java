@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 
 @Service
-public class RegisterUptimeUseCase {
+public class RegisterUptimeService {
 
     @Autowired
     BusinessHoursRepository businessHoursRepository;
@@ -26,7 +26,7 @@ public class RegisterUptimeUseCase {
         this.restaurantRepository.findById(id_restaurant)
                 .orElseThrow(() -> new RestaurantNotFoundException("id_restaurant"));
 
-        if (dto.openingTime().isAfter(dto.closingTime()) || dto.openingTime().equals(dto.closingTime())) {
+        if (dto.openingTime().equals(dto.closingTime())) {
             throw new BusinessHoursInvalidException("Horário de abertura deve ser antes do horário de fechamento");
         }
 
