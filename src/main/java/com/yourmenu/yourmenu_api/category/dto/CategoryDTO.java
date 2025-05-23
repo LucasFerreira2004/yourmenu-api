@@ -1,7 +1,7 @@
 package com.yourmenu.yourmenu_api.category.dto;
 
 public record CategoryDTO(
-        Integer Id,
+        Long Id,
         String name,
         String restaurantId
 ) {
