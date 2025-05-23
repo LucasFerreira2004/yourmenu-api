@@ -14,7 +14,7 @@ import java.beans.Transient;
 @Service
 public class RestaurantAddressService {
     @Autowired
-    private RestaurantAdressRepository restaurantAdressRepository;
+    private RestaurantAddressRepository restaurantAddressRepository;
 
     @Autowired
     private RestaurantAddressValidateService restaurantAddressValidateService;
@@ -27,20 +27,30 @@ public class RestaurantAddressService {
         restaurantAddressValidateService.validateAllToSave(dto.restaurantId(), adminId);
         Restaurant restaurant = restaurantRepository.findById(dto.restaurantId()).orElseThrow(() -> new RestaurantNotFoundException(dto.restaurantId()));
         RestaurantAddress restaurantAddress = RestaurantAddressMapper.toEntity(dto, restaurant);
-        restaurantAdressRepository.save(restaurantAddress);
+        restaurantAddressRepository.save(restaurantAddress);
         return RestaurantAddressMapper.toDTO(restaurantAddress);
     }
 
     public RestaurantAddressDTO getRestaurantAdress(String restaurantId){
         restaurantAddressValidateService.validateAdressExists(restaurantId);
-        RestaurantAddress adress = restaurantAdressRepository.findByRestaurantId(restaurantId);
+        RestaurantAddress adress = restaurantAddressRepository.findByRestaurantId(restaurantId);
         return RestaurantAddressMapper.toDTO(adress);
     }
 
     public RestaurantAddressDTO update(RestaurantAddressSaveDTO dto, String adminId) {
         restaurantAddressValidateService.validateAllToUpdate(dto.restaurantId(), adminId);
+        try {
+            RestaurantAddress oldAdress = restaurantAddressRepository.findByRestaurantId(dto.restaurantId());
+            Restaurant restaurant = restaurantRepository.findById(dto.restaurantId()).orElseThrow(() -> new RestaurantNotFoundException(dto.restaurantId()));
+            RestaurantAddress newAddress = RestaurantAddressMapper.toEntity(dto, restaurant);
+            newAddress.setId(oldAdress.getId());
+            return RestaurantAddressMapper.toDTO(restaurantAddressRepository.save(newAddress));
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
         Restaurant restaurant = restaurantRepository.findById(dto.restaurantId()).orElseThrow(() -> new RestaurantNotFoundException(dto.restaurantId()));
         RestaurantAddress address = RestaurantAddressMapper.toEntity(dto, restaurant);
-        return RestaurantAddressMapper.toDTO(restaurantAdressRepository.save(address));
+        return RestaurantAddressMapper.toDTO(restaurantAddressRepository.save(address));
     }
 }

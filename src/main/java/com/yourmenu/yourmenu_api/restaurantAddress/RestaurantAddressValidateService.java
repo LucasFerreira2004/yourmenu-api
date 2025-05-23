@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RestaurantAddressValidateService {
     @Autowired
-    private RestaurantAdressRepository restaurantAdressRepository;
+    private RestaurantAddressRepository restaurantAddressRepository;
 
     @Autowired
     private RestaurantRepository restaurantRepository;
@@ -26,7 +26,7 @@ public class RestaurantAddressValidateService {
     }
 
     public void validateAdressExists(String restaurantId){
-        RestaurantAddress adress = restaurantAdressRepository.findByRestaurantId(restaurantId);
+        RestaurantAddress adress = restaurantAddressRepository.findByRestaurantId(restaurantId);
         if (adress == null) throw new RestaurantAddressNotFoundException("restaurantId");
     }
 
