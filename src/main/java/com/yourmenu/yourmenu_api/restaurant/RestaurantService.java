@@ -48,7 +48,7 @@ public class RestaurantService {
     @Transient
     public RestaurantDTO openClose(@Valid OpenDTO dto, String restaurantId, String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
         restaurant.setIsOpen(dto.isOpen());
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
@@ -57,7 +57,7 @@ public class RestaurantService {
     @Transient
     public RestaurantDTO update(@Valid RestaurantSaveDTO dto, String restaurantId,  String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
         restaurant = updateRestaurantData(restaurant, dto);
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
@@ -93,13 +93,13 @@ public class RestaurantService {
 
     public RestaurantDTO findById(String restaurantId, String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
         return restaurantMapper.toDTO(restaurant);
     }
 
     public void delete(String restaurantId, String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.doAllValidations(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
         restaurantRepository.delete(restaurant);
     }
 }

@@ -20,4 +20,16 @@ public class CategoryExceptionHandler {
         );
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(CategoryDoesntBelongToRestaurantException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCategoryDoesntBelongToRestaurantException(CategoryDoesntBelongToRestaurantException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
 }
