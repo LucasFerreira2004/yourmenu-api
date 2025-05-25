@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.category.services;
 
 import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.category.CategoryRepository;
+import com.yourmenu.yourmenu_api.category.Exceptions.CategoryNotFoundException;
 import com.yourmenu.yourmenu_api.category.dto.CategoryDTO;
 import com.yourmenu.yourmenu_api.category.dto.CategorySaveDTO;
 import com.yourmenu.yourmenu_api.category.mapper.CategoryMapper;
@@ -9,9 +10,12 @@ import com.yourmenu.yourmenu_api.category.validation.CategoryValidateService;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantService;
+import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class CategoryService {
@@ -24,6 +28,9 @@ public class CategoryService {
     @Autowired
     private CategoryValidateService categoryValidateService;
 
+    @Autowired
+    private RestaurantValidateService restaurantValidateService;
+
     public CategoryDTO save(CategorySaveDTO dto, String restaurantId, String adminId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(()-> new RestaurantNotFoundException());
         Category category = CategoryMapper.toEntity(dto, restaurant);
@@ -35,11 +42,19 @@ public class CategoryService {
     public CategoryDTO update(CategorySaveDTO dto, String AdminId){
         return null;
     }
-    public CategoryDTO getByCategoryId(Integer categoryid){
-        return null;
+    public CategoryDTO getByCategoryId(Long categoryId) {
+        categoryValidateService.validateCategoryExists(categoryId);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(() -> new CategoryNotFoundException());
+        return CategoryMapper.toDto(category);
     }
-    public CategoryDTO getAllByRestaurantId(String RestaurantId){
-        return null;
+
+    public List<CategoryDTO> getAllByRestaurantId(String restaurantId) {
+        restaurantValidateService.validateRestaurantExists(restaurantId);
+        List<Category> categories = categoryRepository.findAllByRestaurantId(restaurantId);
+        return categories.stream()
+                .map(CategoryMapper::toDto)
+                .toList();
     }
     public CategoryDTO delete(Integer categoryid, String AdminId){
         return null;

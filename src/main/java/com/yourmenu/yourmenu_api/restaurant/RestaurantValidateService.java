@@ -22,6 +22,10 @@ public class RestaurantValidateService {
     public void validateRestaurantExists(Restaurant restaurant) {
         if (restaurant == null) throw new RestaurantNotFoundException();
     }
+    public void validateRestaurantExists(String restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        if (restaurant == null) throw new RestaurantNotFoundException();
+    }
 
     public void validateAllToSave(Restaurant restaurant, String administratorId) {
         validateRestaurantExists(restaurant);

@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/restaurant/{restaurantId}/category")
@@ -26,4 +27,18 @@ public class CategoryController {
                 .created(location) // define o status 201 e o header Location
                 .body(aswer);
     }
+
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<CategoryDTO> getById(@PathVariable Long categoryId) {
+        CategoryDTO category = categoryService.getByCategoryId(categoryId);
+        return ResponseEntity.ok(category);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoryDTO>> getAll(@PathVariable String restaurantId) {
+        List<CategoryDTO> categories = categoryService.getAllByRestaurantId(restaurantId);
+        return ResponseEntity.ok(categories);
+    }
+
+
 }
