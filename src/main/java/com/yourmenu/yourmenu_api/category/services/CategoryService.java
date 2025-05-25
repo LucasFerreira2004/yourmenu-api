@@ -42,10 +42,11 @@ public class CategoryService {
     public CategoryDTO update(CategorySaveDTO dto, String AdminId){
         return null;
     }
-    public CategoryDTO getByCategoryId(Long categoryId) {
+    public CategoryDTO getByCategoryId(Long categoryId, String restaurantId) {
         categoryValidateService.validateCategoryExists(categoryId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());
+        categoryValidateService.validateCategorybelongsToRestaurant(category, restaurantId);
         return CategoryMapper.toDto(category);
     }
 

@@ -29,8 +29,8 @@ public class CategoryController {
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryDTO> getById(@PathVariable Long categoryId) {
-        CategoryDTO category = categoryService.getByCategoryId(categoryId);
+    public ResponseEntity<CategoryDTO> getById(@PathVariable String restaurantId, @PathVariable Long categoryId) {
+        CategoryDTO category = categoryService.getByCategoryId(categoryId, restaurantId);
         return ResponseEntity.ok(category);
     }
 
