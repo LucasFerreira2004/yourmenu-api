@@ -12,18 +12,24 @@ import org.springframework.stereotype.Service;
 public class CategoryValidateService {
     @Autowired
     private CategoryRepository categoryRepository;
+
     @Autowired
     private RestaurantValidateService restaurantValidateService;
 
     public void validateCategoryExists(Long categoryId) {
         categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException());
     }
-    public void validateAdminCanSaveCategory(Long categoryId, String adminId) {
-        validateCategoryExists(categoryId);
-        restaurantValidateService.
-
+    public void validateAdminCanSaveCategory(Category category, String adminId) {
+        restaurantValidateService.validateRestaurantExists(category.getRestaurant());
+        restaurantValidateService.validateAdministratorCanEditRestaurant(category.getRestaurant(), adminId);
     }
 
+    public void validateAdminCanEditCategory(Long categoryId, String adminId) {
+        validateCategoryExists(categoryId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException());
+        restaurantValidateService.validateRestaurantExists(category.getRestaurant());
+        restaurantValidateService.validateAdministratorCanEditRestaurant(category.getRestaurant(), adminId);
+    }
     public void validateCategorybelongsToRestaurant(Category category, String restaurantId) {
         if (!category.getRestaurant().getId().equals(restaurantId)) {
             throw new CategoryDoesntBelongToRestaurantException();
