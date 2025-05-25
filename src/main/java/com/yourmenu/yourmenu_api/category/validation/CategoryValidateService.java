@@ -35,4 +35,10 @@ public class CategoryValidateService {
             throw new CategoryDoesntBelongToRestaurantException();
         }
     }
+    public void validateCategoryNameIsUnique(Category category) {
+        validateCategoryExists(category.getId());
+        restaurantValidateService.validateRestaurantExists(category.getRestaurant());
+        Category categoryWithSameName = categoryRepository.findByNameAndRestaurantId(category.getName(), category.getRestaurant().getId());
+        if (categoryWithSameName != null) throw new CategoryWithSameNameException();
+    }
 }

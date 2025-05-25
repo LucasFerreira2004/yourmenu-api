@@ -6,7 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"restaurant_id", "name"})
+        }
+)
 @Entity
 @Data
 @NoArgsConstructor
@@ -19,7 +23,7 @@ public class Category {
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 
-    @JoinColumn(nullable = false)
+    @Column(nullable = false)
     private String name;
 
     //private Boolean suportsComposite;

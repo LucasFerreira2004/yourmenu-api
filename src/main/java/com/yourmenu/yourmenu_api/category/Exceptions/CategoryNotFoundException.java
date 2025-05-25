@@ -8,5 +8,4 @@ public class CategoryNotFoundException extends ApplicationException {
     }
     public CategoryNotFoundException(String message) {super("categoryId", message);}
     public CategoryNotFoundException() {super("categoryId", "categoria nao encontrada");}
-
 }
