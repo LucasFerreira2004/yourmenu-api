@@ -19,12 +19,12 @@ public class RestaurantValidateService {
             throw new DeniedAccessException("administratorId", "Você não tem permissão para acessar ou modificar este restaurante");
         }
     }
-    public void validateRestaurantExists(Restaurant restaurant, String errorField) {
-        if (restaurant == null) throw new RestaurantNotFoundException(errorField);
+    public void validateRestaurantExists(Restaurant restaurant) {
+        if (restaurant == null) throw new RestaurantNotFoundException();
     }
 
-    public void validateAllToSave(Restaurant restaurant, String administratorId, String errorField) {
-        validateRestaurantExists(restaurant, errorField);
+    public void validateAllToSave(Restaurant restaurant, String administratorId) {
+        validateRestaurantExists(restaurant);
         validateAdministratorCanEditRestaurant(restaurant, administratorId);
     }
 }

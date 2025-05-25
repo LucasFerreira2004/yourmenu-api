@@ -48,7 +48,7 @@ public class RestaurantService {
     @Transient
     public RestaurantDTO openClose(@Valid OpenDTO dto, String restaurantId, String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateAllToSave(restaurant, adminId);
         restaurant.setIsOpen(dto.isOpen());
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
@@ -57,7 +57,7 @@ public class RestaurantService {
     @Transient
     public RestaurantDTO update(@Valid RestaurantSaveDTO dto, String restaurantId,  String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateAllToSave(restaurant, adminId);
         restaurant = updateRestaurantData(restaurant, dto);
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
@@ -91,15 +91,15 @@ public class RestaurantService {
         return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant)).toList();
     }
 
-    public RestaurantDTO findById(String restaurantId, String adminId) {
+    public RestaurantDTO findById(String restaurantId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateRestaurantExists(restaurant);
         return restaurantMapper.toDTO(restaurant);
     }
 
     public void delete(String restaurantId, String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToSave(restaurant, adminId, restaurantId);
+        restaurantValidateService.validateAllToSave(restaurant, adminId);
         restaurantRepository.delete(restaurant);
     }
 }

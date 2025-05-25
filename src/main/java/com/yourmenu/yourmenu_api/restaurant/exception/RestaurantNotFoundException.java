@@ -9,4 +9,7 @@ public class RestaurantNotFoundException extends ApplicationException {
     public RestaurantNotFoundException(String field) {
         super(field, "Restaurante não encontrado");
     }
+    public RestaurantNotFoundException() {
+        super("restaurantId", "Restaurante não encontrado");
+    }
 }
