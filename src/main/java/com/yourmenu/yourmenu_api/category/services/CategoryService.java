@@ -12,6 +12,7 @@ import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantService;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class CategoryService {
     @Autowired
     private RestaurantValidateService restaurantValidateService;
 
+    @Transactional
     public CategoryDTO save(CategorySaveDTO dto, String restaurantId, String adminId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(()-> new RestaurantNotFoundException());
         Category category = CategoryMapper.toEntity(dto, restaurant);
@@ -39,8 +41,15 @@ public class CategoryService {
         return CategoryMapper.toDto(category);
     }
 
-    public CategoryDTO update(CategorySaveDTO dto, String AdminId){
-        return null;
+    @Transactional
+    public CategoryDTO update(CategorySaveDTO dto, Long categoryId, String adminId) {
+        categoryValidateService.validateAdminCanEditCategory(categoryId, adminId);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
+        category.setName(dto.name());
+        categoryValidateService.validateCategoryIsUnique(category);
+        categoryRepository.save(category);
+        return CategoryMapper.toDto(category);
     }
     public CategoryDTO getByCategoryId(Long categoryId, String restaurantId) {
         categoryValidateService.validateCategoryExists(categoryId);
