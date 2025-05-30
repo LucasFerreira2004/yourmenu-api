@@ -1,6 +1,6 @@
 package com.yourmenu.yourmenu_api.deliveryZone.exception;
 
-import com.yourmenu.yourmenu_api.globalExceptions.ApplicationException;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ApplicationException;
 
 public class DeliveryZoneNotFoundException extends ApplicationException {
     public DeliveryZoneNotFoundException(String field, String message) {
