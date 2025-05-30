@@ -13,6 +13,7 @@ import com.yourmenu.yourmenu_api.restaurant.RestaurantService;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import jakarta.transaction.Transactional;
+import org.apache.commons.lang3.RuntimeEnvironment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -42,15 +43,24 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryDTO update(CategorySaveDTO dto, Long categoryId, String adminId) {
+    public CategoryDTO update(CategorySaveDTO dto, String restaurantId, Long categoryId, String adminId) {
         categoryValidateService.validateAdminCanEditCategory(categoryId, adminId);
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(CategoryNotFoundException::new);
+                .orElseThrow(() -> new CategoryNotFoundException());
+        //no futuro deverá ser crida uma função para essa parte de criação de  categoria
+        //System.out.println("depurando AAAAAAAAA - "+category.getName());
         category.setName(dto.name());
-        categoryValidateService.validateCategoryIsUnique(category);
+        System.out.println(category.getName() + " " + category.getId());
+        try {
+            categoryValidateService.validateCategoryIsUnique(category); // O erro acontece nessa linha aqui.
+        }catch (Exception e){
+            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
+        }
         categoryRepository.save(category);
         return CategoryMapper.toDto(category);
     }
+
     public CategoryDTO getByCategoryId(Long categoryId, String restaurantId) {
         categoryValidateService.validateCategoryExists(categoryId);
         Category category = categoryRepository.findById(categoryId)
