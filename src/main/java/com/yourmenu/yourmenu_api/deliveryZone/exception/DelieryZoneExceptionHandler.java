@@ -1,6 +1,6 @@
 package com.yourmenu.yourmenu_api.deliveryZone.exception;
 
-import com.yourmenu.yourmenu_api.globalExceptions.ErrorResponseDTO;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ErrorResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
