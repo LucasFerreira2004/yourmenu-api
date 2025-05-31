@@ -42,16 +42,23 @@ public class DeliveryZoneService {
         return deliveryZoneMapper.toDto(deliveryZoneRepository.save(entity));
     }
 
-    public List<DeliveryZoneDto> findAll() {
-        return deliveryZoneMapper.toPageDto(deliveryZoneRepository.findAll());
+    public List<DeliveryZoneDto> findAll(String restaurantId, String adminId) {
+        deliveryZoneValidateService.validateRestaurantOwnerShip(restaurantId, adminId);
+        return deliveryZoneMapper.toListDto(
+                                    deliveryZoneRepository.findAllByRestaurantId(restaurantId));
     }
 
     public DeliveryZoneDto findById(Long id) {
-        return deliveryZoneMapper.toDto(deliveryZoneRepository.findById(id).orElseThrow(() -> new DeliveryZoneNotFoundException("id")));
+        return deliveryZoneMapper.toDto(
+                deliveryZoneRepository
+                        .findById(id)
+                        .orElseThrow(() -> new DeliveryZoneNotFoundException("id")));
     }
 
-    public DeliveryZoneDto update(Long id, DeliveryZonePostDto deliveryZone) {
-        DeliveryZone existingZone = deliveryZoneRepository.findById(id)
+    public DeliveryZoneDto update(Long id, DeliveryZonePostDto deliveryZone, String adminId) {
+        deliveryZoneValidateService.validateRestaurantOwnerShipPerDeliveryZone(id, adminId);
+        DeliveryZone existingZone = deliveryZoneRepository
+                .findById(id)
                 .orElseThrow(() -> new DeliveryZoneNotFoundException("id"));
 
         // Busca o restaurante pelo slug e valida o existente
@@ -70,7 +77,8 @@ public class DeliveryZoneService {
         return deliveryZoneMapper.toDto(deliveryZoneRepository.save(existingZone));
     }
 
-    public void delete(Long id) {
+    public void delete(Long id, String adminId) {
+        deliveryZoneValidateService.validateRestaurantOwnerShipPerDeliveryZone(id, adminId);
         deliveryZoneRepository.deleteById(id);
     }
 }

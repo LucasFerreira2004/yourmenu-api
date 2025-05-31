@@ -23,14 +23,14 @@ public class DeliveryZoneController {
     @Autowired
     private DeliveryZoneService deliveryZoneService;
 
-    @GetMapping()
+    @GetMapping("/{restaurantId}/all")
     @Operation(summary = "Retorna as zonas de entrega", description = "Retorna todas as zonas de entrega e seus valores")
     @ResponseStatus(value = HttpStatus.OK)
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Zonas de entrega encontradas")
     })
-    public ResponseEntity<List<DeliveryZoneDto>> findAll() {
-        List<DeliveryZoneDto> zones = deliveryZoneService.findAll();
+    public ResponseEntity<List<DeliveryZoneDto>> findAll(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
+        List<DeliveryZoneDto> zones = deliveryZoneService.findAll(restaurantId, currentUser.getId());
         return ResponseEntity.ok(zones);
     }
 
@@ -68,8 +68,11 @@ public class DeliveryZoneController {
             @ApiResponse(responseCode = "400", description = "Zona de entrega já cadastrada"),
             @ApiResponse(responseCode = "404", description = "Zona de entrega não encontrada")
     })
-    public ResponseEntity<DeliveryZoneDto> update(@PathVariable Long id, @Valid @RequestBody DeliveryZonePostDto deliveryZone) {
-        return ResponseEntity.ok(deliveryZoneService.update(id, deliveryZone));
+    public ResponseEntity<DeliveryZoneDto> update(
+            @PathVariable Long id,
+            @Valid @RequestBody DeliveryZonePostDto deliveryZone,
+            @CurrentUser Administrator currentUser) {
+        return ResponseEntity.ok(deliveryZoneService.update(id, deliveryZone, currentUser.getId()));
     }
 
     @DeleteMapping("/{id}")
@@ -79,8 +82,8 @@ public class DeliveryZoneController {
             @ApiResponse(responseCode = "204", description = "Zona de entrega deletada"),
             @ApiResponse(responseCode = "404", description = "Zona de entrega não encontrada")
     })
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        deliveryZoneService.delete(id);
+    public ResponseEntity<Void> delete(@PathVariable Long id, @CurrentUser Administrator currentUser) {
+        deliveryZoneService.delete(id, currentUser.getId());
         return ResponseEntity.noContent().build();
     }
 }
