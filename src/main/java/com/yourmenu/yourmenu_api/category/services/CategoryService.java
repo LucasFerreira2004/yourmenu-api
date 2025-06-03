@@ -49,15 +49,8 @@ public class CategoryService {
                 .orElseThrow(() -> new CategoryNotFoundException());
         category.getId();
         //no futuro deverá ser crida uma função para essa parte de criação de  categoria
-        //System.out.println("depurando AAAAAAAAA - "+category.getName());
         category.setName(dto.name());
-        System.out.println(category.getName() + " " + category.getId());
-        try {
-            categoryValidateService.validateCategoryIsUnique(category); // O erro acontece nessa linha aqui.
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new RuntimeException(e.getMessage());
-        }
+        categoryValidateService.validateCategoryIsUnique(category); // O erro acontece nessa linha aqui.
         categoryRepository.save(category);
         return CategoryMapper.toDto(category);
     }

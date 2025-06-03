@@ -45,15 +45,14 @@ public class CategoryController {
                                               @PathVariable Long categoryId,
                                               @RequestBody @Valid CategorySaveDTO dto,
                                               @CurrentUser Administrator currentUser) {
-        try{
-            CategoryDTO updatedCategory = categoryService.update(dto, restaurantId, categoryId, currentUser.getId());
-            return ResponseEntity.ok(updatedCategory);
-        }catch(Exception e){
-            e.printStackTrace();
-            throw e;
-        }
+
+        CategoryDTO updatedCategory = categoryService.update(dto, restaurantId, categoryId, currentUser.getId());
+        return ResponseEntity.ok(updatedCategory);
     }
 
-
-
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<CategoryDTO> delete(@PathVariable String restaurantId, @PathVariable Long categoryId, @CurrentUser Administrator currentUser) {
+        CategoryDTO deletedCategory = categoryService.delete(categoryId, currentUser.getId());
+        return ResponseEntity.ok(deletedCategory);
+    }
 }
