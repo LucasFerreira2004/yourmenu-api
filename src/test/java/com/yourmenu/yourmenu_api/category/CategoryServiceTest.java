@@ -21,8 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class CategoryServiceTest {
@@ -113,5 +112,32 @@ class CategoryServiceTest {
         // Act + Assert
         assertThrows(CategoryNotFoundException.class, () ->
                 categoryService.update(dto, "rest1", 999L, "admin1"));
+    }
+
+    @Test
+    void delete_ShouldRemoveCategory_WhenValid() {
+        // Arrange
+        when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
+        doNothing().when(categoryValidateService).validateAdminCanEditCategory(1L, "admin1");
+        doNothing().when(categoryRepository).delete(category);
+
+        // Act
+        CategoryDTO result = categoryService.delete(1L, "admin1");
+
+        // Assert
+        assertEquals("Bebidas", result.name());
+        assertEquals(1L, result.Id());
+        verify(categoryRepository).delete(category); // Garante que o delete foi chamado
+    }
+
+    @Test
+    void delete_ShouldThrowException_WhenCategoryNotFound() {
+        // Arrange
+        when(categoryRepository.findById(999L)).thenReturn(Optional.empty());
+        doNothing().when(categoryValidateService).validateAdminCanEditCategory(999L, "admin1");
+
+        // Act + Assert
+        assertThrows(CategoryNotFoundException.class, () ->
+                categoryService.delete(999L, "admin1"));
     }
 }

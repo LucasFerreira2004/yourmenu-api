@@ -77,7 +77,7 @@ public class CategoryService {
                 .map(CategoryMapper::toDto)
                 .toList();
     }
-    public CategoryDTO delete(Integer categoryid, String AdminId){
+    public CategoryDTO delete(Long categoryid, String AdminId){
         return null;
     }
 }
