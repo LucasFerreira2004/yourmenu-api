@@ -5,7 +5,7 @@ import com.yourmenu.yourmenu_api.category.CategoryRepository;
 import com.yourmenu.yourmenu_api.category.Exceptions.CategoryDoesntBelongToRestaurantException;
 import com.yourmenu.yourmenu_api.category.Exceptions.CategoryNotFoundException;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
-import com.yourmenu.yourmenu_api.shared.globalExceptions.DuplicatedNameException;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceWithSameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +31,7 @@ public class CategoryValidateService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException());
         restaurantValidateService.validateRestaurantExists(category.getRestaurant());
         restaurantValidateService.validateAdministratorCanEditRestaurant(category.getRestaurant(), adminId);
+        this.validateCategorybelongsToRestaurant(category, adminId);
     }
     public void validateCategorybelongsToRestaurant(Category category, String restaurantId) {
         if (!category.getRestaurant().getId().equals(restaurantId)) {
@@ -38,9 +39,8 @@ public class CategoryValidateService {
         }
     }
     public void validateCategoryIsUnique(Category category) {
-        System.out.println("Depurando id do adm: " + category.getRestaurant().getAdministrator().getId());
         restaurantValidateService.validateRestaurantExists(category.getRestaurant().getId());
         Category categoryWithSameName = categoryRepository.findByNameAndRestaurantId(category.getName(), category.getRestaurant().getId());
-        if (categoryWithSameName != null) throw new DuplicatedNameException("category");
+        if (categoryWithSameName != null) throw new ResourceWithSameNameException("category");
     }
 }
