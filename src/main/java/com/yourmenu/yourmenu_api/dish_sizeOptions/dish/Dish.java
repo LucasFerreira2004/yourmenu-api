@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.dish;
+package com.yourmenu.yourmenu_api.dish_sizeOptions.dish;
 
 import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;

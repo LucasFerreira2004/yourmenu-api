@@ -1,9 +1,8 @@
 package com.yourmenu.yourmenu_api.category;
 
-import com.yourmenu.yourmenu_api.dish.Dish;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
