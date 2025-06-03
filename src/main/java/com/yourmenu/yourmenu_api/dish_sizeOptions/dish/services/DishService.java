@@ -1,10 +1,13 @@
 package com.yourmenu.yourmenu_api.dish_sizeOptions.dish.services;
 
+import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.category.CategoryRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.DishRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishSaveDTO;
+import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +26,9 @@ public class DishService {
 
 
     public DishDTO save(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){
-        return null;
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("restaurant"));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
+
     }
 
     public DishDTO update(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){

@@ -6,7 +6,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Table
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"restaurant_id", "name"})
+        }
+)
 @Entity
 @Data
 @NoArgsConstructor
