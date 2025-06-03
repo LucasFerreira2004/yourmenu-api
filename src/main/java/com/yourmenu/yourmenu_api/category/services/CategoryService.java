@@ -77,7 +77,13 @@ public class CategoryService {
                 .map(CategoryMapper::toDto)
                 .toList();
     }
-    public CategoryDTO delete(Long categoryid, String AdminId){
-        return null;
+    @Transactional
+    public CategoryDTO delete(Long categoryId, String adminId) {
+        categoryValidateService.validateAdminCanEditCategory(categoryId, adminId);
+        Category category = categoryRepository.findById(categoryId)
+                .orElseThrow(CategoryNotFoundException::new);
+        categoryRepository.delete(category);
+        return CategoryMapper.toDto(category);
     }
+
 }
