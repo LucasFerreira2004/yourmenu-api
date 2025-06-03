@@ -8,7 +8,7 @@ import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 public class CategoryMapper {
     public static Category toEntity(CategorySaveDTO dto, Restaurant restaurant) {
         Category category = new Category();
-        category.setName(dto.name());
+        category.setName(dto.name().toLowerCase());
         category.setRestaurant(restaurant);
         return category;
     }
