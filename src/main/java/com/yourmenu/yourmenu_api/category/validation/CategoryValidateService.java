@@ -38,7 +38,8 @@ public class CategoryValidateService {
         }
     }
     public void validateCategoryIsUnique(Category category) {
-        restaurantValidateService.validateRestaurantExists(category.getRestaurant());
+        System.out.println("Depurando id do adm: " + category.getRestaurant().getAdministrator().getId());
+        restaurantValidateService.validateRestaurantExists(category.getRestaurant().getId());
         Category categoryWithSameName = categoryRepository.findByNameAndRestaurantId(category.getName(), category.getRestaurant().getId());
         if (categoryWithSameName != null) throw new DuplicatedNameException("category");
     }

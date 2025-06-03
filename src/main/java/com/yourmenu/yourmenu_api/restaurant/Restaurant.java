@@ -1,11 +1,11 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.Administrator;
+import com.yourmenu.yourmenu_api.category.Category;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Table
 @Entity
@@ -37,4 +37,9 @@ public class Restaurant {
 
     @Column(columnDefinition = "text")
     private String BannerPicUrl;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "restaurant")
+    private List<Category> categories;
+
 }

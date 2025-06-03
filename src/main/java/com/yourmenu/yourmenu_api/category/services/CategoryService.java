@@ -47,6 +47,7 @@ public class CategoryService {
         categoryValidateService.validateAdminCanEditCategory(categoryId, adminId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());
+        category.getId();
         //no futuro deverá ser crida uma função para essa parte de criação de  categoria
         //System.out.println("depurando AAAAAAAAA - "+category.getName());
         category.setName(dto.name());

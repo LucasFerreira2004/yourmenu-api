@@ -45,8 +45,13 @@ public class CategoryController {
                                               @PathVariable Long categoryId,
                                               @RequestBody @Valid CategorySaveDTO dto,
                                               @CurrentUser Administrator currentUser) {
-        CategoryDTO updatedCategory = categoryService.update(dto, restaurantId, categoryId, currentUser.getId());
-        return ResponseEntity.ok(updatedCategory);
+        try{
+            CategoryDTO updatedCategory = categoryService.update(dto, restaurantId, categoryId, currentUser.getId());
+            return ResponseEntity.ok(updatedCategory);
+        }catch(Exception e){
+            e.printStackTrace();
+            throw e;
+        }
     }
 
 
