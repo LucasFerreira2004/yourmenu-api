@@ -62,4 +62,16 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(DuplicatedNameException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(DuplicatedNameException e) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
 }
