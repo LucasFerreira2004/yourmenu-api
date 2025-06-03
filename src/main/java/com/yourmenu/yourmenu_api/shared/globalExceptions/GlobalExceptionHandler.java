@@ -38,6 +38,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(ResourceNotFoundException e) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
+
     @ExceptionHandler(UserNotAuthenticatedException.class)
     public ResponseEntity<ErrorResponseDTO> handleException(UserNotAuthenticatedException e) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
