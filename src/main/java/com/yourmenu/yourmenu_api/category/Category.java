@@ -1,10 +1,13 @@
 package com.yourmenu.yourmenu_api.category;
 
+import com.yourmenu.yourmenu_api.dish.Dish;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Table(
         uniqueConstraints = {
@@ -25,6 +28,10 @@ public class Category {
 
     @Column(nullable = false)
     private String name;
+
+    //observar se dará o erro de referência cíclica de toString().
+    @OneToMany
+    private List<Dish> dishes;
 
     //private Boolean suportsComposite;
     //private Integer maxNumberComposites;
