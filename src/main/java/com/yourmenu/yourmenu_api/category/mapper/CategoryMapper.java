@@ -16,4 +16,11 @@ public class CategoryMapper {
     public static CategoryDTO toDto(Category category) {
         return new CategoryDTO(category.getId(), category.getName(), category.getRestaurant().getId());
     }
+
+    public static Category copyEntity(Category category) {
+        return new Category(category.getId(),
+                            category.getRestaurant(),
+                            category.getName(),
+                            category.getDishes());
+    }
 }

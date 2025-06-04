@@ -2,9 +2,12 @@ package com.yourmenu.yourmenu_api.dish_sizeOptions.dish.services;
 
 import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.category.CategoryRepository;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.DishRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishSaveDTO;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.mappers.DishMapper;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.validation.DishValidateService;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
@@ -24,11 +27,15 @@ public class DishService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private DishValidateService dishValidateService;
 
     public DishDTO save(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("restaurant"));
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
-
+        Dish dish = DishMapper.toEntity(dto, restaurant, category);
+        dishValidateService.validateToSave(dish, adminId);
+        return DishMapper.toDTO(dishRepository.save(dish));
     }
 
     public DishDTO update(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){

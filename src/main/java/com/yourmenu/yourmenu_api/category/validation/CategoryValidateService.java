@@ -31,7 +31,6 @@ public class CategoryValidateService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException());
         restaurantValidateService.validateRestaurantExists(category.getRestaurant());
         restaurantValidateService.validateAdministratorCanEditRestaurant(category.getRestaurant(), adminId);
-        this.validateCategorybelongsToRestaurant(category, adminId);
     }
     public void validateCategorybelongsToRestaurant(Category category, String restaurantId) {
         if (!category.getRestaurant().getId().equals(restaurantId)) {
@@ -41,6 +40,7 @@ public class CategoryValidateService {
     public void validateCategoryIsUnique(Category category) {
         restaurantValidateService.validateRestaurantExists(category.getRestaurant().getId());
         Category categoryWithSameName = categoryRepository.findByNameAndRestaurantId(category.getName(), category.getRestaurant().getId());
+        System.out.println(categoryRepository.findByNameAndRestaurantId(category.getName(), category.getRestaurant().getId()));
         if (categoryWithSameName != null) throw new ResourceWithSameNameException("category");
     }
 }
