@@ -15,13 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 
 @RestController
-@RequestMapping("/restaurant/{restaurantId}/category/{categoryId}/dish")
+@RequestMapping("/restaurant/{restaurantId}")
 public class DishController {
     @Autowired
     private DishService dishService;
 
-    @PostMapping
-    public ResponseEntity<DishDTO> saveCategory(@RequestBody @Valid DishSaveDTO dto,
+    @PostMapping("/category/{categoryId}/dish")
+    public ResponseEntity<DishDTO> savaDish(@RequestBody @Valid DishSaveDTO dto,
                                                     @PathVariable String restaurantId,
                                                     @PathVariable Long categoryId,
                                                     @CurrentUser Administrator currentUser) {
@@ -30,5 +30,11 @@ public class DishController {
         return ResponseEntity
                 .created(location) // define o status 201 e o header Location
                 .body(response);
+    }
+
+    @GetMapping("/dish/{dishId}")
+    public ResponseEntity<DishDTO> getDishById(@PathVariable String restaurantId, @PathVariable Long dishId) {
+        DishDTO response = dishService.getBydId(dishId, restaurantId);
+        return ResponseEntity.ok(response);
     }
 }

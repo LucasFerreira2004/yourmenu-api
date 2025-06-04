@@ -46,7 +46,7 @@ public class DishService {
         return null;
     }
 
-    public DishDTO getBydId(Long dishId){
+    public DishDTO getBydId(Long dishId, String restaurantId){
         return null;
     }
 

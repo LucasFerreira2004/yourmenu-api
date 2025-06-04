@@ -69,7 +69,7 @@ class CategoryServiceTest {
         CategoryDTO result = categoryService.save(dto, "rest1", "admin1");
 
         // Assert
-        assertEquals("Bebidas", result.name());
+        assertEquals("bebidas", result.name());
         assertEquals(1L, result.Id());
     }
 

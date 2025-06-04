@@ -24,4 +24,9 @@ public class DishValidateService {
         categoryValidateService.validateAdminCanEditCategory(dish.category.getId(), adminId);
         this.validateDishIsUniqueByName(dish);
     }
+
+    public void validateDishBelongsToRestaurant(Dish dish, String restaurantId) {
+        if (!dish.getRestaurant().getId().equals(restaurantId))
+            throw new
+    }
 }

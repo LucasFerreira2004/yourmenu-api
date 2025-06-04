@@ -75,6 +75,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(EntityDoesNotBelongToAnotherEntityException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(EntityDoesNotBelongToAnotherEntityException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
+
     @ExceptionHandler(ResourceWithSameNameException.class)
     public ResponseEntity<ErrorResponseDTO> handleException(ResourceWithSameNameException e) {
         HttpStatus status = HttpStatus.CONFLICT;

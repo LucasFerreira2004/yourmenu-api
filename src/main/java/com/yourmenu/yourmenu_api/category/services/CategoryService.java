@@ -49,9 +49,9 @@ public class CategoryService {
                 .orElseThrow(() -> new CategoryNotFoundException());
         //no futuro deverá ser crida uma função para essa parte de criação de  categoria
         Category newCategory = CategoryMapper.copyEntity(oldCategory);
-        newCategory.setName(dto.name());
+        newCategory.setName(dto.name().toLowerCase());
         System.out.println(categoryRepository.findById(categoryId));
-        categoryValidateService.validateCategoryIsUnique(newCategory); // O erro acontece nessa linha aqui.
+        categoryValidateService.validateCategoryIsUnique(newCategory);
         categoryRepository.save(newCategory);
         return CategoryMapper.toDto(newCategory);
     }
