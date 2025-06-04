@@ -47,7 +47,9 @@ public class DishService {
     }
 
     public DishDTO getBydId(Long dishId, String restaurantId){
-        return null;
+        dishValidateService.validateToGetById(dishId, restaurantId);
+        Dish dish = dishRepository.findById(dishId).orElseThrow(() -> new ResourceNotFoundException("dish"));
+        return DishMapper.toDTO(dish);
     }
 
     public List<DishDTO> getAllDishesByCategory(Long dishId, Long categoryId){
