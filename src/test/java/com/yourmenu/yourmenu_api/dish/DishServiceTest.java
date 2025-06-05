@@ -11,6 +11,7 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.services.DishService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.validation.DishValidateService;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.EntityDoesNotBelongToAnotherEntityException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -150,7 +151,12 @@ class DishServiceTest {
         assertEquals(response, rightDTOs);
     }
 
-
+    @Test
+    void getByCategory_ShoudThrowException_WhenCategoryDoesNotBelongToRestaurant() {
+        assertThrows(EntityDoesNotBelongToAnotherEntityException.class, () -> {
+            dishService.getAllDishesByCategory(restaurant.getId() + "notExistentId", category.getId());
+        });
+    }
 
 
 
