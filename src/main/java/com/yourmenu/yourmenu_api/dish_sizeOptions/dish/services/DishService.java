@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.dish_sizeOptions.dish.services;
 
+
 import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.category.CategoryRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
@@ -46,16 +47,16 @@ public class DishService {
         return null;
     }
 
-    public DishDTO getBydId(Long dishId, String restaurantId){
+    public DishDTO getById(Long dishId, String restaurantId){
         dishValidateService.validateToGetById(dishId, restaurantId);
         Dish dish = dishRepository.findById(dishId).orElseThrow(() -> new ResourceNotFoundException("dish"));
         return DishMapper.toDTO(dish);
     }
 
-    public List<DishDTO> getAllDishesByCategory(Long dishId, Long categoryId){
-        return List.of();
+    public List<DishDTO> getAllDishesByCategory(String restaurantId, Long categoryId){
+        List<Dish> dishes = dishRepository.findAllByCategoryId(categoryId);
+        return dishes.stream().map(x -> DishMapper.toDTO(x)).toList();
     }
-
     public List<DishDTO> getAllAvailableDishesByCategory(Long dishId, Long categoryId){
         return List.of();
     }
