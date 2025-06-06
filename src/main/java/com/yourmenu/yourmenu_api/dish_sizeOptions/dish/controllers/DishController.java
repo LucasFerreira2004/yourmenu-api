@@ -46,4 +46,11 @@ public class DishController {
         List<DishDTO> response = dishService.getAllDishesByCategory(restaurantId, categoryId);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping(URL_WITH_CATEGORY + "/available")
+    public ResponseEntity<List<DishDTO>> getAllAvailableDishesByCategory(@PathVariable String restaurantId,
+                                                                         @PathVariable Long categoryId){
+        List<DishDTO> response = dishService.getAllAvailableDishesByCategory(restaurantId, categoryId);
+        return ResponseEntity.ok(response);
+    }
 }

@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.category.CategoryRepository;
 import com.yourmenu.yourmenu_api.category.Exceptions.CategoryDoesntBelongToRestaurantException;
 import com.yourmenu.yourmenu_api.category.Exceptions.CategoryNotFoundException;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.EntityDoesNotBelongToAnotherEntityException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceWithSameNameException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,10 @@ public class CategoryValidateService {
         restaurantValidateService.validateRestaurantExists(category.getRestaurant());
         restaurantValidateService.validateAdministratorCanEditRestaurant(category.getRestaurant(), adminId);
     }
-    public void validateCategorybelongsToRestaurant(Category category, String restaurantId) {
+    public void validateCategorybelongsToRestaurant(Long categoryId, String restaurantId) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException());
         if (!category.getRestaurant().getId().equals(restaurantId)) {
-            throw new CategoryDoesntBelongToRestaurantException();
+            throw new EntityDoesNotBelongToAnotherEntityException("category", "restaurant");
         }
     }
     public void validateCategoryIsUnique(Category category) {

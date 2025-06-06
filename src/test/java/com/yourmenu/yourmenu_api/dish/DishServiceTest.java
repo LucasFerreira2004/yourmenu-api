@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.dish;
 
 import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.category.CategoryRepository;
+import com.yourmenu.yourmenu_api.category.validation.CategoryValidateService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.DishRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
@@ -26,8 +27,8 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.configuration.GlobalConfiguration.validate;
 
 @ExtendWith(MockitoExtension.class)
 class DishServiceTest {
@@ -46,6 +47,9 @@ class DishServiceTest {
 
     @Mock
     private DishValidateService dishValidateService;
+
+    @Mock
+    private CategoryValidateService categoryValidateService;
 
     private Restaurant restaurant;
     private Category category;
@@ -143,7 +147,7 @@ class DishServiceTest {
     void shoudReturnDishListByCategorySucessfully() {
         //configurar
         List<Dish> dishes = List.of(dish, dish2);
-        when(dishRepository.findAllByCategoryId(category.getId())).thenReturn(dishes);
+        when(dishRepository.findAllByCategoryIdInRestaurant(category.getId(), restaurant.getId())).thenReturn(dishes);
         //exercitar
         List<DishDTO> response = dishService.getAllDishesByCategory(restaurant.getId(), category.getId());
         //verificar
@@ -153,20 +157,13 @@ class DishServiceTest {
 
     @Test
     void getByCategory_ShoudThrowException_WhenCategoryDoesNotBelongToRestaurant() {
+        final Long WRONG_CATEGORY_ID = category.getId() + 10L;
+        doThrow(new EntityDoesNotBelongToAnotherEntityException("category", "restaurant"))
+                .when(categoryValidateService)
+                .validateCategorybelongsToRestaurant(WRONG_CATEGORY_ID, restaurant.getId());
+
         assertThrows(EntityDoesNotBelongToAnotherEntityException.class, () -> {
-            dishService.getAllDishesByCategory(restaurant.getId() + "notExistentId", category.getId());
-        });
+            dishService.getAllDishesByCategory(restaurant.getId(), WRONG_CATEGORY_ID);
+        }, "method didn't throw exception when category did not belong to restaurant");
     }
-
-
-
-
-
-
-
-
-
-
-
-
 }

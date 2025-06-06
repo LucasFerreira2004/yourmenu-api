@@ -58,9 +58,9 @@ public class CategoryService {
 
     public CategoryDTO getByCategoryId(Long categoryId, String restaurantId) {
         categoryValidateService.validateCategoryExists(categoryId);
+        categoryValidateService.validateCategorybelongsToRestaurant(categoryId, restaurantId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());
-        categoryValidateService.validateCategorybelongsToRestaurant(category, restaurantId);
         return CategoryMapper.toDto(category);
     }
 

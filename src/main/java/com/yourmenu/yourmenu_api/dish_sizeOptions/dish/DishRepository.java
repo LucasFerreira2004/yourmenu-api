@@ -12,7 +12,16 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
     Dish findByNameAndRestaurant(String name, String restaurant_id);
 
     @Query(nativeQuery = true, value = """
-        select * from dish where category_id = :categoryId;
+        select * from dish where category_id = :categoryId and restaurant_id = :restaurantId;
     """)
-    List<Dish> findAllByCategoryId(Long categoryId);
+    List<Dish> findAllByCategoryIdInRestaurant(Long categoryId, String restaurantId);
+
+    @Query(nativeQuery = true, value = """
+        select * from dish where category_id = :categoryId 
+                                 and restaurant_id = :restaurantId
+                                 and is_available = true;
+    """)
+    List<Dish> findAllAvailableByCategoryIdInRestaurant(Long categoryId, String restaurantId);
+
+
 }

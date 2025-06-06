@@ -3,6 +3,7 @@ package com.yourmenu.yourmenu_api.dish_sizeOptions.dish.services;
 
 import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.category.CategoryRepository;
+import com.yourmenu.yourmenu_api.category.validation.CategoryValidateService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.DishRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
@@ -31,6 +32,9 @@ public class DishService {
     @Autowired
     private DishValidateService dishValidateService;
 
+    @Autowired
+    private CategoryValidateService categoryValidateService;
+
     public DishDTO save(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("restaurant"));
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
@@ -54,11 +58,14 @@ public class DishService {
     }
 
     public List<DishDTO> getAllDishesByCategory(String restaurantId, Long categoryId){
-        List<Dish> dishes = dishRepository.findAllByCategoryId(categoryId);
+        categoryValidateService.validateCategorybelongsToRestaurant(categoryId, restaurantId);
+        List<Dish> dishes = dishRepository.findAllByCategoryIdInRestaurant(categoryId, restaurantId);
         return dishes.stream().map(x -> DishMapper.toDTO(x)).toList();
     }
-    public List<DishDTO> getAllAvailableDishesByCategory(Long dishId, Long categoryId){
-        return List.of();
+    public List<DishDTO> getAllAvailableDishesByCategory(String restaurantId, Long categoryId){
+        categoryValidateService.validateCategorybelongsToRestaurant(categoryId, restaurantId);
+        List<Dish> dishes = dishRepository.findAllAvailableByCategoryIdInRestaurant(categoryId, restaurantId);
+        return dishes.stream().map(x -> DishMapper.toDTO(x)).toList();
     }
 
 }
