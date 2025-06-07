@@ -45,21 +45,22 @@ public class CategoryService {
     @Transactional
     public CategoryDTO update(CategorySaveDTO dto, String restaurantId, Long categoryId, String adminId) {
         categoryValidateService.validateAdminCanEditCategory(categoryId, adminId);
-        Category category = categoryRepository.findById(categoryId)
+        Category oldCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());
-        category.getId();
         //no futuro deverá ser crida uma função para essa parte de criação de  categoria
-        category.setName(dto.name());
-        categoryValidateService.validateCategoryIsUnique(category); // O erro acontece nessa linha aqui.
-        categoryRepository.save(category);
-        return CategoryMapper.toDto(category);
+        Category newCategory = CategoryMapper.copyEntity(oldCategory);
+        newCategory.setName(dto.name().toLowerCase());
+        System.out.println(categoryRepository.findById(categoryId));
+        categoryValidateService.validateCategoryIsUnique(newCategory);
+        categoryRepository.save(newCategory);
+        return CategoryMapper.toDto(newCategory);
     }
 
     public CategoryDTO getByCategoryId(Long categoryId, String restaurantId) {
         categoryValidateService.validateCategoryExists(categoryId);
+        categoryValidateService.validateCategorybelongsToRestaurant(categoryId, restaurantId);
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new CategoryNotFoundException());
-        categoryValidateService.validateCategorybelongsToRestaurant(category, restaurantId);
         return CategoryMapper.toDto(category);
     }
 

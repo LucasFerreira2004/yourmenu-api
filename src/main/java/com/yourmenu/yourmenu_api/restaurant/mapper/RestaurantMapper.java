@@ -23,7 +23,7 @@ public class RestaurantMapper {
 
     public Restaurant toEntity(RestaurantSaveDTO dto) {
         Restaurant restaurant = new Restaurant();
-        restaurant.setName(dto.name());
+        restaurant.setName(dto.name().toLowerCase());
         restaurant.setDeliveryTimeMin(dto.deliveryTimeMin());
         restaurant.setDeliveryTimeMax(dto.deliveryTimeMax());
         return restaurant;

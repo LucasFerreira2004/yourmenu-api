@@ -38,6 +38,18 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(ResourceNotFoundException e) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
+
     @ExceptionHandler(UserNotAuthenticatedException.class)
     public ResponseEntity<ErrorResponseDTO> handleException(UserNotAuthenticatedException e) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
@@ -63,8 +75,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(error);
     }
 
-    @ExceptionHandler(DuplicatedNameException.class)
-    public ResponseEntity<ErrorResponseDTO> handleException(DuplicatedNameException e) {
+    @ExceptionHandler(EntityDoesNotBelongToAnotherEntityException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(EntityDoesNotBelongToAnotherEntityException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(ResourceWithSameNameException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(ResourceWithSameNameException e) {
         HttpStatus status = HttpStatus.CONFLICT;
         ErrorResponseDTO error = new ErrorResponseDTO(
                 e.getField(),
