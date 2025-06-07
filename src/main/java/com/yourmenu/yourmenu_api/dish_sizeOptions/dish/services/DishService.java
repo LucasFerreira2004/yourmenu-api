@@ -35,6 +35,9 @@ public class DishService {
     @Autowired
     private CategoryValidateService categoryValidateService;
 
+    @Autowired
+    private DishMapper dishMapper;
+
     public DishDTO save(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("restaurant"));
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
@@ -43,8 +46,12 @@ public class DishService {
         return DishMapper.toDTO(dishRepository.save(dish));
     }
 
-    public DishDTO update(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){
-        return null;
+    public DishDTO update(Long dishId, DishSaveDTO newDishDTO, String restaurantId, Long categoryId, String adminId) {
+        Dish newDish = dishMapper.toEntity(newDishDTO, restaurantId, categoryId);
+        dishValidateService.validateToUpdate(dishId, newDish, adminId);
+        newDish.setId(dishId);
+        Dish updatedDish = dishRepository.save(newDish);
+        return DishMapper.toDTO(updatedDish);
     }
 
     public DishDTO delete(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){

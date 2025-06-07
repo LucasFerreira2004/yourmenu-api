@@ -53,4 +53,14 @@ public class DishController {
         List<DishDTO> response = dishService.getAllAvailableDishesByCategory(restaurantId, categoryId);
         return ResponseEntity.ok(response);
     }
+
+    @PutMapping(URL_WITH_CATEGORY + "/{dishId}")
+    public ResponseEntity<DishDTO> updateDish(@RequestBody @Valid DishSaveDTO dto,
+                                              @PathVariable String restaurantId,
+                                              @PathVariable Long categoryId,
+                                              @PathVariable Long dishId,
+                                              @CurrentUser Administrator currentUser){
+        DishDTO response = dishService.update(dishId,  dto, restaurantId, categoryId, currentUser.getId());
+        return ResponseEntity.ok(response);
+    }
 }

@@ -3,6 +3,7 @@ package com.yourmenu.yourmenu_api.dish_sizeOptions.dish.validation;
 import com.yourmenu.yourmenu_api.category.validation.CategoryValidateService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.DishRepository;
+import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.EntityDoesNotBelongToAnotherEntityException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceWithSameNameException;
@@ -18,6 +19,9 @@ public class DishValidateService {
     @Autowired
     private CategoryValidateService categoryValidateService;
 
+    @Autowired
+    private RestaurantValidateService restaurantValidateService;
+
     public void validateDishIsUniqueByName(Dish dish) {
             Dish result = dishRepository.findByNameAndRestaurant(dish.name, dish.getRestaurant().getId());
             if (result != null)
@@ -25,7 +29,18 @@ public class DishValidateService {
     }
     public void validateToSave(Dish dish, String adminId) {
         categoryValidateService.validateAdminCanEditCategory(dish.category.getId(), adminId);
+        restaurantValidateService.validateAdministratorCanEditRestaurant(dish.getRestaurant(), adminId);
         this.validateDishIsUniqueByName(dish);
+    }
+
+    public void validateToUpdate(Long dihsId, Dish newDish,String adminId) {
+        this.validateDishExists(dihsId);
+        categoryValidateService.validateAdminCanEditCategory(newDish.category.getId(), adminId);
+        restaurantValidateService.validateAdministratorCanEditRestaurant(newDish.getRestaurant(), adminId);
+        Dish oldDish = dishRepository.findById(dihsId).orElseThrow(EntityNotFoundException::new);
+        if (!newDish.getName().equals(oldDish.getName()))
+            this.validateDishIsUniqueByName(newDish);
+
     }
 
     public void validateDishBelongsToRestaurant(Dish dish, String restaurantId) {
