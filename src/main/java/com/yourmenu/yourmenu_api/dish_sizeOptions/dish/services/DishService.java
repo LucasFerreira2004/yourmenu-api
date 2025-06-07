@@ -54,8 +54,9 @@ public class DishService {
         return DishMapper.toDTO(updatedDish);
     }
 
-    public DishDTO delete(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){
-        return null;
+    public void delete(String restaurantId, Long categoryId, Long dishId,  String adminId){
+        dishValidateService.validateToDelete(restaurantId, categoryId, dishId, adminId);
+        dishRepository.deleteById(dishId);
     }
 
     public DishDTO getById(Long dishId, String restaurantId){

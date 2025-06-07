@@ -63,4 +63,13 @@ public class DishController {
         DishDTO response = dishService.update(dishId,  dto, restaurantId, categoryId, currentUser.getId());
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping(URL_WITH_CATEGORY + "/{dishId}")
+    public ResponseEntity<Void> deleteDish(@PathVariable String restaurantId,
+                                              @PathVariable Long categoryId,
+                                              @PathVariable Long dishId,
+                                              @CurrentUser Administrator currentUser) {
+        dishService.delete(restaurantId, categoryId, dishId, currentUser.getId());
+        return ResponseEntity.ok().build();
+    }
 }

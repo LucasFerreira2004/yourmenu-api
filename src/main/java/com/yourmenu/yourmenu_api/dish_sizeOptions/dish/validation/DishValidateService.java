@@ -11,6 +11,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Service
 public class DishValidateService {
     @Autowired
@@ -48,12 +50,29 @@ public class DishValidateService {
             throw new EntityDoesNotBelongToAnotherEntityException("dish","restaurant");
     }
 
+    public void validateDishBelongsToCategory(Dish dish, Long categoryId) {
+        if (!Objects.equals(dish.getCategory().getId(), categoryId))
+            throw new EntityDoesNotBelongToAnotherEntityException("dish","category");
+    }
+
     public void validateDishExists(Long dishId){
         dishRepository.findById(dishId).orElseThrow(() -> new ResourceNotFoundException("dish"));
+    }
+
+    public Dish validateDishExistsAndGet(Long dishId){
+        return dishRepository.findById(dishId).orElseThrow(() -> new ResourceNotFoundException("dish"));
     }
     public void validateToGetById(Long dishId, String restaurantId){
         this.validateDishExists(dishId);
         Dish dish = dishRepository.findById(dishId).orElseThrow(() -> new ResourceNotFoundException("dish"));
         this.validateDishBelongsToRestaurant(dish, restaurantId);
+    }
+
+    public void validateToDelete(String restaurantId, Long categoryId, Long dishId, String adminId) {
+        validateToGetById(dishId, restaurantId);
+        Dish dish = validateDishExistsAndGet(dishId);
+        validateDishBelongsToCategory(dish, categoryId);
+        categoryValidateService.validateAdminCanEditCategory(dish.category.getId(), adminId);
+        restaurantValidateService.validateAdministratorCanEditRestaurant(dish.getRestaurant(), adminId);
     }
 }
