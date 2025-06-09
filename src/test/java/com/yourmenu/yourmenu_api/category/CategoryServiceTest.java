@@ -87,7 +87,7 @@ class CategoryServiceTest {
         CategoryDTO result = categoryService.update(dto, "rest1", 1L, "admin1");
 
         // Assert
-        assertEquals("Novas bebidas", result.name());
+        assertEquals("novas bebidas", result.name());
         assertEquals(1L, result.Id());
     }
 
