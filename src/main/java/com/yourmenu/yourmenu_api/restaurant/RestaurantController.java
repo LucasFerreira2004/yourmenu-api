@@ -54,8 +54,8 @@ public class RestaurantController {
     }
 
     @GetMapping("/{restaurantId}")
-    public ResponseEntity<RestaurantDTO> findBySlug(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.findById(restaurantId, currentUser.getId());
+    public ResponseEntity<RestaurantDTO> findBySlug(@PathVariable String restaurantId) {
+        RestaurantDTO response = restaurantService.findById(restaurantId);
         return ResponseEntity.ok(response);
     }
 
