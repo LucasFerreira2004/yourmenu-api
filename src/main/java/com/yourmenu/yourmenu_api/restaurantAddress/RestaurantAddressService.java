@@ -6,6 +6,7 @@ import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundExceptio
 import com.yourmenu.yourmenu_api.restaurantAddress.dto.RestaurantAddressDTO;
 import com.yourmenu.yourmenu_api.restaurantAddress.dto.RestaurantAddressSaveDTO;
 import com.yourmenu.yourmenu_api.restaurantAddress.mapper.RestaurantAddressMapper;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class RestaurantAddressService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    @Transient
+    @Transactional
     public RestaurantAddressDTO save(RestaurantAddressSaveDTO dto, String adminId){
         restaurantAddressValidateService.validateAllToSave(dto.restaurantId(), adminId);
         Restaurant restaurant = restaurantRepository.findById(dto.restaurantId()).orElseThrow(() -> new RestaurantNotFoundException(dto.restaurantId()));
@@ -37,6 +38,7 @@ public class RestaurantAddressService {
         return RestaurantAddressMapper.toDTO(adress);
     }
 
+    @Transactional
     public RestaurantAddressDTO update(RestaurantAddressSaveDTO dto, String adminId) {
         restaurantAddressValidateService.validateAllToUpdate(dto.restaurantId(), adminId);
         try {

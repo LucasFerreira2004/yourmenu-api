@@ -11,7 +11,7 @@ public class RestaurantValidateService {
     @Autowired
     private RestaurantRepository restaurantRepository;
 
-    public void authorizeAdministratorAccess(Restaurant restaurant, String administratorId) {
+    public void validateAdministratorCanEditRestaurant(Restaurant restaurant, String administratorId) {
         if (administratorId == null) {
             throw new UserNotFoundException("administratorId");
         }
@@ -19,12 +19,16 @@ public class RestaurantValidateService {
             throw new DeniedAccessException("administratorId", "Você não tem permissão para acessar ou modificar este restaurante");
         }
     }
-    public void existentRestaurant(Restaurant restaurant, String errorField) {
-        if (restaurant == null) throw new RestaurantNotFoundException(errorField);
+    public void validateRestaurantExists(Restaurant restaurant) {
+        if (restaurant == null) throw new RestaurantNotFoundException();
+    }
+    public void validateRestaurantExists(String restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        if (restaurant == null) throw new RestaurantNotFoundException();
     }
 
-    public void doAllValidations(Restaurant restaurant, String administratorId, String errorField) {
-        existentRestaurant(restaurant, errorField);
-        authorizeAdministratorAccess(restaurant, administratorId);
+    public void validateAllToSave(Restaurant restaurant, String administratorId) {
+        validateRestaurantExists(restaurant);
+        validateAdministratorCanEditRestaurant(restaurant, administratorId);
     }
 }
