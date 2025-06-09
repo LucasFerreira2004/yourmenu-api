@@ -29,13 +29,7 @@ public class Category {
 
     @Column(nullable = false)
     private String name;
-
-    //observar se dará o erro de referência cíclica de toString().
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany
-    private List<Dish> dishes;
-
+    
     //private Boolean suportsComposite;
     //private Integer maxNumberComposites;
     //private Boolean suportsAddons;

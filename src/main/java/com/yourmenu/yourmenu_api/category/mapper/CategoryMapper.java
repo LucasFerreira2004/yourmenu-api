@@ -20,7 +20,5 @@ public class CategoryMapper {
     public static Category copyEntity(Category category) {
         return new Category(category.getId(),
                             category.getRestaurant(),
-                            category.getName(),
-                            category.getDishes());
-    }
+                            category.getName());}
 }
