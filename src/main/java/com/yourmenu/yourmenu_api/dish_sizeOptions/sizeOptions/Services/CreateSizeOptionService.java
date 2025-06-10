@@ -20,7 +20,7 @@ public class CreateSizeOptionService {
     @Autowired
     SizeOptionsMapper sizeOptionsMapper;
 
-    //metodo para teste SKSKSK
+    //DEIXAR PRONTA PARA INICIALIZAR COM TODOS OS TAMANHOS CORRETAMENTE
     public List<SizeOptionDTO> execute() {
         List<SizeOptionDTO> result = new ArrayList<>();
         for (int i = 0; i < MeasureUnit.values().length; i++) {

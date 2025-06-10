@@ -43,6 +43,7 @@ public class DishService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
         Dish dish = DishMapper.toEntity(dto, restaurant, category);
         dishValidateService.validateToSave(dish, adminId);
+        //MARCAR CASO DÊ ERRO
         return DishMapper.toDTO(dishRepository.save(dish));
     }
 
