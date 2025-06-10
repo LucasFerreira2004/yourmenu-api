@@ -20,17 +20,12 @@ public class SizeOption {
     @JoinColumn(name = "dish_id", nullable = false)
     private Dish dish;
 
-    @NotBlank //So para Strings
+    @NotBlank
     @Column(nullable = false)
-    private String value;
+    private String magnitude;
 
     @Enumerated(EnumType.STRING)
     @NotNull
     @Column(nullable = false)
     private MeasureUnit measureUnit;
-    /*
-    * NotNull e nullble=false se complementam pois
-    * um atua no momento que passam os dados (a nível de Java)
-    * e o outro, no momento que tenta armazenar algo no banco de dados
-    */
 }
