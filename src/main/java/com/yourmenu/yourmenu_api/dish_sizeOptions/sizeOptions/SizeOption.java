@@ -16,12 +16,7 @@ public class SizeOption {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "dish_id", nullable = false)
-    private Dish dish;
-
-    @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String magnitude;
 
     @Enumerated(EnumType.STRING)
