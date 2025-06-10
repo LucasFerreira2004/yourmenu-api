@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -45,5 +46,21 @@ public class S3Service {
         }
     }
 
+    public void deleteFile(String imagemAntiga) {
+        try {
+            s3Client.deleteObject(DeleteObjectRequest.builder()
+                    .bucket(bucket)
+                    .key(imagemAntiga)
+                    .build());
 
+        } catch (Exception e) {
+            throw new RuntimeException("Falha ao deletar o arquivo S3: " + e.getMessage(), e);
+        }
+    }
+
+    public String updateFile(MultipartFile file, Object object) {
+//        deleteFile(object.getImagem());
+//        return uploadFile(file);
+        return "";
+    }
 }
