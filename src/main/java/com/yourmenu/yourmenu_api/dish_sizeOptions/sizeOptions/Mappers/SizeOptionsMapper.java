@@ -10,7 +10,6 @@ public class SizeOptionsMapper {
         if(entity == null){
             return null;
         }
-
         return new SizeOptionDTO(
                 entity.getId(),
                 entity.getMagnitude(),

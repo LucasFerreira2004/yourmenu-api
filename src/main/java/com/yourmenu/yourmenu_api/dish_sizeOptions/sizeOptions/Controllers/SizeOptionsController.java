@@ -30,8 +30,8 @@ public class SizeOptionsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<SizeOption>> getAllSizeOptions(){
-        List<SizeOption> response = listingAllSizeOptionsService.execute();
+    public ResponseEntity<List<SizeOptionDTO>> getAllSizeOptions(){
+        List<SizeOptionDTO> response = listingAllSizeOptionsService.execute();
         return ResponseEntity.ok(response);
     }
 }
