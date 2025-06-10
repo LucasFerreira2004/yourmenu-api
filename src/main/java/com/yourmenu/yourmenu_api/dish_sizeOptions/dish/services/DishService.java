@@ -49,7 +49,7 @@ public class DishService {
         dishValidateService.validateToSave(dish, adminId);
         //
         Dish savedDish = dishRepository.save(dish);
-        createAssociationsService.execute();
+        createAssociationsService.execute(dto.sizeOptionsPrices(), savedDish.getId());
         return DishMapper.toDTO(savedDish);
         //
     }

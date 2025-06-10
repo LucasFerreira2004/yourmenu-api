@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption;
 
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -23,6 +24,10 @@ public class DishSizeOption {
     @ManyToOne
     @JoinColumn(name = "sizeOption_id", nullable = false)
     private SizeOption sizeOption;
+
+    @ManyToOne
+    @JoinColumn(name = "dish_id", nullable = false)
+    private Dish dish;
 
     @Column(precision = 10, scale = 2)
     @Digits(integer = 8, fraction = 2)
