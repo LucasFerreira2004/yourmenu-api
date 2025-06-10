@@ -18,10 +18,10 @@ import java.util.List;
 public class SizeOptionsController {
 
     @Autowired
-    CreateSizeOptionService createSizeOptionService;
+    private CreateSizeOptionService createSizeOptionService;
 
     @Autowired
-    ListingAllSizeOptionsService listingAllSizeOptionsService;
+    private ListingAllSizeOptionsService listingAllSizeOptionsService;
 
     @PostMapping
     public ResponseEntity<List<SizeOptionDTO>> save(){

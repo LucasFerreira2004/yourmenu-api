@@ -15,10 +15,10 @@ import java.util.List;
 public class CreateSizeOptionService {
 
     @Autowired
-    SizeOptionRepository sizeOptionRepository;
+    private SizeOptionRepository sizeOptionRepository;
 
     @Autowired
-    SizeOptionsMapper sizeOptionsMapper;
+    private SizeOptionsMapper sizeOptionsMapper;
 
     //DEIXAR PRONTA PARA INICIALIZAR COM TODOS OS TAMANHOS CORRETAMENTE
     public List<SizeOptionDTO> execute() {

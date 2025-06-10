@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
 public class ListingAllSizeOptionsService {
 
     @Autowired
-    SizeOptionRepository sizeOptionRepository;
+    private SizeOptionRepository sizeOptionRepository;
 
     @Autowired
-    SizeOptionsMapper sizeOptionsMapper;
+    private SizeOptionsMapper sizeOptionsMapper;
 
     public List<SizeOptionDTO> execute(){
         List<SizeOption> sizeOptions = sizeOptionRepository.findAll();
