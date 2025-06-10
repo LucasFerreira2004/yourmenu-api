@@ -31,10 +31,10 @@ public class DishSizeOption {
     private BigDecimal price;
 
     public void setPrice(BigDecimal price) {
-        if (price != null) {
-            this.price = price.setScale(2, RoundingMode.HALF_UP);
-        } else {
-            this.price = null;
+        if (price == null) {
+            throw new IllegalArgumentException("price não pode ser null");
         }
+        this.price = price.setScale(2, RoundingMode.HALF_UP);
     }
+
 }
