@@ -29,7 +29,7 @@ public class DishSizeOption {
     @JoinColumn(name = "dish_id", nullable = false)
     private Dish dish;
 
-    @Column(precision = 10, scale = 2)
+    @Column(precision = 10, scale = 2, nullable = false)
     @Digits(integer = 8, fraction = 2)
     @NotNull
     @DecimalMin("0.0")
