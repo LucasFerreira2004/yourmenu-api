@@ -19,8 +19,8 @@ public class SizeOptionsController {
     CreateSizeOptionService createSizeOptionService;
 
     @PostMapping
-    public ResponseEntity<List<SizeOption>> save(){
-        List<SizeOption> response = createSizeOptionService.execute();
+    public ResponseEntity<List<SizeOptionDTO>> save(){
+        List<SizeOptionDTO> response = createSizeOptionService.execute();
         return ResponseEntity.ok(response);
     }
 }
