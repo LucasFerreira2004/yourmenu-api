@@ -33,9 +33,9 @@ public class CreateAssociationsService {
             dishSizeOption.setSizeOption(sizeOption);
             dishSizeOption.setPrice(item.price());
 
-            System.out.println(dishSizeOption);
-
             dishSizeOptionRepository.save(dishSizeOption);
+
+            System.out.println(dishSizeOption);
         }
     }
 
