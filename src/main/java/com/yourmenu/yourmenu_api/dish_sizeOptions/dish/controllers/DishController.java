@@ -7,8 +7,10 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.services.DishService;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
@@ -22,12 +24,14 @@ public class DishController {
     private final String URL_WITH_CATEGORY = "/category/{categoryId}/dish";
     private final String URL_WITHOUT_CATEGORY = "/dish";
 
-    @PostMapping(URL_WITH_CATEGORY)
-    public ResponseEntity<DishDTO> savaDish(@RequestBody @Valid DishSaveDTO dto,
-                                                    @PathVariable String restaurantId,
-                                                    @PathVariable Long categoryId,
-                                                    @CurrentUser Administrator currentUser) {
-        DishDTO response = dishService.save(dto, restaurantId, categoryId, currentUser.getId());
+    @PostMapping(value = URL_WITH_CATEGORY, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<DishDTO> createDish(
+            @ModelAttribute DishSaveDTO dto,
+            @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl,
+            @PathVariable String restaurantId,
+            @PathVariable Long categoryId,
+            @CurrentUser Administrator currentUser) {
+        DishDTO response = dishService.save(dto, imageUrl, restaurantId, categoryId, currentUser.getId());
         URI location = URI.create("/restaurant/"+restaurantId+"/category/" + categoryId + "/dish/" + response.id());
         return ResponseEntity
                 .created(location) // define o status 201 e o header Location
@@ -54,13 +58,15 @@ public class DishController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(URL_WITH_CATEGORY + "/{dishId}")
-    public ResponseEntity<DishDTO> updateDish(@RequestBody @Valid DishSaveDTO dto,
-                                              @PathVariable String restaurantId,
-                                              @PathVariable Long categoryId,
-                                              @PathVariable Long dishId,
-                                              @CurrentUser Administrator currentUser){
-        DishDTO response = dishService.update(dishId,  dto, restaurantId, categoryId, currentUser.getId());
+    @PutMapping(value = URL_WITH_CATEGORY + "/{dishId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<DishDTO> updateDish(
+            @ModelAttribute DishSaveDTO dto,
+            @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl,
+            @PathVariable String restaurantId,
+            @PathVariable Long categoryId,
+            @PathVariable Long dishId,
+            @CurrentUser Administrator currentUser){
+        DishDTO response = dishService.update(dishId,  dto, imageUrl, restaurantId, categoryId, currentUser.getId());
         return ResponseEntity.ok(response);
     }
 
