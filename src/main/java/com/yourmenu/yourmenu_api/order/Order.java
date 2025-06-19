@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Table
@@ -22,7 +23,7 @@ public class Order {
     private Restaurant restaurant;
 
     @Column(nullable = false)
-    private LocalDateTime orderDate;
+    private LocalDate date;
 
     @Column(nullable = false)
     private BigDecimal price;
