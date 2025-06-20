@@ -1,7 +1,7 @@
 package com.yourmenu.yourmenu_api.order.services;
 
 import com.yourmenu.yourmenu_api.order.Order;
-import com.yourmenu.yourmenu_api.order.OrderMapper;
+import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -5,10 +5,11 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record OrderSaveDTO(
         @NotNull
-        LocalDate date,
+        LocalDateTime dateTime,
 
         @NotNull
         BigDecimal price,

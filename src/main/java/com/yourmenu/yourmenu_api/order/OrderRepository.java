@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(nativeQuery = true, value = """
-        select * from order where restaurant_id = :restaurantId order by date desc;
+        select * from orders where restaurant_id = :restaurantId order by date desc;
     """)
     public List<Order> findAllByRestaurantIdOrderByDate(String restaurantId);
 }

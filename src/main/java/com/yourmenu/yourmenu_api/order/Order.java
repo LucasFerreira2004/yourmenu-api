@@ -23,7 +23,7 @@ public class Order {
     private Restaurant restaurant;
 
     @Column(nullable = false)
-    private LocalDate date;
+    private LocalDateTime dateTime;
 
     @Column(nullable = false)
     private BigDecimal price;

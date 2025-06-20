@@ -1,4 +1,5 @@
-package com.yourmenu.yourmenu_api.order;
+package com.yourmenu.yourmenu_api.order.mappers;
+import com.yourmenu.yourmenu_api.order.Order;
 
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
@@ -9,7 +10,7 @@ public class OrderMapper {
     public static Order toEntity(OrderSaveDTO dto, Restaurant restaurant) {
         Order order = new Order();
         order.setRestaurant(restaurant);
-        order.setDate(dto.date());
+        order.setDateTime(dto.dateTime());
         order.setPrice(dto.price());
         order.setStatus(dto.status());
         return order;
@@ -19,7 +20,7 @@ public class OrderMapper {
         return new OrderDTO(
                 order.getId(),
                 order.getRestaurant().getId(),
-                order.getDate(),
+                order.getDateTime(),
                 order.getPrice(),
                 order.getStatus()
         );

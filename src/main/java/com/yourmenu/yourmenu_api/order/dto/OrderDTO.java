@@ -4,11 +4,12 @@ import com.yourmenu.yourmenu_api.order.OrderStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record OrderDTO(
     Long id,
     String restaurantId,
-    LocalDate date,
+    LocalDateTime dateTime,
     BigDecimal price,
     OrderStatus status
 ) {
