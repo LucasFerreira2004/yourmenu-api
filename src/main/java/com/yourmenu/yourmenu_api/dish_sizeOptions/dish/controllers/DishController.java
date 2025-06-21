@@ -28,6 +28,7 @@ public class DishController {
                                                     @PathVariable Long categoryId,
                                                     @CurrentUser Administrator currentUser) {
         DishDTO response = dishService.save(dto, restaurantId, categoryId, currentUser.getId());
+
         URI location = URI.create("/restaurant/"+restaurantId+"/category/" + categoryId + "/dish/" + response.id());
         return ResponseEntity
                 .created(location) // define o status 201 e o header Location

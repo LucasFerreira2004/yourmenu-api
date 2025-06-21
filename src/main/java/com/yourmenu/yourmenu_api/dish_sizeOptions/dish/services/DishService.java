@@ -47,8 +47,11 @@ public class DishService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
         Dish dish = DishMapper.toEntity(dto, restaurant, category);
         dishValidateService.validateToSave(dish, adminId);
+
         Dish savedDish = dishRepository.save(dish);
         createAssociationsService.execute(dto.sizeOptionsPrices(), savedDish);
+        savedDish = dishRepository.findById(savedDish.getId()) // Recarrega o prato com os relacionamentos atualizados
+                .orElseThrow(() -> new ResourceNotFoundException("dish"));
         return DishMapper.toDTO(savedDish);
     }
 

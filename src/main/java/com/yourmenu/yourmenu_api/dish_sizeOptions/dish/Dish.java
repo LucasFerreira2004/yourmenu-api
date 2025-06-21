@@ -1,10 +1,13 @@
 package com.yourmenu.yourmenu_api.dish_sizeOptions.dish;
 
 import com.yourmenu.yourmenu_api.category.Category;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Table(
         uniqueConstraints = {
@@ -26,6 +29,9 @@ public class Dish {
     @ManyToOne
     @JoinColumn(name = "category_id")
     public Category category;
+
+    @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<DishSizeOption> sizeOptions;
 
     @Column(nullable = false)
     public String name;
