@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.MeasureUnit;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOptionRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.dto.SizeOptionDTO;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,15 +22,16 @@ public class CreateSizeOptionService {
     private SizeOptionsMapper sizeOptionsMapper;
 
     //DEIXAR PRONTA PARA INICIALIZAR COM TODOS OS TAMANHOS CORRETAMENTE
-    public List<SizeOptionDTO> execute() {
-        List<SizeOptionDTO> result = new ArrayList<>();
+    @PostConstruct
+    private void init() {
+        if (sizeOptionRepository.count() > 0) return; // Evita duplicar ao reiniciar
+
         for (int i = 0; i < MeasureUnit.values().length; i++) {
             if (i < 3) {
                 SizeOption sizeOption = new SizeOption();
                 sizeOption.setMeasureUnit(MeasureUnit.values()[i]);
                 sizeOption.setMagnitude(null);
                 sizeOptionRepository.save(sizeOption);
-                result.add(sizeOptionsMapper.toDTO(sizeOption));
                 continue;
             }
             for (int j = 0; j < 4; j++) {
@@ -38,9 +40,9 @@ public class CreateSizeOptionService {
                 sizeOption.setMeasureUnit(MeasureUnit.values()[i]);
                 sizeOption.setMagnitude(String.valueOf(mag));
                 sizeOptionRepository.save(sizeOption);
-                result.add(sizeOptionsMapper.toDTO(sizeOption));
             }
         }
-        return result;
+
+        System.out.println("SizeOptions iniciais criados com sucesso.");
     }
 }

@@ -11,6 +11,7 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishSaveDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.mappers.DishMapper;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.validation.DishValidateService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.Services.CreateAssociationsService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.Services.UpdateAssociationsService;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
@@ -48,6 +49,9 @@ public class DishService {
     @Autowired
     private CreateAssociationsService createAssociationsService;
 
+    @Autowired
+    private UpdateAssociationsService updateAssociationsService;
+
     public DishDTO save(
             @Valid DishSaveDTO dto,
             MultipartFile imageUrl,
@@ -83,6 +87,8 @@ public class DishService {
 
         if(imageUrl != null && !imageUrl.isEmpty())
             newDish.setImageUrl(s3Service.uploadFile(imageUrl));
+
+        updateAssociationsService.execute(newDishDTO.sizeOptionsPrices(), newDish);
 
         Dish updatedDish = dishRepository.save(newDish);
         return DishMapper.toDTO(updatedDish);
