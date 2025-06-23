@@ -13,9 +13,12 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.validation.DishValidateSe
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.Services.CreateAssociationsService;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
+import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -40,12 +43,24 @@ public class DishService {
     private DishMapper dishMapper;
 
     @Autowired
+    private S3Service s3Service;
+
+    @Autowired
     private CreateAssociationsService createAssociationsService;
 
-    public DishDTO save(DishSaveDTO dto, String restaurantId, Long categoryId, String adminId){
+    public DishDTO save(
+            @Valid DishSaveDTO dto,
+            MultipartFile imageUrl,
+            String restaurantId,
+            Long categoryId,
+            String adminId){
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElseThrow(() -> new ResourceNotFoundException("restaurant"));
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
         Dish dish = DishMapper.toEntity(dto, restaurant, category);
+
+        if(imageUrl != null && !imageUrl.isEmpty())
+            dish.setImageUrl(s3Service.uploadFile(imageUrl));
+
         dishValidateService.validateToSave(dish, adminId);
 
         Dish savedDish = dishRepository.save(dish);
@@ -55,10 +70,20 @@ public class DishService {
         return DishMapper.toDTO(savedDish);
     }
 
-    public DishDTO update(Long dishId, DishSaveDTO newDishDTO, String restaurantId, Long categoryId, String adminId) {
+    public DishDTO update(
+            Long dishId,
+            @Valid DishSaveDTO newDishDTO,
+            MultipartFile imageUrl,
+            String restaurantId,
+            Long categoryId,
+            String adminId) {
         Dish newDish = dishMapper.toEntity(newDishDTO, restaurantId, categoryId);
         dishValidateService.validateToUpdate(dishId, newDish, adminId);
         newDish.setId(dishId);
+
+        if(imageUrl != null && !imageUrl.isEmpty())
+            newDish.setImageUrl(s3Service.uploadFile(imageUrl));
+
         Dish updatedDish = dishRepository.save(newDish);
         return DishMapper.toDTO(updatedDish);
     }
