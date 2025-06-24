@@ -4,6 +4,7 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.dto.SizeOptionPriceDTO;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.exceptions.SizeOptionNotFound;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOptionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class CreateAssociationsService {
             dishSizeOption.setDish(dish);
 
             SizeOption sizeOption = sizeOptionRepository.findById(item.sizeOptionId())
-                    .orElseThrow(() -> new RuntimeException("SizeOption não encontrado com ID: " + item.sizeOptionId()));
+                    .orElseThrow(() -> new SizeOptionNotFound("sizeOptionId", "Opção de tamanho com ID " + item.sizeOptionId() + " não encontrada."));
 
             dishSizeOption.setSizeOption(sizeOption);
             dishSizeOption.setPrice(item.price());

@@ -4,6 +4,7 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.dto.SizeOptionPriceDTO;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.exceptions.SizeOptionNotFound;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOptionRepository;
 import jakarta.transaction.Transactional;
@@ -32,8 +33,12 @@ public class UpdateAssociationsService {
 
             Long sizeOptionId = sizeOptionPriceDTO.sizeOptionId();
 
+            SizeOption sizeOption = sizeOptionRepository.findById(sizeOptionId)
+                    .orElseThrow(() -> new SizeOptionNotFound("sizeOptionId", "Opção de tamanho com ID " + sizeOptionId + " não existe."));
+
             Optional<DishSizeOption> optional = dishSizeOptionRepository
                     .findByDishIdAndSizeOptionId(dishId, sizeOptionId);
+
 
             if (optional.isPresent()) {
                 DishSizeOption existing = optional.get();
@@ -41,9 +46,6 @@ public class UpdateAssociationsService {
                 dishSizeOptionRepository.save(existing);
                 newAssociations.add(existing);
             } else {
-                SizeOption sizeOption = sizeOptionRepository.findById(sizeOptionId)
-                        .orElseThrow(() -> new RuntimeException("SizeOption não encontrada: " + sizeOptionId));
-
                 DishSizeOption newAssociation = new DishSizeOption();
                 newAssociation.setDish(dish);
                 newAssociation.setSizeOption(sizeOption);
