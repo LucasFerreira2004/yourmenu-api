@@ -20,5 +20,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, String> 
     @Query(nativeQuery = true, value = """
     select * from restaurant where administrator_id = :adminId
     """)
-    Restaurant findByAdministratorId(String administratorId);
+    Restaurant findByAdministratorId(String adminId);
 }
