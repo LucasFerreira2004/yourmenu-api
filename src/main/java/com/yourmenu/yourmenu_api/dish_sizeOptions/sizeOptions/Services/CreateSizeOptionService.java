@@ -42,7 +42,5 @@ public class CreateSizeOptionService {
                 sizeOptionRepository.save(sizeOption);
             }
         }
-
-        System.out.println("SizeOptions iniciais criados com sucesso.");
     }
 }

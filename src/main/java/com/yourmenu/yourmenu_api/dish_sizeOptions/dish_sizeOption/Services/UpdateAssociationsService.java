@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class UpdateAssociationsService {
@@ -57,8 +56,7 @@ public class UpdateAssociationsService {
         //remover os que não foram usados (delete automatico)
         for(int i = 0; i < currentAssociations.size(); i++) {
             if(!newAssociations.contains(currentAssociations.get(i))) {
-                System.out.println("apagando id: " + currentAssociations.get(i).getId());
-                dishSizeOptionRepository.deleteByIdNative(currentAssociations.get(i).getSizeOption().getId());
+                dishSizeOptionRepository.deleteByIdNative(currentAssociations.get(i).getId());
             }
         }
     }
