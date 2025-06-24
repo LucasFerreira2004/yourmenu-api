@@ -21,7 +21,7 @@ public class CreateSizeOptionService {
     @Autowired
     private SizeOptionsMapper sizeOptionsMapper;
 
-    //DEIXAR PRONTA PARA INICIALIZAR COM TODOS OS TAMANHOS CORRETAMENTE
+    //DEIXAR PRONTA PARA INICIALIZAR COM TODOS OS TAMANHOS CORRETAMENTE - PERGUNTAR QUAIS TAMANHOS ADICIONAR
     @PostConstruct
     private void init() {
         if (sizeOptionRepository.count() > 0) return; // Evita duplicar ao reiniciar
