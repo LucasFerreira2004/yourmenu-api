@@ -26,16 +26,11 @@ public class UpdateAssociationsService {
     public void execute(List<SizeOptionPriceDTO> dto, Dish dish) {
         long dishId = dish.getId();
 
-        // Guarda os IDs vindos do DTO
-        Set<Long> dtoIds = dto.stream()
-                .map(SizeOptionPriceDTO::sizeOptionId)
-                .collect(Collectors.toSet());
-
-        // Busca todos os registros atuais do prato
         List<DishSizeOption> currentAssociations = dishSizeOptionRepository.findAllByDishId(dishId);
+        List<DishSizeOption> newAssociations = new ArrayList<>();
 
-        // Atualiza ou cria
         for (SizeOptionPriceDTO sizeOptionPriceDTO : dto) {
+
             Long sizeOptionId = sizeOptionPriceDTO.sizeOptionId();
 
             Optional<DishSizeOption> optional = dishSizeOptionRepository
@@ -45,6 +40,7 @@ public class UpdateAssociationsService {
                 DishSizeOption existing = optional.get();
                 existing.setPrice(sizeOptionPriceDTO.price());
                 dishSizeOptionRepository.save(existing);
+                newAssociations.add(existing);
             } else {
                 SizeOption sizeOption = sizeOptionRepository.findById(sizeOptionId)
                         .orElseThrow(() -> new RuntimeException("SizeOption não encontrada: " + sizeOptionId));
@@ -54,14 +50,15 @@ public class UpdateAssociationsService {
                 newAssociation.setSizeOption(sizeOption);
                 newAssociation.setPrice(sizeOptionPriceDTO.price());
                 dishSizeOptionRepository.save(newAssociation);
+                newAssociations.add(newAssociation);
             }
         }
 
-        // Apaga os registros que não estão mais no DTO
-        for (DishSizeOption existing : currentAssociations) {
-            Long existingSizeOptionId = existing.getSizeOption().getId();
-            if (!dtoIds.contains(existingSizeOptionId)) {
-                dishSizeOptionRepository.delete(existing);
+        //remover os que não foram usados (delete automatico)
+        for(int i = 0; i < currentAssociations.size(); i++) {
+            if(!newAssociations.contains(currentAssociations.get(i))) {
+                System.out.println("apagando id: " + currentAssociations.get(i).getId());
+                dishSizeOptionRepository.deleteByIdNative(currentAssociations.get(i).getSizeOption().getId());
             }
         }
     }
