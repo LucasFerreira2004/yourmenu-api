@@ -88,9 +88,11 @@ public class DishService {
         if(imageUrl != null && !imageUrl.isEmpty())
             newDish.setImageUrl(s3Service.uploadFile(imageUrl));
 
-        updateAssociationsService.execute(newDishDTO.sizeOptionsPrices(), newDish);
-
         Dish updatedDish = dishRepository.save(newDish);
+        updateAssociationsService.execute(newDishDTO.sizeOptionsPrices(), newDish);
+        updatedDish = dishRepository.findById(updatedDish.getId()) // Recarrega o prato com os relacionamentos atualizados
+                .orElseThrow(() -> new ResourceNotFoundException("dish"));
+
         return DishMapper.toDTO(updatedDish);
     }
 

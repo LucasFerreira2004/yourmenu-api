@@ -4,28 +4,66 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.dto.SizeOptionPriceDTO;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOptionRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class UpdateAssociationsService {
 
     @Autowired
-    DishSizeOptionRepository dishSizeOptionRepository;
+    private DishSizeOptionRepository dishSizeOptionRepository;
 
     @Autowired
-    CreateAssociationsService createAssociationsService;
+    private SizeOptionRepository sizeOptionRepository;
 
-    public void execute(List<SizeOptionPriceDTO> dto, Dish dish){
-        System.out.println(dish.getSizeOptions());
+    @Transactional
+    public void execute(List<SizeOptionPriceDTO> dto, Dish dish) {
+        long dishId = dish.getId();
 
-        /*
-        for(int i = 0; i < dish.getSizeOptions().size(); i++){ //apagar os atuais
-            dishSizeOptionRepository.deleteById(dish.getSizeOptions().get(i).getId());
+        // Guarda os IDs vindos do DTO
+        Set<Long> dtoIds = dto.stream()
+                .map(SizeOptionPriceDTO::sizeOptionId)
+                .collect(Collectors.toSet());
+
+        // Busca todos os registros atuais do prato
+        List<DishSizeOption> currentAssociations = dishSizeOptionRepository.findAllByDishId(dishId);
+
+        // Atualiza ou cria
+        for (SizeOptionPriceDTO sizeOptionPriceDTO : dto) {
+            Long sizeOptionId = sizeOptionPriceDTO.sizeOptionId();
+
+            Optional<DishSizeOption> optional = dishSizeOptionRepository
+                    .findByDishIdAndSizeOptionId(dishId, sizeOptionId);
+
+            if (optional.isPresent()) {
+                DishSizeOption existing = optional.get();
+                existing.setPrice(sizeOptionPriceDTO.price());
+                dishSizeOptionRepository.save(existing);
+            } else {
+                SizeOption sizeOption = sizeOptionRepository.findById(sizeOptionId)
+                        .orElseThrow(() -> new RuntimeException("SizeOption não encontrada: " + sizeOptionId));
+
+                DishSizeOption newAssociation = new DishSizeOption();
+                newAssociation.setDish(dish);
+                newAssociation.setSizeOption(sizeOption);
+                newAssociation.setPrice(sizeOptionPriceDTO.price());
+                dishSizeOptionRepository.save(newAssociation);
+            }
         }
-        */
-        createAssociationsService.execute(dto, dish); // reaproveitando metodo para guardar os novos
+
+        // Apaga os registros que não estão mais no DTO
+        for (DishSizeOption existing : currentAssociations) {
+            Long existingSizeOptionId = existing.getSizeOption().getId();
+            if (!dtoIds.contains(existingSizeOptionId)) {
+                dishSizeOptionRepository.delete(existing);
+            }
+        }
     }
 }
+
