@@ -20,11 +20,4 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         order by date_time desc;
     """)
     public List<Order> findAllByRestaurantAndDate(String restaurantId, LocalDateTime startOfDay, LocalDateTime endOfDay);
-
-    @Query(nativeQuery = true, value = """
-        select * from orders
-        where restaurant_id = :restaurantId and date_time >= :dateTime;
-        order by date_time desc;
-    """)
-    public List<Order> findAllByRestaurantDateAndStatus(String restaurantId, LocalDateTime dateTime, String status);
 }

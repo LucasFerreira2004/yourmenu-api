@@ -1,6 +1,8 @@
 package com.yourmenu.yourmenu_api.order.services;
 
 import com.yourmenu.yourmenu_api.order.Order;
+import com.yourmenu.yourmenu_api.order.OrderStatus;
+import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderService {
@@ -36,5 +40,14 @@ public class OrderService {
         if (!order.getRestaurant().getId().equals(restaurantId))
             throw new EntityDoesNotBelongToAnotherEntityException("Order", "Restaurant");
         return OrderMapper.toDTO(order);
+    }
+
+    public List<OrderByStatusDTO> getAlByRestaurantDateAndStatus(String restaurantId, LocalDate date){
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
+        List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
+
+        Map<OrderStatus, List<Order>> ordersGrouped = orders.stream()
+                .collect(Collectors.groupingBy(Order::getStatus));
     }
 }
