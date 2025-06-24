@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     @GetMapping("/by-date")
-    public ResponseEntity<List<OrderDTO>> getAllByRestaurant(@PathVariable String restaurantId, @RequestParam LocalDate date){
+    public ResponseEntity<List<OrderDTO>> getAllByRestaurantAndDate(@PathVariable String restaurantId, @RequestParam LocalDate date){
         List<OrderDTO> orders = orderService.getAllByRestaurantAndDate(restaurantId, date);
         return ResponseEntity.ok(orders);
     }
@@ -31,4 +31,10 @@ public class OrderController {
         OrderDTO order = orderService.getById(restaurantId, orderId);
         return ResponseEntity.ok(order);
     }
+
+//    @GetMapping("/status/by-date")
+//    public ResponseEntity<OrderDTO> getById(@PathVariable String restaurantId, @PathVariable Long orderId){
+//        OrderDTO order = orderService.getById(restaurantId, orderId);
+//        return ResponseEntity.ok(order);
+//    }
 }

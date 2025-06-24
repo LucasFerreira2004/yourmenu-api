@@ -26,7 +26,8 @@ public class OrderService {
 
     public List<OrderDTO> getAllByRestaurantAndDate(String restaurantId, LocalDate date){
         LocalDateTime startOfDay = date.atStartOfDay();
-        List<Order> orders = orderRepository.findAllByRestaurantAndDateTime(restaurantId, startOfDay);
+        LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
+        List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
         return orders.stream().map(x -> OrderMapper.toDTO(x)).toList();
     }
 
