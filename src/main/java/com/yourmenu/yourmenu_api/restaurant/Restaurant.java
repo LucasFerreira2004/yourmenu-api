@@ -7,7 +7,11 @@ import lombok.*;
 
 import java.util.List;
 
-@Table
+@Table(
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"\"administrator_id\""})
+        }
+)
 @Entity
 @Data
 @NoArgsConstructor

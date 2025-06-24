@@ -43,6 +43,7 @@ public class RestaurantService {
     @Transactional
     public RestaurantDTO save(RestaurantSaveDTO dto, MultipartFile profilePictureUrl, MultipartFile bannerPictureUrl, String adminId) {
         Restaurant restaurant = restaurantMapper.toEntity(dto);
+        restaurantValidateService.validateAllToSave(adminId);
         restaurant.setIsOpen(false);
         restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         restaurant.setAdministrator(administratorService.findByid(adminId));
@@ -60,7 +61,7 @@ public class RestaurantService {
     @Transactional
     public RestaurantDTO openClose(@Valid OpenDTO dto, String restaurantId, String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToSave(restaurant, adminId);
+        restaurantValidateService.validateAllToUpdate(restaurant, adminId);
         restaurant.setIsOpen(dto.isOpen());
         restaurantRepository.save(restaurant);
         return restaurantMapper.toDTO(restaurant);
@@ -74,7 +75,7 @@ public class RestaurantService {
             MultipartFile bannerPictureUrl,
             String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToSave(restaurant, adminId);
+        restaurantValidateService.validateAllToUpdate(restaurant, adminId);
         updateRestaurantData(restaurant, dto, profilePictureUrl, bannerPictureUrl);
 
         restaurantRepository.save(restaurant);
@@ -123,7 +124,7 @@ public class RestaurantService {
     @Transactional
     public void delete(String restaurantId, String adminId) {
         Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToSave(restaurant, adminId);
+        restaurantValidateService.validateAllToUpdate(restaurant, adminId);
         restaurantRepository.delete(restaurant);
     }
 }
