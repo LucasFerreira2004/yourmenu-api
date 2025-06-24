@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.shared.globalExceptions.DeniedAccessException;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ExistentResourceException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.UserNotFoundException;
 import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,5 +31,7 @@ public class RestaurantValidateService {
     public void validateAllToSave(Restaurant restaurant, String administratorId) {
         validateRestaurantExists(restaurant);
         validateAdministratorCanEditRestaurant(restaurant, administratorId);
+        Restaurant restaurnatResponse = restaurantRepository.findByAdministratorId(administratorId);
+        if (restaurnatResponse != null) throw new ExistentResourceException("restaurant");
     }
 }

@@ -98,4 +98,16 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(status).body(error);
     }
+
+    @ExceptionHandler(ExistentResourceException.class)
+    public ResponseEntity<ErrorResponseDTO> handleException(ExistentResourceException e) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        ErrorResponseDTO error = new ErrorResponseDTO(
+                e.getField(),
+                e.getMessage(),
+                status.value(),
+                status.getReasonPhrase()
+        );
+        return ResponseEntity.status(status).body(error);
+    }
 }
