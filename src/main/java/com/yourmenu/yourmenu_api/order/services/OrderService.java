@@ -4,6 +4,9 @@ import com.yourmenu.yourmenu_api.order.Order;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
+import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.EntityDoesNotBelongToAnotherEntityException;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,5 +28,12 @@ public class OrderService {
         LocalDateTime startOfDay = date.atStartOfDay();
         List<Order> orders = orderRepository.findAllByRestaurantAndDateTime(restaurantId, startOfDay);
         return orders.stream().map(x -> OrderMapper.toDTO(x)).toList();
+    }
+
+    public OrderDTO getById(String restaurantId, Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RestaurantNotFoundException("Order"));
+        if (!order.getRestaurant().getId().equals(restaurantId))
+            throw new EntityDoesNotBelongToAnotherEntityException("Order", "Restaurant");
+        return OrderMapper.toDTO(order);
     }
 }

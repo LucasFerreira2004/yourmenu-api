@@ -21,9 +21,14 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
-    @GetMapping()
+    @GetMapping("/by-date")
     public ResponseEntity<List<OrderDTO>> getAllByRestaurant(@PathVariable String restaurantId, @RequestParam LocalDate date){
         List<OrderDTO> orders = orderService.getAllByRestaurantAndDate(restaurantId, date);
         return ResponseEntity.ok(orders);
+    }
+    @GetMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> getById(@PathVariable String restaurantId, @PathVariable Long orderId){
+        OrderDTO order = orderService.getById(restaurantId, orderId);
+        return ResponseEntity.ok(order);
     }
 }
