@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.order.controllers;
 
+import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.order.services.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,9 @@ public class OrderController {
         return ResponseEntity.ok(order);
     }
 
-//    @GetMapping("/status/by-date")
-//    public ResponseEntity<OrderDTO> getById(@PathVariable String restaurantId, @PathVariable Long orderId){
-//        OrderDTO order = orderService.getById(restaurantId, orderId);
-//        return ResponseEntity.ok(order);
-//    }
+    @GetMapping("/status/by-date")
+    public ResponseEntity<List<OrderByStatusDTO>> getAllByRestaurantDateAndStatus(@PathVariable String restaurantId, @RequestParam LocalDate date){
+        List<OrderByStatusDTO> orders = orderService.getAlByRestaurantDateAndStatus(restaurantId, date);
+        return ResponseEntity.ok(orders);
+    }
 }

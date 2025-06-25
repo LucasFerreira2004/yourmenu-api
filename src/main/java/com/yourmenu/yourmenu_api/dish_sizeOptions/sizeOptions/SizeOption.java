@@ -24,5 +24,6 @@ public class SizeOption {
     //fica a critério do back fazer ou não esse campo, não sei se realmente será necessário
     //private String displayValue;
 
+    @Enumerated(EnumType.STRING)
     private MeasureUnit measureUnit;
 }
