@@ -20,7 +20,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -93,7 +95,8 @@ class DishServiceTest {
         when(categoryRepository.findById(1L)).thenReturn(Optional.of(category));
         when(dishRepository.save(any(Dish.class))).thenReturn(dish);
 
-        DishDTO result = dishService.save(dto, "restaurant-id", 1L, "admin-id");
+        MultipartFile multipartFile = mock(MultipartFile.class);
+        DishDTO result = dishService.save(dto, multipartFile, "restaurant_id",1L, "admin-id");
 
         assertNotNull(result);
         assertEquals("Feijoada", result.name());
@@ -106,7 +109,8 @@ class DishServiceTest {
         when(restaurantRepository.findById("restaurant-id")).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> {
-            dishService.save(dto, "restaurant-id", 1L, "admin-id");
+            MultipartFile multipartFile = mock(MultipartFile.class);
+            dishService.save(dto, multipartFile, "restaurant_id",1L, "admin-id");
         });
     }
 
@@ -117,7 +121,8 @@ class DishServiceTest {
         when(categoryRepository.findById(1L)).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () -> {
-            dishService.save(dto, "restaurant-id", 1L, "admin-id");
+            MultipartFile multipartFile = mock(MultipartFile.class);
+            dishService.save(dto, multipartFile, "restaurant_id",1L, "admin-id");
         });
     }
 
