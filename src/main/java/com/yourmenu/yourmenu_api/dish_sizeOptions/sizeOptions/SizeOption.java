@@ -1,29 +1,26 @@
 package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions;
 
-import com.yourmenu.yourmenu_api.restaurant.Restaurant;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Table
 @Entity
 @Data
+@NoArgsConstructor
 public class SizeOption {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // não necessário pois não há mais crud tamanhos
-//    @ManyToOne
-//    @JoinColumn(name = "restaurant_id", nullable = false)
-//    private Restaurant restaurant;
-
-    @Column(nullable = false)
-    private String value;
-
-    //fica a critério do back fazer ou não esse campo, não sei se realmente será necessário
-    //private String displayValue;
+    @Column(nullable = true)
+    private String magnitude;
 
     @Enumerated(EnumType.STRING)
+    @NotNull
+    @Column(nullable = false)
     private MeasureUnit measureUnit;
 }
