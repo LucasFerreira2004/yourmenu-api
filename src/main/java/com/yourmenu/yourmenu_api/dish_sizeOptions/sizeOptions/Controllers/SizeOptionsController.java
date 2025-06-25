@@ -2,14 +2,12 @@ package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Controllers;
 
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Services.CreateSizeOptionService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Services.ListingAllSizeOptionsService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Services.SearchSizeOptionService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.dto.SizeOptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,9 +18,18 @@ public class SizeOptionsController {
     @Autowired
     private ListingAllSizeOptionsService listingAllSizeOptionsService;
 
+    @Autowired
+    private SearchSizeOptionService searchSizeOptionService;
+
     @GetMapping
     public ResponseEntity<List<SizeOptionDTO>> getAllSizeOptions(){
         List<SizeOptionDTO> response = listingAllSizeOptionsService.execute();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/{sizeOptionId}")
+    public ResponseEntity<SizeOptionDTO> getSizeOptionsById(@PathVariable Long sizeOptionId){
+        SizeOptionDTO response = searchSizeOptionService.execute(sizeOptionId);
         return ResponseEntity.ok(response);
     }
 }
