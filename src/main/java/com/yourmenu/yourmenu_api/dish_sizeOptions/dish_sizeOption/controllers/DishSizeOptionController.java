@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.Controllers;
+package com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.controllers;
 
 
 import org.springframework.web.bind.annotation.GetMapping;

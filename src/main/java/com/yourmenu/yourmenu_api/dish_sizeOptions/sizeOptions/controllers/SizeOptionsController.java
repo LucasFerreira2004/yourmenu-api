@@ -1,9 +1,7 @@
-package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Controllers;
+package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.controllers;
 
-import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Services.CreateSizeOptionService;
-import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Services.ListingAllSizeOptionsService;
-import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Services.SearchSizeOptionService;
-import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.services.ListingAllSizeOptionsService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.services.SearchSizeOptionService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.dto.SizeOptionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

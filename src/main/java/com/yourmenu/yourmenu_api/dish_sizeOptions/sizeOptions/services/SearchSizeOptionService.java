@@ -1,7 +1,7 @@
-package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Services;
+package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.services;
 
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.exceptions.SizeOptionNotFound;
-import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Mappers.SizeOptionsMapper;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.mappers.SizeOptionsMapper;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOptionRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.dto.SizeOptionDTO;

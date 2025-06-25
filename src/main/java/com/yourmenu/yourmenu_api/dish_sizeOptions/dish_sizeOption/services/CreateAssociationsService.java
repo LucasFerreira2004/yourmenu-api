@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.Services;
+package com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.services;
 
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption;
