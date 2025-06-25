@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.Mappers;
+package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.mappers;
 
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.dto.SizeOptionDTO;
@@ -13,7 +13,8 @@ public class SizeOptionsMapper {
         return new SizeOptionDTO(
                 entity.getId(),
                 entity.getMagnitude(),
-                entity.getMeasureUnit()
+                entity.getMeasureUnit(),
+                entity.getMeasureUnit().getAbbreviation()
         );
     }
 }
