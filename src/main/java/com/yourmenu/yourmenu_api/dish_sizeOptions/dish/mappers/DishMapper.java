@@ -57,6 +57,8 @@ public class DishMapper {
                 ? dish.getSizeOptions().stream()
                 .map(opt -> new SizeOptionPriceDTO(
                         opt.getSizeOption().getId(),
+                        opt.getSizeOption().getMagnitude(),
+                        opt.getSizeOption().getMeasureUnit().getAbbreviation(),
                         opt.getPrice()
                 ))
                 .toList()
