@@ -13,7 +13,8 @@ public class SizeOptionsMapper {
         return new SizeOptionDTO(
                 entity.getId(),
                 entity.getMagnitude(),
-                entity.getMeasureUnit()
+                entity.getMeasureUnit(),
+                entity.getMeasureUnit().getAbbreviation()
         );
     }
 }

@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.MeasureUnit;
 public record SizeOptionDTO(
         Long id,
         String magnitude,
-        MeasureUnit measureUnit
+        MeasureUnit measureUnit,
+        String abbreviation
 ) {
 }
