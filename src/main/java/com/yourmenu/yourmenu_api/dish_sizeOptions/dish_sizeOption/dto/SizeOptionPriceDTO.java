@@ -5,6 +5,6 @@ import java.math.BigDecimal;
 public record SizeOptionPriceDTO(
         Long sizeOptionId,
         String magnitude,
-        String measureUnit, //preencher com as abreviações
+        String measureUnit,
         BigDecimal price
 ) {}
