@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(nativeQuery = true, value = """
@@ -20,4 +21,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         order by date_time desc;
     """)
     public List<Order> findAllByRestaurantAndDate(String restaurantId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+
+    @Query(nativeQuery = true, value = """
+        select * from orders where id = :orderId and restaurant_id = :restaurantId;
+    """)
+    Order findByIdByRestaurant(Long orderId, String restaurantId);
 }

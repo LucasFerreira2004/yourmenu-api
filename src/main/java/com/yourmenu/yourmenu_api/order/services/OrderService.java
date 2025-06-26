@@ -6,9 +6,9 @@ import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.EntityDoesNotBelongToAnotherEntityException;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,5 +55,16 @@ public class OrderService {
             ordersByStatus.add(new OrderByStatusDTO(status, ordersGrouped.get(status).stream().map(OrderMapper::toDTO).toList()));
         }
         return ordersByStatus;
+    }
+
+    public OrderDTO updateStatus(String restaurantId, Long orderId, OrderStatus status) {
+        Order order = orderRepository.findByIdByRestaurant(orderId, restaurantId);
+        if (order == null) {
+            throw new ResourceNotFoundException("Id do pedido");
+        }
+
+        order.setStatus(status);
+        orderRepository.save(order);
+        return OrderMapper.toDTO(order);
     }
 }

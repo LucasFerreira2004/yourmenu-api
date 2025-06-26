@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.order.controllers;
 
+import com.yourmenu.yourmenu_api.order.OrderStatus;
 import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.order.services.OrderService;
@@ -37,5 +38,14 @@ public class OrderController {
     public ResponseEntity<List<OrderByStatusDTO>> getAllByRestaurantDateAndStatus(@PathVariable String restaurantId, @RequestParam LocalDate date){
         List<OrderByStatusDTO> orders = orderService.getAlByRestaurantDateAndStatus(restaurantId, date);
         return ResponseEntity.ok(orders);
+    }
+
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> updateStatus(
+            @PathVariable(value = "orderId") Long orderId,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestParam OrderStatus status) {
+        OrderDTO order = orderService.updateStatus(restaurantId, orderId, status);
+        return ResponseEntity.ok(order);
     }
 }
