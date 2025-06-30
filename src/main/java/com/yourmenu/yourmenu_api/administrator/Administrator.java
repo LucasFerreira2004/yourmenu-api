@@ -22,9 +22,6 @@ public class Administrator implements UserDetails {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @OneToMany(mappedBy = "administrator")
-    private List<Restaurant> restaurants;
-
     @NotNull
     @NotBlank
     private String firstName;
