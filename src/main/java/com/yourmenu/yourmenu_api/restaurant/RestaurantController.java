@@ -7,12 +7,13 @@ import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.util.List;
-
 
 @RestController
 @RequestMapping(value="/restaurant")
@@ -20,10 +21,15 @@ public class RestaurantController {
     @Autowired
     RestaurantService restaurantService;
 
-    @PostMapping
-    public ResponseEntity<RestaurantDTO> save(@RequestBody @Valid RestaurantSaveDTO dto, @CurrentUser Administrator currentUser) {
-        System.out.println("ID DO USER: " + currentUser.getId()); //linha apenas para depuração
-        RestaurantDTO createdRestaurant = restaurantService.save(dto, currentUser.getId());
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RestaurantDTO> save(
+            @ModelAttribute RestaurantSaveDTO dto,
+            @RequestParam(required = false, name = "profilePictureUrl") MultipartFile profilePictureUrl,
+            @RequestParam(required = false, name = "bannerPictureUrl") MultipartFile bannerPictureUrl,
+            @CurrentUser Administrator currentUser) {
+//        logger.info("ID DO USER: " + currentUser.getId());
+
+        RestaurantDTO createdRestaurant = restaurantService.save(dto, profilePictureUrl, bannerPictureUrl, currentUser.getId());
 
         URI location = URI.create("/restaurant/" + createdRestaurant.slug());
         return ResponseEntity
@@ -39,9 +45,14 @@ public class RestaurantController {
                 .body(response);
     }
 
-    @PutMapping("/{restaurantId}")
-    public ResponseEntity<RestaurantDTO> update(@RequestBody @Valid RestaurantSaveDTO dto, @PathVariable String restaurantId ,@CurrentUser Administrator currentUser) {
-        RestaurantDTO response = restaurantService.update(dto, restaurantId, currentUser.getId());
+    @PutMapping(value = "/{restaurantId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RestaurantDTO> update(
+            @ModelAttribute RestaurantSaveDTO dto,
+            @PathVariable String restaurantId,
+            @RequestPart(required = false, name = "profilePictureUrl") MultipartFile profilePictureUrl,
+            @RequestPart(required = false, name = "bannerPictureUrl") MultipartFile bannerPictureUrl,
+            @CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.update(dto, restaurantId, profilePictureUrl, bannerPictureUrl, currentUser.getId());
         return ResponseEntity
                 .ok()
                 .body(response);
@@ -64,5 +75,4 @@ public class RestaurantController {
         restaurantService.delete(restaurantId, currentUser.getId());
         return ResponseEntity.noContent().build();
     }
-
 }

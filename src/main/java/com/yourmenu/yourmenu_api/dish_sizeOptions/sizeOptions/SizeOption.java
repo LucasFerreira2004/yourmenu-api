@@ -19,7 +19,7 @@ public class SizeOption {
 //    private Restaurant restaurant;
 
     @Column(nullable = false)
-    private String value;
+    private String magnitude;
 
     //fica a critério do back fazer ou não esse campo, não sei se realmente será necessário
     //private String displayValue;

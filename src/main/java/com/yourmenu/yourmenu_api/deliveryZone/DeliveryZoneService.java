@@ -34,7 +34,7 @@ public class DeliveryZoneService {
         
         // Busca o restaurante pelo slug e valida
         Restaurant restaurant = restaurantRepository.findBySlug(deliveryZone.restaurantSlug());
-        restaurantValidateService.validateAllToSave(restaurant, adminId);
+        restaurantValidateService.validateAllToUpdate(restaurant, adminId);
 
         deliveryZoneValidateService.existentDeliveryZone(entity, deliveryZone.zone(), restaurant);
 
@@ -56,7 +56,7 @@ public class DeliveryZoneService {
 
         // Busca o restaurante pelo slug e valida o existente
         Restaurant restaurant = restaurantRepository.findBySlug(deliveryZone.restaurantSlug());
-        restaurantValidateService.validateAllToSave(
+        restaurantValidateService.validateAllToUpdate(
                 restaurant,
                 existingZone.getRestaurant().getAdministrator().getId());
 
