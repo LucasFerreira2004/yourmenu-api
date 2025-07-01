@@ -1,8 +1,10 @@
-package com.yourmenu.yourmenu_api.order.controllers;
+package com.yourmenu.yourmenu_api.order;
 
+import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
-import com.yourmenu.yourmenu_api.order.services.OrderService;
+import com.yourmenu.yourmenu_api.order.dto.OrdersSumaryDTO;
+import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -37,5 +39,21 @@ public class OrderController {
     public ResponseEntity<List<OrderByStatusDTO>> getAllByRestaurantDateAndStatus(@PathVariable String restaurantId, @RequestParam LocalDate date){
         List<OrderByStatusDTO> orders = orderService.getAlByRestaurantDateAndStatus(restaurantId, date);
         return ResponseEntity.ok(orders);
+    }
+
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> updateStatus(
+            @PathVariable(value = "orderId") Long orderId,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestParam OrderStatus status) {
+        OrderDTO order = orderService.updateStatus(restaurantId, orderId, status);
+        return ResponseEntity.ok(order);
+    }
+
+    //esse get não pode ser público, só pode ser feito por adm
+    @GetMapping("/summary/by-date")
+    public ResponseEntity<OrdersSumaryDTO> getSummaryByDate(@PathVariable String restaurantId, @RequestParam LocalDate date, @CurrentUser Administrator currentUser){
+        OrdersSumaryDTO summary = orderService.getSummaryByDate(restaurantId, date,currentUser.getId());
+        return ResponseEntity.ok(summary);
     }
 }
