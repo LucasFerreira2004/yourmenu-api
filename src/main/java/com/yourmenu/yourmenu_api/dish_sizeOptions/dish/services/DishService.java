@@ -10,6 +10,8 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishSaveDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.mappers.DishMapper;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.validation.DishValidateService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.services.CreateAssociationsService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.services.UpdateAssociationsService;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
@@ -44,6 +46,12 @@ public class DishService {
     @Autowired
     private S3Service s3Service;
 
+    @Autowired
+    private CreateAssociationsService createAssociationsService;
+
+    @Autowired
+    private UpdateAssociationsService updateAssociationsService;
+
     public DishDTO save(
             @Valid DishSaveDTO dto,
             MultipartFile imageUrl,
@@ -58,7 +66,12 @@ public class DishService {
             dish.setImageUrl(s3Service.uploadFile(imageUrl));
 
         dishValidateService.validateToSave(dish, adminId);
-        return DishMapper.toDTO(dishRepository.save(dish));
+
+        Dish savedDish = dishRepository.save(dish);
+        createAssociationsService.execute(dto.sizeOptionsPrices(), savedDish);
+        savedDish = dishRepository.findById(savedDish.getId()) // Recarrega o prato com os relacionamentos atualizados
+                .orElseThrow(() -> new ResourceNotFoundException("dish"));
+        return DishMapper.toDTO(savedDish);
     }
 
     public DishDTO update(
@@ -76,6 +89,10 @@ public class DishService {
             newDish.setImageUrl(s3Service.uploadFile(imageUrl));
 
         Dish updatedDish = dishRepository.save(newDish);
+        updateAssociationsService.execute(newDishDTO.sizeOptionsPrices(), newDish);
+        updatedDish = dishRepository.findById(updatedDish.getId()) // Recarrega o prato com os relacionamentos atualizados
+                .orElseThrow(() -> new ResourceNotFoundException("dish"));
+
         return DishMapper.toDTO(updatedDish);
     }
 
