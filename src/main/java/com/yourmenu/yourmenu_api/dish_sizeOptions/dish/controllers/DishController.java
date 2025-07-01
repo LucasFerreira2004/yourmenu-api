@@ -26,7 +26,7 @@ public class DishController {
 
     @PostMapping(value = URL_WITH_CATEGORY, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DishDTO> createDish(
-            @ModelAttribute DishSaveDTO dto,
+            @RequestPart("dto") DishSaveDTO dto,
             @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl,
             @PathVariable String restaurantId,
             @PathVariable Long categoryId,
@@ -60,7 +60,7 @@ public class DishController {
 
     @PutMapping(value = URL_WITH_CATEGORY + "/{dishId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DishDTO> updateDish(
-            @ModelAttribute DishSaveDTO dto,
+            @RequestPart("dto") DishSaveDTO dto,
             @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl,
             @PathVariable String restaurantId,
             @PathVariable Long categoryId,
