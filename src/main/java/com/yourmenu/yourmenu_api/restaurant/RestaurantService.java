@@ -110,9 +110,9 @@ public class RestaurantService {
         return restaurant;
     }
 
-    public List<RestaurantDTO> findAllByLoggedUser(String adminId) {
-        List<Restaurant> restaurants = restaurantRepository.findAllByAdministratorId(adminId);
-        return restaurants.stream().map(restaurant -> restaurantMapper.toDTO(restaurant)).toList();
+    public RestaurantDTO findAllByLoggedUser(String adminId) {
+        Restaurant restaurantResponse = restaurantRepository.findByAdministratorId(adminId);
+        return restaurantMapper.toDTO(restaurantResponse);
     }
 
     public RestaurantDTO findById(String restaurantId) {

@@ -59,8 +59,8 @@ public class RestaurantController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RestaurantDTO>> findAllByLoggedUser(@CurrentUser Administrator currentUser) {
-        List<RestaurantDTO> response = restaurantService.findAllByLoggedUser(currentUser.getId());
+    public ResponseEntity<RestaurantDTO> findByLoggedUser(@CurrentUser Administrator currentUser) {
+        RestaurantDTO response = restaurantService.findAllByLoggedUser(currentUser.getId());
         return ResponseEntity.ok(response);
     }
 
