@@ -31,14 +31,14 @@ public class DishValidateService {
     }
     public void validateToSave(Dish dish, String adminId) {
         categoryValidateService.validateAdminCanEditCategory(dish.category.getId(), adminId);
-        restaurantValidateService.validateAdministratorCanEditRestaurant(dish.getRestaurant(), adminId);
+        restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(dish.getRestaurant().getId(), adminId);
         this.validateDishIsUniqueByName(dish);
     }
 
     public void validateToUpdate(Long dihsId, Dish newDish,String adminId) {
         this.validateDishExists(dihsId);
         categoryValidateService.validateAdminCanEditCategory(newDish.category.getId(), adminId);
-        restaurantValidateService.validateAdministratorCanEditRestaurant(newDish.getRestaurant(), adminId);
+        restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(newDish.getRestaurant().getId(), adminId);
         Dish oldDish = dishRepository.findById(dihsId).orElseThrow(EntityNotFoundException::new);
         if (!newDish.getName().equals(oldDish.getName()))
             this.validateDishIsUniqueByName(newDish);
@@ -73,6 +73,6 @@ public class DishValidateService {
         Dish dish = validateDishExistsAndGet(dishId);
         validateDishBelongsToCategory(dish, categoryId);
         categoryValidateService.validateAdminCanEditCategory(dish.category.getId(), adminId);
-        restaurantValidateService.validateAdministratorCanEditRestaurant(dish.getRestaurant(), adminId);
+        restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(dish.getRestaurant().getId(), adminId);
     }
 }
