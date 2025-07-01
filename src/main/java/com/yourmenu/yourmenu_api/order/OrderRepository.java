@@ -22,6 +22,11 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     """)
     public List<Order> findAllByRestaurantAndDate(String restaurantId, LocalDateTime startOfDay, LocalDateTime endOfDay);
 
+    @Query(nativeQuery = true, value = """
+        select * from orders where id = :orderId and restaurant_id = :restaurantId;
+    """)
+    Order findByIdByRestaurant(Long orderId, String restaurantId);
+
     @Query(nativeQuery = true, value= """
         select sum(price)
         from orders

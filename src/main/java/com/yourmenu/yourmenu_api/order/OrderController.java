@@ -41,6 +41,15 @@ public class OrderController {
         return ResponseEntity.ok(orders);
     }
 
+    @PatchMapping("/{orderId}")
+    public ResponseEntity<OrderDTO> updateStatus(
+            @PathVariable(value = "orderId") Long orderId,
+            @RequestParam(value = "restaurantId") String restaurantId,
+            @RequestParam OrderStatus status) {
+        OrderDTO order = orderService.updateStatus(restaurantId, orderId, status);
+        return ResponseEntity.ok(order);
+    }
+
     //esse get não pode ser público, só pode ser feito por adm
     @GetMapping("/summary/by-date")
     public ResponseEntity<OrdersSumaryDTO> getSummaryByDate(@PathVariable String restaurantId, @RequestParam LocalDate date, @CurrentUser Administrator currentUser){
