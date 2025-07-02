@@ -13,6 +13,7 @@ public class OrderMapper {
         order.setDateTime(dto.dateTime());
         order.setPrice(dto.price());
         order.setStatus(dto.status());
+        order.setNote(order.getNote());
         return order;
     }
 
@@ -22,7 +23,8 @@ public class OrderMapper {
                 order.getRestaurant().getId(),
                 order.getDateTime(),
                 order.getPrice(),
-                order.getStatus()
+                order.getStatus(),
+                order.getNote()
         );
     }
 }

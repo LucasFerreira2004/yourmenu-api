@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.order;
 
+import com.yourmenu.yourmenu_api.orderItem.OrderItem;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Table(name = "orders")
 @Entity
@@ -31,4 +33,11 @@ public class Order {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
+
+    @Column(columnDefinition = "text")
+    private String note;
+
+    //mapeamento de volta
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    List<OrderItem> orderItems;
 }

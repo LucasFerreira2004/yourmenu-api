@@ -11,6 +11,7 @@ public record OrderDTO(
     String restaurantId,
     LocalDateTime dateTime,
     BigDecimal price,
-    OrderStatus status
+    OrderStatus status,
+    String note
 ) {
 }
