@@ -7,10 +7,7 @@ import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 
@@ -32,5 +29,14 @@ public class OrderAdressController {
         return ResponseEntity
                 .created(location)
                 .body(createdOrderAdress);
+    }
+
+    @GetMapping("byOrder/{orderId}")
+    public ResponseEntity<OrderAdressDto> createOrderAdress(
+            @PathVariable Long orderId,
+            @CurrentUser Administrator currentUser
+    ) {
+        OrderAdressDto orderAdress = orderAdressService.getByOrderId(orderId);
+        return ResponseEntity.ok(orderAdress);
     }
 }
