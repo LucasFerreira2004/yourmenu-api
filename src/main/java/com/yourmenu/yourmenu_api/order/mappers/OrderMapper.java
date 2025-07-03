@@ -11,7 +11,7 @@ public class OrderMapper {
         Order order = new Order();
         order.setRestaurant(restaurant);
         order.setDateTime(dto.dateTime());
-        order.setPrice(dto.price());
+        order.setPrice(null);
         order.setStatus(dto.status());
         order.setNote(order.getNote());
         return order;
@@ -22,9 +22,10 @@ public class OrderMapper {
                 order.getId(),
                 order.getRestaurant().getId(),
                 order.getDateTime(),
-                order.getPrice(),
+                null,
                 order.getStatus(),
-                order.getNote()
+                order.getNote(),
+                null
         );
     }
 }

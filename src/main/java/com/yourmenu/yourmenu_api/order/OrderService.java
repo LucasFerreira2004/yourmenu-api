@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.order;
 
 import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
+import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrdersSumaryDTO;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
@@ -26,6 +27,10 @@ public class OrderService {
 
     @Autowired
     private RestaurantValidateService restaurantValidateService;
+
+    public static OrderDTO saveOrder(String restaurantId, OrderSaveDTO saveDTO) {
+
+    }
 
     public List<OrderDTO> getAllByRestaurant(String restaurantId) {
         List<Order> orders = orderRepository.findAllByRestaurantIdOrderByDateTime(restaurantId);

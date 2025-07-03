@@ -3,6 +3,7 @@ package com.yourmenu.yourmenu_api.order;
 import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
+import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrdersSumaryDTO;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,5 +56,11 @@ public class OrderController {
     public ResponseEntity<OrdersSumaryDTO> getSummaryByDate(@PathVariable String restaurantId, @RequestParam LocalDate date, @CurrentUser Administrator currentUser){
         OrdersSumaryDTO summary = orderService.getSummaryByDate(restaurantId, date,currentUser.getId());
         return ResponseEntity.ok(summary);
+    }
+
+    @PostMapping()
+    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, OrderSaveDTO saveDTO){
+        OrderDTO order = OrderService.saveOrder(restaurantId, saveDTO);
+        return ResponseEntity.ok(order);
     }
 }

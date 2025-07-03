@@ -15,11 +15,11 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
     List<OrderItem> findAllByOrderId(Long orderId);
 
     @Query(nativeQuery = true, value = """
-        SELECT item.quantity * dish_option.price 
-        FROM order_item as item
-        JOIN dish_size_option as dish_option on item.dish_size_option_id = dish_option.id; 
+        SELECT :quantity * dish_option.price 
+        FROM dish_size_option as dish_option
+        where dish_option.id = :dishSizeOptionId 
     """)
-    BigDecimal findPriceById(Long id);
+    BigDecimal findPriceByDishSizeOptionId(Integer quantity, Long dishSizeOptionId);
 
     @Query(nativeQuery = true, value = """
         SELECT SUM(item.quantity * dish_option.price) 
