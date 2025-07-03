@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 public record OrderItemDTO(
         Long id,
         Long dishSizeOptionId,
-        Integer quantity,
         String dishName,
+        Integer quantity,
         BigDecimal price
 ) {
 }

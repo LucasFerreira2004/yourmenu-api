@@ -5,6 +5,10 @@ import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrdersSumaryDTO;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
+import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
+import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
+import com.yourmenu.yourmenu_api.restaurant.Restaurant;
+import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import com.yourmenu.yourmenu_api.restaurant.exception.RestaurantNotFoundException;
@@ -27,9 +31,21 @@ public class OrderService {
 
     @Autowired
     private RestaurantValidateService restaurantValidateService;
+    
+    @Autowired
+    private RestaurantRepository restaurantRepository;
 
-    public static OrderDTO saveOrder(String restaurantId, OrderSaveDTO saveDTO) {
+    @Autowired
+    private OrderItemService orderItemService;
 
+    public OrderDTO saveOrder(String restaurantId, OrderSaveDTO saveDTO) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
+        Order order = OrderMapper.toEntity(saveDTO, restaurant);
+        orderItemService.saveOrderItems(saveDTO.orderItems());
+
+        orderRepository.save(order);
+        return OrderMapper.toDTO(order);
     }
 
     public List<OrderDTO> getAllByRestaurant(String restaurantId) {

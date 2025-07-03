@@ -60,7 +60,7 @@ public class OrderController {
 
     @PostMapping()
     public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, OrderSaveDTO saveDTO){
-        OrderDTO order = OrderService.saveOrder(restaurantId, saveDTO);
+        OrderDTO order = orderService.saveOrder(restaurantId, saveDTO);
         return ResponseEntity.ok(order);
     }
 }

@@ -20,27 +20,27 @@ import java.util.List;
 public class Dish {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id")
-    public Restaurant restaurant;
+    private Restaurant restaurant;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
-    public Category category;
+    private Category category;
 
     @OneToMany(mappedBy = "dish", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<DishSizeOption> sizeOptions;
 
     @Column(nullable = false)
-    public String name;
+    private String name;
 
     @Column(columnDefinition = "text")
-    public String description;
+    private String description;
 
     @Column(nullable = false)
-    public Boolean isAvailable;
+    private Boolean isAvailable;
 
-    public String imageUrl;
+    private String imageUrl;
 }
