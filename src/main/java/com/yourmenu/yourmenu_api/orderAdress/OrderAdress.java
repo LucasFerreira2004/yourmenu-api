@@ -13,10 +13,11 @@ public class OrderAdress {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToOne(mappedBy = "order_adress_id", cascade = CascadeType.ALL)
+    @OneToOne()
+    @JoinColumn(name = "order_id", nullable = false)
     private Order order;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "delivery_zone_id", nullable = false)
     private DeliveryZone deliveryZone;
 
