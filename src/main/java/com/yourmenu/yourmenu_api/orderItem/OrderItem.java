@@ -18,6 +18,7 @@ public class OrderItem {
     @ManyToOne
     private Order order;
 
+    @JoinColumn(name = "dish_size_option_id")
     @ManyToOne
     private DishSizeOption dishSizeOption;
 

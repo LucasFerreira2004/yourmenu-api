@@ -1,9 +1,12 @@
 package com.yourmenu.yourmenu_api.orderItem.dto;
 
-import jakarta.persistence.Id;
+import java.math.BigDecimal;
 
 public record OrderItemDTO(
         Long id,
-        Long orderItem
+        Long dishSizeOptionId,
+        Integer quantity,
+        String dishName,
+        BigDecimal price
 ) {
 }
