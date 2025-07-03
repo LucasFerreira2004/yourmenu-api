@@ -1,34 +1,32 @@
 package com.yourmenu.yourmenu_api.orderAdress.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.Length;
 
 public record OrderAdressPostDto(
-        @NotEmpty(message = "O pedido deve ser informado")
-        @Size(min = 1, message = "O pedido deve ser informado")
+
+        @NotNull(message = "O pedido deve ser informado")
         Long orderId,
 
-        @NotEmpty(message = "A zona de entrega deve ser informada")
-        @Size(min = 1, message = "O pedido deve ser informado")
+        @NotNull(message = "A zona de entrega deve ser informada")
         Long deliveryZoneId,
 
-        @NotBlank(message = "A zona de entrega deve ser informada")
-        @Size(min = 8, max = 8, message = "O cep deve ter 8 caracteres")
-        Long cep,
+        @NotBlank(message = "O CEP deve ser informado")
+        @Size(min = 8, max = 8, message = "O CEP deve conter exatamente 8 caracteres")
+        String cep,
 
         @NotBlank(message = "A rua deve ser informada")
         String street,
 
-        @NotBlank(message = "O numero deve ser informado")
-        @Length(min = 1, max = 20)
+        @NotBlank(message = "O número deve ser informado")
+        @Size(min = 1, max = 20, message = "O número deve ter entre 1 e 20 caracteres")
         String number,
 
-        @Length(min = 1, max = 100, message = "O complemento deve ter no.maxcdn 100 caracteres")
+        @Size(max = 100, message = "O complemento deve ter no máximo 100 caracteres")
         String complement,
 
-        @Length(min = 1, max = 100, message = "A referência deve ter no máximo 100 caracteres")
+        @Size(max = 100, message = "A referência deve ter no máximo 100 caracteres")
         String reference
-) {
-}
+
+) {}
