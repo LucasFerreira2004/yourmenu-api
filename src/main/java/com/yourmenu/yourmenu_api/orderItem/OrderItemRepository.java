@@ -20,4 +20,12 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
         JOIN dish_size_option as dish_option on item.dish_size_option_id = dish_option.id; 
     """)
     BigDecimal findPriceById(Long id);
+
+    @Query(nativeQuery = true, value = """
+        SELECT SUM(item.quantity * dish_option.price) 
+        FROM order_item as item
+        JOIN dish_size_option as dish_option on item.dish_size_option_id = dish_option.id
+        JOIN order on order.id = :orderId;
+    """)
+    BigDecimal findOrderPriceByOrderId (Long orderId);
 }
