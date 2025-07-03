@@ -4,6 +4,7 @@ import com.yourmenu.yourmenu_api.deliveryZone.DeliveryZone;
 import com.yourmenu.yourmenu_api.order.Order;
 
 public record OrderAdressDto(
+        Long id,
         Order order,
         DeliveryZone deliveryZone,
         Long cep,
