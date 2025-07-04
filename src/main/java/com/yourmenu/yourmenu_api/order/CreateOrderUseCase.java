@@ -22,6 +22,8 @@ public class CreateOrderUseCase {
     @Autowired
     private OrderItemService orderItemService;
 
+    @Autowired
+    private OrderMapper orderMapper;
     //order address e order client
 
     @Transactional
@@ -29,6 +31,6 @@ public class CreateOrderUseCase {
         Order order =  orderService.saveOrder(saveDTO, restaurantId);
         List<OrderItem> items =  orderItemService.saveOrderItems(saveDTO.orderItems(), order.getId());
         order.setOrderItems(items);
-        return OrderMapper.toDTO(order);
+        return orderMapper.toDTO(order);
     }
 }

@@ -16,6 +16,9 @@ public class OrderMapper {
     @Autowired
     private OrderItemService orderItemService;
 
+    @Autowired
+    private OrderItemMapper orderItemMapper;
+
     public Order toEntity(OrderSaveDTO dto, Restaurant restaurant) {
         BigDecimal price = orderItemService.getTotalPriceByList(dto.orderItems());
         Order order = new Order();
@@ -27,7 +30,7 @@ public class OrderMapper {
         return order;
     }
 
-    public static OrderDTO toDTO(Order order) {
+    public OrderDTO toDTO(Order order) {
         return new OrderDTO(
                 order.getId(),
                 order.getRestaurant().getId(),
@@ -35,7 +38,7 @@ public class OrderMapper {
                 order.getPrice(),
                 order.getStatus(),
                 order.getNote(),
-                order.getOrderItems().stream().map(x-> OrderItemMapper.toDTO(x)).toList()
+                order.getOrderItems().stream().map(x-> orderItemMapper.toDTO(x)).toList()
         );
     }
 }

@@ -50,21 +50,21 @@ public class OrderService {
 
     public List<OrderDTO> getAllByRestaurant(String restaurantId) {
         List<Order> orders = orderRepository.findAllByRestaurantIdOrderByDateTime(restaurantId);
-        return orders.stream().map(x -> OrderMapper.toDTO(x)).toList();
+        return orders.stream().map(x -> orderMapper.toDTO(x)).toList();
     }
 
     public List<OrderDTO> getAllByRestaurantAndDate(String restaurantId, LocalDate date){
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
-        return orders.stream().map(x -> OrderMapper.toDTO(x)).toList();
+        return orders.stream().map(x -> orderMapper.toDTO(x)).toList();
     }
 
     public OrderDTO getById(String restaurantId, Long orderId) {
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new RestaurantNotFoundException("Order"));
         if (!order.getRestaurant().getId().equals(restaurantId))
             throw new EntityDoesNotBelongToAnotherEntityException("Order", "Restaurant");
-        return OrderMapper.toDTO(order);
+        return orderMapper.toDTO(order);
     }
 
     public List<OrderByStatusDTO> getAlByRestaurantDateAndStatus(String restaurantId, LocalDate date){
@@ -76,7 +76,7 @@ public class OrderService {
                 .collect(Collectors.groupingBy(Order::getStatus));
         List<OrderByStatusDTO> ordersByStatus = new ArrayList<>();
         for (OrderStatus status : ordersGrouped.keySet()) {
-            ordersByStatus.add(new OrderByStatusDTO(status, ordersGrouped.get(status).stream().map(OrderMapper::toDTO).toList()));
+            ordersByStatus.add(new OrderByStatusDTO(status, ordersGrouped.get(status).stream().map(orderMapper::toDTO).toList()));
         }
         return ordersByStatus;
     }
@@ -89,7 +89,7 @@ public class OrderService {
 
         order.setStatus(status);
         orderRepository.save(order);
-        return OrderMapper.toDTO(order);
+        return orderMapper.toDTO(order);
     }
 
     public OrdersSumaryDTO getSummaryByDate(String restaurantId, LocalDate date, String adminsitratorId) {

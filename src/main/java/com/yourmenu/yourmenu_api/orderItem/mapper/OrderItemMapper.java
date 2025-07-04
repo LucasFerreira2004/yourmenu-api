@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.orderItem.mapper;
 
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.mappers.SizeOptionsMapper;
 import com.yourmenu.yourmenu_api.order.Order;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
@@ -29,6 +30,9 @@ public class OrderItemMapper {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Autowired
+    private SizeOptionsMapper sizeOptionsMapper;
+
     public  OrderItem toEntity(OrderItemSaveDTO dto, Long orderId) {
         OrderItem orderItem = new OrderItem();
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order"));
@@ -42,11 +46,12 @@ public class OrderItemMapper {
         return orderItem;
     }
 
-    public static OrderItemDTO toDTO(OrderItem orderItem) {
+    public OrderItemDTO toDTO(OrderItem orderItem) {
         return new OrderItemDTO(
                 orderItem.getId(),
                 orderItem.getDishSizeOption().getId(),
                 orderItem.getDishSizeOption().getDish().getName(),
+                sizeOptionsMapper.toDTO(orderItem.getDishSizeOption().getSizeOption()),
                 orderItem.getQuantity(),
                 orderItem.getPrice()
         );
