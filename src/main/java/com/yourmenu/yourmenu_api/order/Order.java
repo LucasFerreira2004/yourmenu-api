@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,6 +40,9 @@ public class Order {
     private String note;
 
     //mapeamento de volta
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<OrderItem> orderItems = new ArrayList<>();
+
+
 }
