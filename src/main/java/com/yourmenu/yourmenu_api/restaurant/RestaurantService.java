@@ -6,6 +6,7 @@ import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
 import com.yourmenu.yourmenu_api.restaurant.mapper.RestaurantMapper;
+import com.yourmenu.yourmenu_api.shared.awss3.ImageDefaultsProperties;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
 import com.yourmenu.yourmenu_api.shared.utils.SlugFormater;
 import jakarta.transaction.Transactional;
@@ -13,9 +14,6 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.beans.Transient;
-import java.util.List;
 
 @Service
 public class RestaurantService {
@@ -40,6 +38,9 @@ public class RestaurantService {
     @Autowired
     private S3Service s3Service;
 
+    @Autowired
+    private ImageDefaultsProperties imageDefaultsProperties;
+
     @Transactional
     public RestaurantDTO save(RestaurantSaveDTO dto, MultipartFile profilePictureUrl, MultipartFile bannerPictureUrl, String adminId) {
         Restaurant restaurant = restaurantMapper.toEntity(dto);
@@ -48,10 +49,7 @@ public class RestaurantService {
         restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         restaurant.setAdministrator(administratorService.findByid(adminId));
 
-        if(profilePictureUrl != null)
-            restaurant.setProfilePicUrl(s3Service.uploadFile(profilePictureUrl));
-        if(bannerPictureUrl != null)
-            restaurant.setBannerPicUrl(s3Service.uploadFile(bannerPictureUrl));
+        adicionarImagens(restaurant, profilePictureUrl, bannerPictureUrl);
 
         restaurantRepository.save(restaurant);
         createBusinessHoursService.execute(restaurant);
@@ -82,6 +80,24 @@ public class RestaurantService {
         return restaurantMapper.toDTO(restaurant);
     }
 
+    public RestaurantDTO findAllByLoggedUser(String adminId) {
+        Restaurant restaurantResponse = restaurantRepository.findByAdministratorId(adminId);
+        return restaurantMapper.toDTO(restaurantResponse);
+    }
+
+    public RestaurantDTO findById(String restaurantId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        restaurantValidateService.validateRestaurantExists(restaurant);
+        return restaurantMapper.toDTO(restaurant);
+    }
+
+    @Transactional
+    public void delete(String restaurantId, String adminId) {
+        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        restaurantValidateService.validateAllToUpdate(restaurant, adminId);
+        restaurantRepository.delete(restaurant);
+    }
+
     private boolean shouldGenerateSlug(Restaurant restaurant, String dtoRestaurantName){
         String normmalizedRestaurantName = SlugFormater.normalize(restaurant.getName());
         String normalizedDtoName = SlugFormater.normalize(dtoRestaurantName);
@@ -110,21 +126,15 @@ public class RestaurantService {
         return restaurant;
     }
 
-    public RestaurantDTO findAllByLoggedUser(String adminId) {
-        Restaurant restaurantResponse = restaurantRepository.findByAdministratorId(adminId);
-        return restaurantMapper.toDTO(restaurantResponse);
-    }
+    private void adicionarImagens(Restaurant restaurant, MultipartFile profilePictureUrl, MultipartFile bannerPictureUrl) {
+        if(profilePictureUrl != null)
+            restaurant.setProfilePicUrl(s3Service.uploadFile(profilePictureUrl));
+        else
+            restaurant.setProfilePicUrl(imageDefaultsProperties.getDefaultIconRestaurant());
 
-    public RestaurantDTO findById(String restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateRestaurantExists(restaurant);
-        return restaurantMapper.toDTO(restaurant);
-    }
-
-    @Transactional
-    public void delete(String restaurantId, String adminId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateAllToUpdate(restaurant, adminId);
-        restaurantRepository.delete(restaurant);
+        if(bannerPictureUrl != null)
+            restaurant.setBannerPicUrl(s3Service.uploadFile(bannerPictureUrl));
+        else
+            restaurant.setBannerPicUrl(imageDefaultsProperties.getDefaultCapaRestaurant());
     }
 }
