@@ -61,7 +61,7 @@ public class OrderService {
     }
 
     public OrderDTO getById(String restaurantId, Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RestaurantNotFoundException("Order"));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order"));
         if (!order.getRestaurant().getId().equals(restaurantId))
             throw new EntityDoesNotBelongToAnotherEntityException("Order", "Restaurant");
         return orderMapper.toDTO(order);
