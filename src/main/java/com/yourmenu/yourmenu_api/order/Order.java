@@ -38,6 +38,6 @@ public class Order {
     private String note;
 
     //mapeamento de volta
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     List<OrderItem> orderItems;
 }

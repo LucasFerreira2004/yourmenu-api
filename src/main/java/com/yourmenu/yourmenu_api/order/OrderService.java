@@ -16,6 +16,7 @@ import com.yourmenu.yourmenu_api.shared.globalExceptions.EntityDoesNotBelongToAn
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.beans.Transient;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -38,13 +39,15 @@ public class OrderService {
     @Autowired
     private OrderItemService orderItemService;
 
+    @Transient
     public OrderDTO saveOrder(String restaurantId, OrderSaveDTO saveDTO) {
         Restaurant restaurant = restaurantRepository.findByid(restaurantId);
         if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
-        Order order = OrderMapper.toEntity(saveDTO, restaurant);
-        orderItemService.saveOrderItems(saveDTO.orderItems());
-
+        BigDecimal price = orderItemService.getTotalPriceByList(saveDTO.orderItems());
+        Order order = OrderMapper.toEntity(saveDTO, restaurant, price);
         orderRepository.save(order);
+        orderItemService.saveOrderItems(saveDTO.orderItems(), order.getId());
+        order = orderRepository.findById(order.getId()).orElse(null);
         return OrderMapper.toDTO(order);
     }
 

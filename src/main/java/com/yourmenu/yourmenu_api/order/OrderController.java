@@ -59,8 +59,8 @@ public class OrderController {
     }
 
     @PostMapping()
-    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, OrderSaveDTO saveDTO){
-        OrderDTO order = orderService.saveOrder(restaurantId, saveDTO);
+    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody OrderSaveDTO saveDTO){
+         OrderDTO order = orderService.saveOrder(restaurantId, saveDTO);
         return ResponseEntity.ok(order);
     }
 }

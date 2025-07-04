@@ -25,19 +25,19 @@ public class DishValidateService {
     private RestaurantValidateService restaurantValidateService;
 
     public void validateDishIsUniqueByName(Dish dish) {
-            Dish result = dishRepository.findByNameAndRestaurant(dish.name, dish.getRestaurant().getId());
+            Dish result = dishRepository.findByNameAndRestaurant(dish.getName(), dish.getRestaurant().getId());
             if (result != null)
                 throw new ResourceWithSameNameException("dish");
     }
     public void validateToSave(Dish dish, String adminId) {
-        categoryValidateService.validateAdminCanEditCategory(dish.category.getId(), adminId);
+        categoryValidateService.validateAdminCanEditCategory(dish.getCategory().getId(), adminId);
         restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(dish.getRestaurant().getId(), adminId);
         this.validateDishIsUniqueByName(dish);
     }
 
     public void validateToUpdate(Long dihsId, Dish newDish,String adminId) {
         this.validateDishExists(dihsId);
-        categoryValidateService.validateAdminCanEditCategory(newDish.category.getId(), adminId);
+        categoryValidateService.validateAdminCanEditCategory(newDish.getCategory().getId(), adminId);
         restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(newDish.getRestaurant().getId(), adminId);
         Dish oldDish = dishRepository.findById(dihsId).orElseThrow(EntityNotFoundException::new);
         if (!newDish.getName().equals(oldDish.getName()))
@@ -72,7 +72,7 @@ public class DishValidateService {
         validateToGetById(dishId, restaurantId);
         Dish dish = validateDishExistsAndGet(dishId);
         validateDishBelongsToCategory(dish, categoryId);
-        categoryValidateService.validateAdminCanEditCategory(dish.category.getId(), adminId);
+        categoryValidateService.validateAdminCanEditCategory(dish.getCategory().getId(), adminId);
         restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(dish.getRestaurant().getId(), adminId);
     }
 }

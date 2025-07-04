@@ -3,15 +3,18 @@ import com.yourmenu.yourmenu_api.order.Order;
 
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
+import com.yourmenu.yourmenu_api.orderItem.mapper.OrderItemMapper;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
+
+import java.math.BigDecimal;
 
 public class OrderMapper {
 
-    public static Order toEntity(OrderSaveDTO dto, Restaurant restaurant) {
+    public static Order toEntity(OrderSaveDTO dto, Restaurant restaurant, BigDecimal price) {
         Order order = new Order();
         order.setRestaurant(restaurant);
         order.setDateTime(dto.dateTime());
-        order.setPrice(null);
+        order.setPrice(price);
         order.setStatus(dto.status());
         order.setNote(order.getNote());
         return order;
@@ -22,10 +25,10 @@ public class OrderMapper {
                 order.getId(),
                 order.getRestaurant().getId(),
                 order.getDateTime(),
-                null,
+                order.getPrice(),
                 order.getStatus(),
                 order.getNote(),
-                null
+                order.getOrderItems().stream().map(x-> OrderItemMapper.toDTO(x)).toList()
         );
     }
 }
