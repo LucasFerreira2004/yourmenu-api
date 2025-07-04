@@ -3,14 +3,21 @@ import com.yourmenu.yourmenu_api.order.Order;
 
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
+import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
 import com.yourmenu.yourmenu_api.orderItem.mapper.OrderItemMapper;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
+@Component
 public class OrderMapper {
+    @Autowired
+    private OrderItemService orderItemService;
 
-    public static Order toEntity(OrderSaveDTO dto, Restaurant restaurant, BigDecimal price) {
+    public Order toEntity(OrderSaveDTO dto, Restaurant restaurant) {
+        BigDecimal price = orderItemService.getTotalPriceByList(dto.orderItems());
         Order order = new Order();
         order.setRestaurant(restaurant);
         order.setDateTime(dto.dateTime());

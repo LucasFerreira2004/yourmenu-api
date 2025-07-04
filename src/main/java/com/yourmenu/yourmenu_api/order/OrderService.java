@@ -37,18 +37,15 @@ public class OrderService {
     private RestaurantRepository restaurantRepository;
 
     @Autowired
-    private OrderItemService orderItemService;
+    private OrderMapper orderMapper;
 
-    @Transient
-    public OrderDTO saveOrder(String restaurantId, OrderSaveDTO saveDTO) {
+
+    public Order saveOrder(OrderSaveDTO saveDTO, String restaurantId) {
         Restaurant restaurant = restaurantRepository.findByid(restaurantId);
         if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
-        BigDecimal price = orderItemService.getTotalPriceByList(saveDTO.orderItems());
-        Order order = OrderMapper.toEntity(saveDTO, restaurant, price);
+        Order order = orderMapper.toEntity(saveDTO, restaurant);
         orderRepository.save(order);
-        orderItemService.saveOrderItems(saveDTO.orderItems(), order.getId());
-        order = orderRepository.findById(order.getId()).orElse(null);
-        return OrderMapper.toDTO(order);
+        return order;
     }
 
     public List<OrderDTO> getAllByRestaurant(String restaurantId) {

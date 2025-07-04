@@ -19,25 +19,29 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private CreateOrderUseCase createOrderUseCase;
+
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllByRestaurant(@PathVariable String restaurantId){
+    public ResponseEntity<List<OrderDTO>> getAllByRestaurant(@PathVariable String restaurantId) {
         List<OrderDTO> orders = orderService.getAllByRestaurant(restaurantId);
         return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/by-date")
-    public ResponseEntity<List<OrderDTO>> getAllByRestaurantAndDate(@PathVariable String restaurantId, @RequestParam LocalDate date){
+    public ResponseEntity<List<OrderDTO>> getAllByRestaurantAndDate(@PathVariable String restaurantId, @RequestParam LocalDate date) {
         List<OrderDTO> orders = orderService.getAllByRestaurantAndDate(restaurantId, date);
         return ResponseEntity.ok(orders);
     }
+
     @GetMapping("/{orderId}")
-    public ResponseEntity<OrderDTO> getById(@PathVariable String restaurantId, @PathVariable Long orderId){
+    public ResponseEntity<OrderDTO> getById(@PathVariable String restaurantId, @PathVariable Long orderId) {
         OrderDTO order = orderService.getById(restaurantId, orderId);
         return ResponseEntity.ok(order);
     }
 
     @GetMapping("/status/by-date")
-    public ResponseEntity<List<OrderByStatusDTO>> getAllByRestaurantDateAndStatus(@PathVariable String restaurantId, @RequestParam LocalDate date){
+    public ResponseEntity<List<OrderByStatusDTO>> getAllByRestaurantDateAndStatus(@PathVariable String restaurantId, @RequestParam LocalDate date) {
         List<OrderByStatusDTO> orders = orderService.getAlByRestaurantDateAndStatus(restaurantId, date);
         return ResponseEntity.ok(orders);
     }
@@ -53,14 +57,14 @@ public class OrderController {
 
     //esse get não pode ser público, só pode ser feito por adm
     @GetMapping("/summary/by-date")
-    public ResponseEntity<OrdersSumaryDTO> getSummaryByDate(@PathVariable String restaurantId, @RequestParam LocalDate date, @CurrentUser Administrator currentUser){
-        OrdersSumaryDTO summary = orderService.getSummaryByDate(restaurantId, date,currentUser.getId());
+    public ResponseEntity<OrdersSumaryDTO> getSummaryByDate(@PathVariable String restaurantId, @RequestParam LocalDate date, @CurrentUser Administrator currentUser) {
+        OrdersSumaryDTO summary = orderService.getSummaryByDate(restaurantId, date, currentUser.getId());
         return ResponseEntity.ok(summary);
     }
 
     @PostMapping()
-    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody OrderSaveDTO saveDTO){
-         OrderDTO order = orderService.saveOrder(restaurantId, saveDTO);
+    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody OrderSaveDTO saveDTO) {
+        OrderDTO order = createOrderUseCase.createOrder(saveDTO, restaurantId);
         return ResponseEntity.ok(order);
     }
 }
