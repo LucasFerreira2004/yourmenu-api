@@ -4,6 +4,7 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
 import com.yourmenu.yourmenu_api.orderItem.mapper.OrderItemMapper;
+import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +22,12 @@ public class OrderItemService {
     @Autowired
     private DishSizeOptionRepository dishSizeOptionRepository;
 
-    public void saveOrderItems(List<OrderItemSaveDTO> itemsDtos, Long orderId) {
+    public List<OrderItem> saveOrderItems(List<OrderItemSaveDTO> itemsDtos, Long orderId) {
         for (OrderItemSaveDTO orderItemSaveDTO : itemsDtos) {
-            OrderItem orderItem = orderItemMapper.toEntity(orderItemSaveDTO, orderId, orderItemSaveDTO.dishSizeOptionId());
+            OrderItem orderItem = orderItemMapper.toEntity(orderItemSaveDTO, orderId);
             orderItemRepository.save(orderItem);
         }
+        return orderItemRepository.findAllByOrderId(orderId);
     }
 
     public BigDecimal getTotalPriceByList(List<OrderItemSaveDTO> items) {

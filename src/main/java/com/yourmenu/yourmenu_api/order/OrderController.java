@@ -64,7 +64,7 @@ public class OrderController {
 
     @PostMapping()
     public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody OrderSaveDTO saveDTO) {
-        OrderDTO order = createOrderUseCase.createOrder(saveDTO, restaurantId);
+        OrderDTO order = createOrderUseCase.execute(saveDTO, restaurantId);
         return ResponseEntity.ok(order);
     }
 }

@@ -29,11 +29,11 @@ public class OrderItemMapper {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
-    public  OrderItem toEntity(OrderItemSaveDTO dto, Long orderId, Long dishSizeOptionId) {
+    public  OrderItem toEntity(OrderItemSaveDTO dto, Long orderId) {
         OrderItem orderItem = new OrderItem();
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order"));
-        DishSizeOption dishSizeOption = dishSizeOptionRepository.findById(dishSizeOptionId).orElseThrow(() -> new ResourceNotFoundException("DishSizeOption"));
-        BigDecimal itemPrice = orderItemRepository.findPriceByDishSizeOptionId(dto.quantity(), dishSizeOptionId);
+        DishSizeOption dishSizeOption = dishSizeOptionRepository.findById(dto.dishSizeOptionId()).orElseThrow(() -> new ResourceNotFoundException("DishSizeOption"));
+        BigDecimal itemPrice = orderItemRepository.findPriceByDishSizeOptionId(dto.quantity(), dto.dishSizeOptionId());
         orderItem.setQuantity(dto.quantity());
         orderItem.setOrder(order);
         orderItem.setDishSizeOption(dishSizeOption);
