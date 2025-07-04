@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.order.dto;
 
 import com.yourmenu.yourmenu_api.order.OrderStatus;
+import com.yourmenu.yourmenu_api.orderAdress.dto.OrderAdressDto;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemDTO;
 
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ public record OrderDTO(
     BigDecimal price,
     OrderStatus status,
     String note,
-    List<OrderItemDTO> orderItems
+    List<OrderItemDTO> orderItems,
+    OrderAdressDto orderAdress
 ) {
 }

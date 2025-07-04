@@ -1,11 +1,14 @@
 package com.yourmenu.yourmenu_api.order;
 
+import com.yourmenu.yourmenu_api.orderAdress.OrderAdress;
 import com.yourmenu.yourmenu_api.orderItem.OrderItem;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -39,10 +42,15 @@ public class Order {
     @Column(columnDefinition = "text")
     private String note;
 
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private OrderAdress orderAdress;
+
     //mapeamento de volta
     @ToString.Exclude
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    List<OrderItem> orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
 
 }

@@ -14,22 +14,20 @@ public class OrderAdressService {
     private final OrderAdressRepository orderAdressRepository;
     private final OrderAdressMapper orderAdressMapper;
 
-    public OrderAdressDto save(OrderAdressPostDto dto, String administratorId) {
-        OrderAdress entity = orderAdressMapper.toEntity(dto);
-
+    public OrderAdress save(OrderAdressPostDto dto, Long orderId) {
+        OrderAdress entity = orderAdressMapper.toEntity(dto, orderId);
         // verificar se existe um orderAdress já cadastrado para o order, se existir, retorna o orderAdress
-        if(orderAdressRepository.existsByOrderId(dto.orderId())) {
-            return orderAdressMapper.toDto(
-                    orderAdressRepository
-                            .findByOrderId(dto.orderId())
-                            .orElseThrow(() -> new ResourceNotFoundException("id", "Id de order para orderAdress não encontrado")));
+        if (orderAdressRepository.existsByOrderId(orderId)) {
+            return orderAdressRepository
+                    .findByOrderId(orderId)
+                    .orElseThrow(() -> new ResourceNotFoundException("id", "Id de order para orderAdress não encontrado"));
         }
+        return orderAdressRepository.save(entity);
 
-        return orderAdressMapper.toDto(orderAdressRepository.save(entity));
     }
 
     public OrderAdressDto getByOrderId(Long orderId) {
-        return orderAdressMapper.toDto(
+        return orderAdressMapper.toDTO(
                                 orderAdressRepository.findByOrderId(orderId)
                                 .orElseThrow(() -> new ResourceNotFoundException("id", "Id de order para orderAdress não encontrado")));
     }

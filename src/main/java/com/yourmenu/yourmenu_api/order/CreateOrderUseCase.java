@@ -3,6 +3,8 @@ package com.yourmenu.yourmenu_api.order;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
+import com.yourmenu.yourmenu_api.orderAdress.OrderAdress;
+import com.yourmenu.yourmenu_api.orderAdress.OrderAdressService;
 import com.yourmenu.yourmenu_api.orderItem.OrderItem;
 import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
 import jakarta.transaction.Transactional;
@@ -24,13 +26,23 @@ public class CreateOrderUseCase {
 
     @Autowired
     private OrderMapper orderMapper;
-    //order address e order client
+
+    @Autowired
+    private OrderAdressService orderAdressService;
+    //order client
 
     @Transactional
     public OrderDTO execute(OrderSaveDTO saveDTO, String restaurantId) {
-        Order order =  orderService.saveOrder(saveDTO, restaurantId);
-        List<OrderItem> items =  orderItemService.saveOrderItems(saveDTO.orderItems(), order.getId());
-        order.setOrderItems(items);
-        return orderMapper.toDTO(order);
+        try {
+            Order order =  orderService.saveOrder(saveDTO, restaurantId);
+            List<OrderItem> items =  orderItemService.saveOrderItems(saveDTO.orderItems(), order.getId());
+            order.setOrderItems(items);
+            OrderAdress orderAdress = orderAdressService.save(saveDTO.orderAdress(), order.getId());
+            order.setOrderAdress(orderAdress);
+            return orderMapper.toDTO(order);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 }
