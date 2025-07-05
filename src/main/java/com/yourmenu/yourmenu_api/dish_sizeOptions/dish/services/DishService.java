@@ -16,6 +16,7 @@ import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.shared.awss3.ImageDefaultsProperties;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.DeniedAccessException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -119,6 +120,21 @@ public class DishService {
         categoryValidateService.validateCategorybelongsToRestaurant(categoryId, restaurantId);
         List<Dish> dishes = dishRepository.findAllAvailableByCategoryIdInRestaurant(categoryId, restaurantId);
         return dishes.stream().map(x -> DishMapper.toDTO(x)).toList();
+    }
+
+    public DishDTO updateImageDish(String restaurantId, Long dishId, MultipartFile imagem) {
+        Dish dish = dishRepository
+                .findById(dishId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Prato não encontrado como id " + dishId));
+
+        dishValidateService.validateToGetById(dishId, restaurantId);
+
+        String novaUrl = (imagem != null && !imagem.isEmpty())
+                ? s3Service.uploadFile(imagem)
+                : imageDefaultsProperties.getDefaultVisualDish();
+
+        dish.setImageUrl(novaUrl);
+        return DishMapper.toDTO(dishRepository.save(dish));
     }
 
     private void adicionarImagens(Dish dish, MultipartFile imageDish) {
