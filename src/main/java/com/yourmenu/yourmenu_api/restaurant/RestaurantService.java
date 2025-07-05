@@ -8,6 +8,7 @@ import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
 import com.yourmenu.yourmenu_api.restaurant.mapper.RestaurantMapper;
 import com.yourmenu.yourmenu_api.shared.awss3.ImageDefaultsProperties;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import com.yourmenu.yourmenu_api.shared.utils.SlugFormater;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -58,7 +59,9 @@ public class RestaurantService {
 
     @Transactional
     public RestaurantDTO openClose(@Valid OpenDTO dto, String restaurantId, String adminId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        Restaurant restaurant = restaurantRepository
+                .findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurant not found with id: " + restaurantId));
         restaurantValidateService.validateAllToUpdate(restaurant, adminId);
         restaurant.setIsOpen(dto.isOpen());
         restaurantRepository.save(restaurant);
@@ -72,8 +75,11 @@ public class RestaurantService {
             MultipartFile profilePictureUrl,
             MultipartFile bannerPictureUrl,
             String adminId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        Restaurant restaurant = restaurantRepository
+                .findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurant not found with id: " + restaurantId));
         restaurantValidateService.validateAllToUpdate(restaurant, adminId);
+
         updateRestaurantData(restaurant, dto, profilePictureUrl, bannerPictureUrl);
 
         restaurantRepository.save(restaurant);
@@ -86,14 +92,18 @@ public class RestaurantService {
     }
 
     public RestaurantDTO findById(String restaurantId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
-        restaurantValidateService.validateRestaurantExists(restaurant);
-        return restaurantMapper.toDTO(restaurant);
+        return restaurantRepository.findById(restaurantId)
+            .map(restaurant -> {
+                restaurantValidateService.validateRestaurantExists(restaurant);
+                return restaurantMapper.toDTO(restaurant);
+            })
+            .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurant not found with id: " + restaurantId));
     }
 
     @Transactional
     public void delete(String restaurantId, String adminId) {
-        Restaurant restaurant = restaurantRepository.findById(restaurantId).orElse(null);
+        Restaurant restaurant = restaurantRepository.findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurant not found with id: " + restaurantId));
         restaurantValidateService.validateAllToUpdate(restaurant, adminId);
         restaurantRepository.delete(restaurant);
     }
@@ -101,12 +111,10 @@ public class RestaurantService {
     private boolean shouldGenerateSlug(Restaurant restaurant, String dtoRestaurantName){
         String normmalizedRestaurantName = SlugFormater.normalize(restaurant.getName());
         String normalizedDtoName = SlugFormater.normalize(dtoRestaurantName);
-        if (normmalizedRestaurantName.equals(normalizedDtoName))
-            return false;
-        return true;
+        return (normmalizedRestaurantName.equals(normalizedDtoName));
     }
 
-    private Restaurant updateRestaurantData(
+    private void updateRestaurantData(
             Restaurant restaurant,
             RestaurantSaveDTO dto,
             MultipartFile profilePictureUrl,
@@ -117,22 +125,21 @@ public class RestaurantService {
         restaurant.setDeliveryTimeMin(dto.deliveryTimeMin());
         restaurant.setDeliveryTimeMax(dto.deliveryTimeMax());
 
-        if(profilePictureUrl != null)
+        if (profilePictureUrl != null && !profilePictureUrl.isEmpty())
             restaurant.setProfilePicUrl(s3Service.uploadFile(profilePictureUrl));
-        if(bannerPictureUrl != null)
+        if (bannerPictureUrl != null && !bannerPictureUrl.isEmpty())
             restaurant.setBannerPicUrl(s3Service.uploadFile(bannerPictureUrl));
         if(dto.isOpen() != null)
             restaurant.setIsOpen(dto.isOpen());
-        return restaurant;
     }
 
     private void adicionarImagens(Restaurant restaurant, MultipartFile profilePictureUrl, MultipartFile bannerPictureUrl) {
-        if(profilePictureUrl != null)
+        if(profilePictureUrl != null && !profilePictureUrl.isEmpty())
             restaurant.setProfilePicUrl(s3Service.uploadFile(profilePictureUrl));
         else
             restaurant.setProfilePicUrl(imageDefaultsProperties.getDefaultIconRestaurant());
 
-        if(bannerPictureUrl != null)
+        if(bannerPictureUrl != null && !bannerPictureUrl.isEmpty())
             restaurant.setBannerPicUrl(s3Service.uploadFile(bannerPictureUrl));
         else
             restaurant.setBannerPicUrl(imageDefaultsProperties.getDefaultCapaRestaurant());
