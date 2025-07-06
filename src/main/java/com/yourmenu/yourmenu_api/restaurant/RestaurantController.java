@@ -1,6 +1,8 @@
 package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.Administrator;
+import com.yourmenu.yourmenu_api.administrator.AdministratorService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
@@ -20,6 +22,8 @@ import java.util.List;
 public class RestaurantController {
     @Autowired
     RestaurantService restaurantService;
+    @Autowired
+    private AdministratorService administratorService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<RestaurantDTO> save(
@@ -74,5 +78,35 @@ public class RestaurantController {
     public ResponseEntity<Void> delete(@PathVariable String restaurantId, @CurrentUser Administrator currentUser) {
         restaurantService.delete(restaurantId, currentUser.getId());
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping(value = "/{restaurantId}/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RestaurantDTO> updateVisualProfileRestaurant(
+            @PathVariable String restaurantId,
+            @CurrentUser Administrator administrator,
+            @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.ok().body(restaurantService.updateImageProfileRestaurant(restaurantId, administrator.getId(), image));
+    }
+
+    @PatchMapping(value = "/{restaurantId}/profile")
+    public ResponseEntity<RestaurantDTO> deleteVisualProfileRestaurant(
+            @PathVariable String restaurantId,
+            @CurrentUser Administrator administrator) {
+        return ResponseEntity.ok().body(restaurantService.deleteImageProfileRestaurant(restaurantId, administrator.getId()));
+    }
+
+    @PutMapping(value = "/{restaurantId}/banner", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<RestaurantDTO> updateVisualBannerRestaurant(
+            @PathVariable String restaurantId,
+            @CurrentUser Administrator administrator,
+            @RequestPart("image") MultipartFile image) {
+        return ResponseEntity.ok().body(restaurantService.updateImageBannerRestaurant(restaurantId, administrator.getId(), image));
+    }
+
+    @PatchMapping(value = "/{restaurantId}/banner")
+    public ResponseEntity<RestaurantDTO> deleteVisualBannerRestaurant(
+            @PathVariable String restaurantId,
+            @CurrentUser Administrator administrator) {
+        return ResponseEntity.ok().body(restaurantService.deleteImageBannerRestaurant(restaurantId, administrator.getId()));
     }
 }
