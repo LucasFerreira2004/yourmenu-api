@@ -108,6 +108,42 @@ public class RestaurantService {
         restaurantRepository.delete(restaurant);
     }
 
+    public RestaurantDTO updateImageProfileRestaurant(String restaurantId, String adminId, MultipartFile imagem) {
+        Restaurant restaurant = findAndValidatePermission(restaurantId, adminId);
+
+        String novaUrl = (imagem != null && !imagem.isEmpty())
+                ? s3Service.uploadFile(imagem)
+                : imageDefaultsProperties.getDefaultVisualDish();
+
+        restaurant.setProfilePicUrl(novaUrl);
+        return restaurantMapper.toDTO(restaurantRepository.save(restaurant));
+    }
+
+    public RestaurantDTO deleteImageProfileRestaurant(String restaurantId, String adminId) {
+        Restaurant restaurant = findAndValidatePermission(restaurantId, adminId);
+
+        restaurant.setProfilePicUrl(imageDefaultsProperties.getDefaultVisualDish());
+        return restaurantMapper.toDTO(restaurantRepository.save(restaurant));
+    }
+
+    public RestaurantDTO deleteImageBannerRestaurant(String restaurantId, String adminId) {
+        Restaurant restaurant = findAndValidatePermission(restaurantId, adminId);
+
+        restaurant.setProfilePicUrl(imageDefaultsProperties.getDefaultVisualDish());
+        return restaurantMapper.toDTO(restaurantRepository.save(restaurant));
+    }
+
+    public RestaurantDTO updateImageBannerRestaurant(String restaurantId, String adminId, MultipartFile imagem) {
+        Restaurant restaurant = findAndValidatePermission(restaurantId, adminId);
+
+        String novaUrl = (imagem != null && !imagem.isEmpty())
+                ? s3Service.uploadFile(imagem)
+                : imageDefaultsProperties.getDefaultVisualDish();
+
+        restaurant.setBannerPicUrl(novaUrl);
+        return restaurantMapper.toDTO(restaurantRepository.save(restaurant));
+    }
+
     private boolean shouldGenerateSlug(Restaurant restaurant, String dtoRestaurantName){
         String normmalizedRestaurantName = SlugFormater.normalize(restaurant.getName());
         String normalizedDtoName = SlugFormater.normalize(dtoRestaurantName);
@@ -143,5 +179,14 @@ public class RestaurantService {
             restaurant.setBannerPicUrl(s3Service.uploadFile(bannerPictureUrl));
         else
             restaurant.setBannerPicUrl(imageDefaultsProperties.getDefaultCapaRestaurant());
+    }
+
+    private Restaurant findAndValidatePermission(String restaurantId, String adminId) {
+        Restaurant restaurant = restaurantRepository
+                .findById(restaurantId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurante nao encontrado como id " + restaurantId));
+        restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(restaurantId, adminId);
+
+        return restaurant;
     }
 }
