@@ -1,39 +1,44 @@
-version: "3.7"
+version: "3.8"
 
 services:
   postgres:
     image: postgres:14-alpine
-    ports:
-      - 5433:5432 
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1234567
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
-      - pgdata-dev:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
     networks:
-      - yourmenu-network
+      - yourmenu-net
+    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4:latest
-    ports:
-      - "5050:80"
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
-    volumes:
-      - pgadmindata-dev:/var/lib/pgadmin/data
+    env_file:
+      - .env
     depends_on:
       - postgres
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail http://localhost:80 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - pgadmindata:/var/lib/pgadmin/data
+    ports:
+      - "5050:80"
     networks:
-      - yourmenu-network
-
-networks:
-  yourmenu-network:
-    driver: bridge
+      - yourmenu-net
+    restart: unless-stopped
 
 volumes:
-  pgdata-dev:
-    driver: local
-  pgadmindata-dev:
-    driver: local
+  pgdata:
+  pgadmindata:
+
+networks:
+  yourmenu-net:
+    driver: bridge
