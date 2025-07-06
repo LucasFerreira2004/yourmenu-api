@@ -2,7 +2,6 @@ package com.yourmenu.yourmenu_api.category.validation;
 
 import com.yourmenu.yourmenu_api.category.Category;
 import com.yourmenu.yourmenu_api.category.CategoryRepository;
-import com.yourmenu.yourmenu_api.category.Exceptions.CategoryDoesntBelongToRestaurantException;
 import com.yourmenu.yourmenu_api.category.Exceptions.CategoryNotFoundException;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.EntityDoesNotBelongToAnotherEntityException;
@@ -23,7 +22,7 @@ public class CategoryValidateService {
     }
     public void validateAdminCanSaveCategory(Category category, String adminId) {
         restaurantValidateService.validateRestaurantExists(category.getRestaurant());
-        restaurantValidateService.validateAdministratorCanEditRestaurant(category.getRestaurant(), adminId);
+        restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(category.getRestaurant().getId(), adminId);
         this.validateCategoryIsUnique(category);
     }
 
@@ -31,7 +30,7 @@ public class CategoryValidateService {
         validateCategoryExists(categoryId);
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException());
         restaurantValidateService.validateRestaurantExists(category.getRestaurant());
-        restaurantValidateService.validateAdministratorCanEditRestaurant(category.getRestaurant(), adminId);
+        restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(category.getRestaurant().getId(), adminId);
     }
     public void validateCategorybelongsToRestaurant(Long categoryId, String restaurantId) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException());
