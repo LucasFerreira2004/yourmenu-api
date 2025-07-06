@@ -16,7 +16,6 @@ import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.shared.awss3.ImageDefaultsProperties;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
-import com.yourmenu.yourmenu_api.shared.globalExceptions.DeniedAccessException;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,6 +133,16 @@ public class DishService {
                 : imageDefaultsProperties.getDefaultVisualDish();
 
         dish.setImageUrl(novaUrl);
+        return DishMapper.toDTO(dishRepository.save(dish));
+    }
+
+    public DishDTO deleteImageDish(String restaurantId, Long dishId) {
+        Dish dish = dishRepository
+                .findById(dishId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Prato não encontrado como id " + dishId));
+        dishValidateService.validateToGetById(dishId, restaurantId);
+
+        dish.setImageUrl(imageDefaultsProperties.getDefaultVisualDish());
         return DishMapper.toDTO(dishRepository.save(dish));
     }
 

@@ -86,4 +86,11 @@ public class DishController {
             @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl) {
         return ResponseEntity.ok().body(dishService.updateImageDish(restaurantId, dishId, imageUrl));
     }
+
+    @DeleteMapping(value = URL_WITHOUT_CATEGORY + "/{dishId}/visual")
+    public ResponseEntity<DishDTO> deleteVisualDish(
+            @PathVariable(value = "restaurantId") String restaurantId,
+            @PathVariable(value = "dishId") Long dishId) {
+        return ResponseEntity.ok().body(dishService.deleteImageDish(restaurantId, dishId));
+    }
 }
