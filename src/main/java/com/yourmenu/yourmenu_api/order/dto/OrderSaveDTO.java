@@ -1,6 +1,7 @@
 package com.yourmenu.yourmenu_api.order.dto;
 
 import com.yourmenu.yourmenu_api.order.OrderStatus;
+import com.yourmenu.yourmenu_api.orderAdress.dto.OrderAdressPostDto;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,6 +21,9 @@ public record OrderSaveDTO(
         String restaurantId,
 
         @NotNull
-        List<OrderItemSaveDTO> orderItems
+        List<OrderItemSaveDTO> orderItems,
+
+        @NotNull
+        OrderAdressPostDto orderAdress
 ) {
 }

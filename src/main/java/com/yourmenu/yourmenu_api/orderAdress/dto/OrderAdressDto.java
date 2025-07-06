@@ -7,7 +7,6 @@ import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 
 public record OrderAdressDto(
         Long id,
-        OrderDTO order,
         DeliveryZoneDto deliveryZone,
         Long cep,
         String street,

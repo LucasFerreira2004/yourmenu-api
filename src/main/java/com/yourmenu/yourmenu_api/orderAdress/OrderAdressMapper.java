@@ -10,19 +10,20 @@ import lombok.RequiredArgsConstructor;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
-@Mapper(componentModel = "spring", uses = { DeliveryZoneMapper.class, OrderMapper.class })
+@Mapper(componentModel = "spring", uses = { DeliveryZoneMapper.class})
+@Component
 public abstract class OrderAdressMapper {
+    @Autowired
+    public OrderRepository orderRepository;
 
     @Autowired
-    OrderRepository orderRepository;
-
-    @Autowired
-    DeliveryZoneRepository deliveryZoneRepository;
+    public DeliveryZoneRepository deliveryZoneRepository;
 
     @Mapping(target = "deliveryZone", expression = "java( deliveryZoneRepository.findById(dto.deliveryZoneId()).orElse(null) )")
-    @Mapping(target = "order", expression = "java( orderRepository.findById(dto.orderId()).orElse(null) )")
-    public abstract OrderAdress toEntity(OrderAdressPostDto dto);
+    @Mapping(target = "order", expression = "java( orderRepository.findById(orderId).orElse(null) )")
+    public abstract OrderAdress toEntity(OrderAdressPostDto dto, Long orderId);
 
-    public abstract OrderAdressDto toDto(OrderAdress entity);
+    public abstract OrderAdressDto toDTO(OrderAdress entity);
 }
