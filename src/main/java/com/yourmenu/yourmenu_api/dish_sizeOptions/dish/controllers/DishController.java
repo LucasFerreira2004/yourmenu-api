@@ -87,7 +87,7 @@ public class DishController {
         return ResponseEntity.ok().body(dishService.updateImageDish(restaurantId, dishId, imageUrl));
     }
 
-    @DeleteMapping(value = URL_WITHOUT_CATEGORY + "/{dishId}/visual")
+    @PatchMapping(value = URL_WITHOUT_CATEGORY + "/{dishId}/visual")
     public ResponseEntity<DishDTO> deleteVisualDish(
             @PathVariable(value = "restaurantId") String restaurantId,
             @PathVariable(value = "dishId") Long dishId) {
