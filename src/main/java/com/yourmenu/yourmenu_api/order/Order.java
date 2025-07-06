@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.order;
 
 import com.yourmenu.yourmenu_api.orderAdress.OrderAdress;
 import com.yourmenu.yourmenu_api.orderItem.OrderItem;
+import com.yourmenu.yourmenu_api.order_client.OrderClient;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -44,8 +45,13 @@ public class Order {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private OrderAdress orderAdress;
+
+    @ToString.Exclude
+    @EqualsAndHashCode.Exclude
+    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private OrderClient orderClient;
 
     //mapeamento de volta
     @ToString.Exclude
