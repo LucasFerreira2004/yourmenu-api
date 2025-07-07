@@ -20,7 +20,6 @@ public class OrderClientMapper {
     public OrderClientDTO toDTO(OrderClient entity) {
         return new OrderClientDTO(
                 entity.getId(),
-                entity.getOrder().getId(),
                 entity.getFirstName(),
                 entity.getLastName(),
                 entity.getPhone()
