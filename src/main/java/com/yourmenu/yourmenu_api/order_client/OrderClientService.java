@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.order_client;
 
 import com.yourmenu.yourmenu_api.order.Order;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
+import com.yourmenu.yourmenu_api.order_client.dto.OrderClientFullDTO;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientSaveDTO;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,13 @@ public class OrderClientService {
 
         OrderClient orderClient = orderClientMapper.toEntity(dto, order);
         return orderClientRepository.save(orderClient);
+    }
+
+    public OrderClientFullDTO findById(Long orderClientId) {
+        OrderClient orderClient = orderClientRepository.findById(orderClientId)
+                .orElseThrow(() -> new ResourceNotFoundException("Id do client"));
+
+        return orderClientMapper.toFullDTO(orderClient);
     }
 
 }
