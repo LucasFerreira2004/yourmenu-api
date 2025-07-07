@@ -1,5 +1,8 @@
 package com.yourmenu.yourmenu_api.order_client;
 
+import com.yourmenu.yourmenu_api.order.Order;
+import com.yourmenu.yourmenu_api.order.OrderRepository;
+import com.yourmenu.yourmenu_api.order_client.dto.OrderClientSaveDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +15,15 @@ public class OrderClientService {
     @Autowired
     private OrderClientMapper orderClientMapper;
 
-    public void saveOrderClinet(OrderClient orderClient) {
+    @Autowired
+    private OrderRepository orderRepository;
 
+    public OrderClient save(OrderClientSaveDTO dto, Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new RuntimeException("Pedido com ID " + orderId + " não encontrado."));
+
+        OrderClient orderClient = orderClientMapper.toEntity(dto, order);
+        return orderClientRepository.save(orderClient);
     }
 
 }
