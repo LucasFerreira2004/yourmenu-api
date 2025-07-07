@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.order_client;
 
 import com.yourmenu.yourmenu_api.order.Order;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
+import com.yourmenu.yourmenu_api.order_client.dto.OrderClientDTO;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientFullDTO;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientSaveDTO;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
@@ -33,6 +34,13 @@ public class OrderClientService {
                 .orElseThrow(() -> new ResourceNotFoundException("Id do client"));
 
         return orderClientMapper.toFullDTO(orderClient);
+    }
+
+    public OrderClientDTO findByOrderId(Long orderId) {
+        OrderClient orderClient = orderClientRepository.findByOrderId(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Cliente não encontrado para o pedido"));
+
+        return orderClientMapper.toDTO(orderClient);
     }
 
 }
