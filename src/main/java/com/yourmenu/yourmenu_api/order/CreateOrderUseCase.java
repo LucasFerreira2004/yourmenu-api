@@ -43,7 +43,7 @@ public class CreateOrderUseCase {
             order.setOrderItems(items);
             OrderAdress orderAdress = orderAdressService.save(saveDTO.orderAdress(), order.getId());
             order.setOrderAdress(orderAdress);
-            OrderClient orderClient = orderClientService.save(saveDTO.orderClientSaveDTO(), order.getId());
+            OrderClient orderClient = orderClientService.save(saveDTO.orderClient(), order.getId());
             order.setOrderClient(orderClient);
 
             return orderMapper.toDTO(order);

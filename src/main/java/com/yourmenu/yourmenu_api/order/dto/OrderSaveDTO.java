@@ -28,6 +28,6 @@ public record OrderSaveDTO(
         OrderAdressPostDto orderAdress,
 
         @NotNull
-        OrderClientSaveDTO orderClientSaveDTO
+        OrderClientSaveDTO orderClient
 ) {
 }

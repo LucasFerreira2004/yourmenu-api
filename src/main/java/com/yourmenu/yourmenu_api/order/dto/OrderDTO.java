@@ -19,6 +19,6 @@ public record OrderDTO(
     String note,
     List<OrderItemDTO> orderItems,
     OrderAdressDto orderAdress,
-    OrderClientDTO orderClientDTO
+    OrderClientDTO orderClient
 ) {
 }
