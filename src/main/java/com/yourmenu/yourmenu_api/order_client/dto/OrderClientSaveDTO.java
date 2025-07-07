@@ -6,10 +6,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record OrderClientSaveDTO(
-
-        @NotNull(message = "O ID do pedido é obrigatório")
-        Long orderId,
-
         @NotBlank(message = "O primeiro nome é obrigatório")
         @Size(min = 2, max = 50, message = "O primeiro nome deve ter entre 2 e 50 caracteres")
         String firstName,
