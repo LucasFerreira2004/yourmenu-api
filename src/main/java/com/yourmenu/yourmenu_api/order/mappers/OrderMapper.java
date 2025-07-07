@@ -6,6 +6,7 @@ import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.orderAdress.OrderAdressMapper;
 import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
 import com.yourmenu.yourmenu_api.orderItem.mapper.OrderItemMapper;
+import com.yourmenu.yourmenu_api.order_client.OrderClientMapper;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,6 +23,9 @@ public class OrderMapper {
 
     @Autowired
     private OrderAdressMapper orderAdressMapper;
+
+    @Autowired
+    private OrderClientMapper orderClientMapper;
 
     public Order toEntity(OrderSaveDTO dto, Restaurant restaurant) {
         BigDecimal price = orderItemService.getTotalPriceByList(dto.orderItems());
@@ -44,7 +48,8 @@ public class OrderMapper {
                     order.getStatus(),
                     order.getNote(),
                     order.getOrderItems().stream().map(x-> orderItemMapper.toDTO(x)).toList(),
-                    orderAdressMapper.toDTO(order.getOrderAdress())
+                    orderAdressMapper.toDTO(order.getOrderAdress()),
+                    orderClientMapper.toDTO(order.getOrderClient())
             );
         } catch (Exception e) {
             e.printStackTrace();

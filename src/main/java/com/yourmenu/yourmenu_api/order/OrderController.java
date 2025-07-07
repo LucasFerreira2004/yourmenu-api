@@ -5,6 +5,9 @@ import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrdersSumaryDTO;
+import com.yourmenu.yourmenu_api.order_client.OrderClientService;
+import com.yourmenu.yourmenu_api.order_client.dto.OrderClientDTO;
+import com.yourmenu.yourmenu_api.order_client.dto.OrderClientFullDTO;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +19,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/restaurant/{restaurantId}/order")
 public class OrderController {
+
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private OrderClientService orderClientService;
 
     @Autowired
     private CreateOrderUseCase createOrderUseCase;
@@ -38,6 +45,18 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getById(@PathVariable String restaurantId, @PathVariable Long orderId) {
         OrderDTO order = orderService.getById(restaurantId, orderId);
         return ResponseEntity.ok(order);
+    }
+
+    @GetMapping("/client/by-id/{orderClientId}")
+    public ResponseEntity<OrderClientFullDTO> getClientById(@PathVariable Long orderClientId) {
+        OrderClientFullDTO fullDTO = orderClientService.findById(orderClientId);
+        return ResponseEntity.ok(fullDTO);
+    }
+
+    @GetMapping("client/by-order/{orderId}")
+    public ResponseEntity<OrderClientDTO> getClientByOrder(@PathVariable Long orderId) {
+        OrderClientDTO dto = orderClientService.findByOrderId(orderId);
+        return ResponseEntity.ok(dto);
     }
 
     @GetMapping("/status/by-date")

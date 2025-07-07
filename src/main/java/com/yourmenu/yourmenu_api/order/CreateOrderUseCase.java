@@ -7,6 +7,8 @@ import com.yourmenu.yourmenu_api.orderAdress.OrderAdress;
 import com.yourmenu.yourmenu_api.orderAdress.OrderAdressService;
 import com.yourmenu.yourmenu_api.orderItem.OrderItem;
 import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
+import com.yourmenu.yourmenu_api.order_client.OrderClient;
+import com.yourmenu.yourmenu_api.order_client.OrderClientService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,9 @@ public class CreateOrderUseCase {
 
     @Autowired
     private OrderAdressService orderAdressService;
-    //order client
+
+    @Autowired
+    private OrderClientService orderClientService;
 
     @Transactional
     public OrderDTO execute(OrderSaveDTO saveDTO, String restaurantId) {
@@ -39,6 +43,9 @@ public class CreateOrderUseCase {
             order.setOrderItems(items);
             OrderAdress orderAdress = orderAdressService.save(saveDTO.orderAdress(), order.getId());
             order.setOrderAdress(orderAdress);
+            OrderClient orderClient = orderClientService.save(saveDTO.orderClient(), order.getId());
+            order.setOrderClient(orderClient);
+
             return orderMapper.toDTO(order);
         } catch (Exception e) {
             e.printStackTrace();
