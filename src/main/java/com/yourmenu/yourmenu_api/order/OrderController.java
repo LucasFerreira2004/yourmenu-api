@@ -9,6 +9,7 @@ import com.yourmenu.yourmenu_api.order_client.OrderClientService;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientDTO;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientFullDTO;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -82,7 +83,7 @@ public class OrderController {
     }
 
     @PostMapping()
-    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody OrderSaveDTO saveDTO) {
+    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody @Valid OrderSaveDTO saveDTO) {
         OrderDTO order = createOrderUseCase.execute(saveDTO, restaurantId);
         return ResponseEntity.ok(order);
     }
