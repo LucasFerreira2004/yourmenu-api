@@ -4,6 +4,8 @@ import com.yourmenu.yourmenu_api.deliveryZone.DeliveryZone;
 import com.yourmenu.yourmenu_api.order.Order;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
+import org.apache.commons.lang3.builder.HashCodeExclude;
 
 @Entity
 @Data
@@ -13,6 +15,8 @@ public class OrderAdress {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @ToString.Exclude
+    @HashCodeExclude
     @OneToOne()
     @JoinColumn(name = "order_id", nullable = false)
     private Order order;

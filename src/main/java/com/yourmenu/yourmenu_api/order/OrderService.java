@@ -1,10 +1,7 @@
 package com.yourmenu.yourmenu_api.order;
 
-import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
-import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
-import com.yourmenu.yourmenu_api.order.dto.OrdersSumaryDTO;
+import com.yourmenu.yourmenu_api.order.dto.*;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
-import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
 import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
@@ -48,20 +45,20 @@ public class OrderService {
         return order;
     }
 
-    public List<OrderDTO> getAllByRestaurant(String restaurantId) {
+    public List<OrderMinDTO> getAllByRestaurant(String restaurantId) {
         List<Order> orders = orderRepository.findAllByRestaurantIdOrderByDateTime(restaurantId);
-        return orders.stream().map(x -> orderMapper.toDTO(x)).toList();
+        return orders.stream().map(x -> orderMapper.toMinDTO(x)).toList();
     }
 
-    public List<OrderDTO> getAllByRestaurantAndDate(String restaurantId, LocalDate date){
+    public List<OrderMinDTO> getAllByRestaurantAndDate(String restaurantId, LocalDate date){
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
-        return orders.stream().map(x -> orderMapper.toDTO(x)).toList();
+        return orders.stream().map(x -> orderMapper.toMinDTO(x)).toList();
     }
 
     public OrderDTO getById(String restaurantId, Long orderId) {
-        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RestaurantNotFoundException("Order"));
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order"));
         if (!order.getRestaurant().getId().equals(restaurantId))
             throw new EntityDoesNotBelongToAnotherEntityException("Order", "Restaurant");
         return orderMapper.toDTO(order);
@@ -76,7 +73,7 @@ public class OrderService {
                 .collect(Collectors.groupingBy(Order::getStatus));
         List<OrderByStatusDTO> ordersByStatus = new ArrayList<>();
         for (OrderStatus status : ordersGrouped.keySet()) {
-            ordersByStatus.add(new OrderByStatusDTO(status, ordersGrouped.get(status).stream().map(orderMapper::toDTO).toList()));
+            ordersByStatus.add(new OrderByStatusDTO(status, ordersGrouped.get(status).stream().map(orderMapper::toMinDTO).toList()));
         }
         return ordersByStatus;
     }

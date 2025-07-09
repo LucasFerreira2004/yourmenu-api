@@ -1,7 +1,10 @@
 package com.yourmenu.yourmenu_api.order.dto;
 
 import com.yourmenu.yourmenu_api.order.OrderStatus;
+import com.yourmenu.yourmenu_api.orderAdress.dto.OrderAdressPostDto;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
+import com.yourmenu.yourmenu_api.order_client.dto.OrderClientSaveDTO;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
@@ -20,6 +23,15 @@ public record OrderSaveDTO(
         String restaurantId,
 
         @NotNull
-        List<OrderItemSaveDTO> orderItems
+        @Valid
+        List<OrderItemSaveDTO> orderItems,
+
+        @NotNull
+        @Valid
+        OrderAdressPostDto orderAdress,
+
+        @NotNull
+        @Valid
+        OrderClientSaveDTO orderClient
 ) {
 }

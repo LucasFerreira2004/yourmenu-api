@@ -5,10 +5,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 public record OrderAdressPostDto(
-
-        @NotNull(message = "O pedido deve ser informado")
-        Long orderId,
-
         @NotNull(message = "A zona de entrega deve ser informada")
         Long deliveryZoneId,
 

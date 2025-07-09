@@ -1,2 +1,0 @@
-ALTER TABLE size_option
-ALTER COLUMN magnitude DROP NOT NULL;

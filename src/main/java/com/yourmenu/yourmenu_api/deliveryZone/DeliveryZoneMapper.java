@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public abstract class DeliveryZoneMapper {
 
-    abstract DeliveryZoneDto toDto(DeliveryZone entity);
+    public abstract DeliveryZoneDto toDto(DeliveryZone entity);
 
     abstract List<DeliveryZoneDto> toPageDto(List<DeliveryZone> zones);
 
