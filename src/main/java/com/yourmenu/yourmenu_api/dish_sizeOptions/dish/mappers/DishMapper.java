@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.category.CategoryRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.Dish;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishSaveDTO;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.dto.SizeOptionPriceDTO;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
@@ -52,6 +53,18 @@ public class DishMapper {
     }
 
     public static DishDTO toDTO(Dish dish) {
+        List<SizeOptionPriceDTO> sizeOptionsPrices = dish.getSizeOptions() != null
+                ? dish.getSizeOptions().stream()
+                .map(opt -> new SizeOptionPriceDTO(
+                        opt.getId(),
+                        opt.getSizeOption().getId(),
+                        opt.getSizeOption().getMagnitude(),
+                        opt.getSizeOption().getMeasureUnit().getAbbreviation(),
+                        opt.getPrice()
+                ))
+                .toList()
+                : List.of(); // Retorna lista vazia caso seja null
+
         return new DishDTO(
                 dish.getId(),
                 dish.getRestaurant() != null ? dish.getRestaurant().getId() : null,
@@ -60,8 +73,9 @@ public class DishMapper {
                 dish.getDescription(),
                 dish.getIsAvailable(),
                 dish.getImageUrl(),
-                List.of() // Placeholder para sizeOptionsPrices
+                sizeOptionsPrices
         );
     }
+
 }
 

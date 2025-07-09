@@ -5,10 +5,10 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishSaveDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.services.DishService;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +26,7 @@ public class DishController {
 
     @PostMapping(value = URL_WITH_CATEGORY, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DishDTO> createDish(
-            @ModelAttribute DishSaveDTO dto,
+            @RequestPart("dto") @Validated DishSaveDTO dto,
             @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl,
             @PathVariable String restaurantId,
             @PathVariable Long categoryId,
@@ -60,7 +60,7 @@ public class DishController {
 
     @PutMapping(value = URL_WITH_CATEGORY + "/{dishId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<DishDTO> updateDish(
-            @ModelAttribute DishSaveDTO dto,
+            @RequestPart("dto") @Validated DishSaveDTO dto,
             @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl,
             @PathVariable String restaurantId,
             @PathVariable Long categoryId,
@@ -77,5 +77,20 @@ public class DishController {
                                               @CurrentUser Administrator currentUser) {
         dishService.delete(restaurantId, categoryId, dishId, currentUser.getId());
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping(value = URL_WITHOUT_CATEGORY + "/{dishId}/visual", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<DishDTO> updateVisualDish(
+            @PathVariable(value = "restaurantId") String restaurantId,
+            @PathVariable(value = "dishId") Long dishId,
+            @RequestPart(value = "imageUrl", required = false) MultipartFile imageUrl) {
+        return ResponseEntity.ok().body(dishService.updateImageDish(restaurantId, dishId, imageUrl));
+    }
+
+    @PatchMapping(value = URL_WITHOUT_CATEGORY + "/{dishId}/visual")
+    public ResponseEntity<DishDTO> deleteVisualDish(
+            @PathVariable(value = "restaurantId") String restaurantId,
+            @PathVariable(value = "dishId") Long dishId) {
+        return ResponseEntity.ok().body(dishService.deleteImageDish(restaurantId, dishId));
     }
 }

@@ -10,8 +10,11 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishSaveDTO;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.mappers.DishMapper;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.validation.DishValidateService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.services.CreateAssociationsService;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.services.UpdateAssociationsService;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
+import com.yourmenu.yourmenu_api.shared.awss3.ImageDefaultsProperties;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
 import jakarta.validation.Valid;
@@ -44,9 +47,18 @@ public class DishService {
     @Autowired
     private S3Service s3Service;
 
+    @Autowired
+    private CreateAssociationsService createAssociationsService;
+
+    @Autowired
+    private UpdateAssociationsService updateAssociationsService;
+
+    @Autowired
+    private ImageDefaultsProperties imageDefaultsProperties;
+
     public DishDTO save(
             @Valid DishSaveDTO dto,
-            MultipartFile imageUrl,
+            MultipartFile imageDish,
             String restaurantId,
             Long categoryId,
             String adminId){
@@ -54,11 +66,15 @@ public class DishService {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("category"));
         Dish dish = DishMapper.toEntity(dto, restaurant, category);
 
-        if(imageUrl != null && !imageUrl.isEmpty())
-            dish.setImageUrl(s3Service.uploadFile(imageUrl));
+        adicionarImagens(dish, imageDish);
 
         dishValidateService.validateToSave(dish, adminId);
-        return DishMapper.toDTO(dishRepository.save(dish));
+
+        Dish savedDish = dishRepository.save(dish);
+        createAssociationsService.execute(dto.sizeOptionsPrices(), savedDish);
+        savedDish = dishRepository.findById(savedDish.getId()) // Recarrega o prato com os relacionamentos atualizados
+                .orElseThrow(() -> new ResourceNotFoundException("dish"));
+        return DishMapper.toDTO(savedDish);
     }
 
     public DishDTO update(
@@ -76,6 +92,10 @@ public class DishService {
             newDish.setImageUrl(s3Service.uploadFile(imageUrl));
 
         Dish updatedDish = dishRepository.save(newDish);
+        updateAssociationsService.execute(newDishDTO.sizeOptionsPrices(), newDish);
+        updatedDish = dishRepository.findById(updatedDish.getId()) // Recarrega o prato com os relacionamentos atualizados
+                .orElseThrow(() -> new ResourceNotFoundException("dish"));
+
         return DishMapper.toDTO(updatedDish);
     }
 
@@ -101,4 +121,37 @@ public class DishService {
         return dishes.stream().map(x -> DishMapper.toDTO(x)).toList();
     }
 
+    public DishDTO updateImageDish(String restaurantId, Long dishId, MultipartFile imagem) {
+        Dish dish = dishRepository
+                .findById(dishId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Prato não encontrado como id " + dishId));
+
+        dishValidateService.validateToGetById(dishId, restaurantId);
+
+        String novaUrl = (imagem != null && !imagem.isEmpty())
+                ? s3Service.uploadFile(imagem)
+                : imageDefaultsProperties.getDefaultVisualDish();
+
+        dish.setImageUrl(novaUrl);
+        return DishMapper.toDTO(dishRepository.save(dish));
+    }
+
+    public DishDTO deleteImageDish(String restaurantId, Long dishId) {
+        Dish dish = dishRepository
+                .findById(dishId)
+                .orElseThrow(() -> new ResourceNotFoundException("id", "Prato não encontrado como id " + dishId));
+        dishValidateService.validateToGetById(dishId, restaurantId);
+
+        dish.setImageUrl(imageDefaultsProperties.getDefaultVisualDish());
+        return DishMapper.toDTO(dishRepository.save(dish));
+    }
+
+    private void adicionarImagens(Dish dish, MultipartFile imageDish) {
+        if (imageDish != null && !imageDish.isEmpty()) {
+            String imageUrl = s3Service.uploadFile(imageDish);
+            dish.setImageUrl(imageUrl);
+        } else {
+            dish.setImageUrl(imageDefaultsProperties.getDefaultVisualDish());
+        }
+    }
 }

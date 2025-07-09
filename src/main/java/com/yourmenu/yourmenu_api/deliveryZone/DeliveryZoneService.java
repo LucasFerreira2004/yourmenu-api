@@ -31,7 +31,7 @@ public class DeliveryZoneService {
 
     public DeliveryZoneDto save(DeliveryZonePostDto deliveryZone, String adminId) {
         DeliveryZone entity = deliveryZoneMapper.toEntity(deliveryZone);
-        
+
         // Busca o restaurante pelo slug e valida
         Restaurant restaurant = restaurantRepository.findBySlug(deliveryZone.restaurantSlug());
         restaurantValidateService.validateAllToUpdate(restaurant, adminId);
