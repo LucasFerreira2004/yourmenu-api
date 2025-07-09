@@ -1,14 +1,12 @@
 package com.yourmenu.yourmenu_api.order;
 
 import com.yourmenu.yourmenu_api.administrator.Administrator;
-import com.yourmenu.yourmenu_api.order.dto.OrderByStatusDTO;
-import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
-import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
-import com.yourmenu.yourmenu_api.order.dto.OrdersSumaryDTO;
+import com.yourmenu.yourmenu_api.order.dto.*;
 import com.yourmenu.yourmenu_api.order_client.OrderClientService;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientDTO;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientFullDTO;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,14 +28,14 @@ public class OrderController {
     private CreateOrderUseCase createOrderUseCase;
 
     @GetMapping
-    public ResponseEntity<List<OrderDTO>> getAllByRestaurant(@PathVariable String restaurantId) {
-        List<OrderDTO> orders = orderService.getAllByRestaurant(restaurantId);
+    public ResponseEntity<List<OrderMinDTO>> getAllByRestaurant(@PathVariable String restaurantId) {
+        List<OrderMinDTO> orders = orderService.getAllByRestaurant(restaurantId);
         return ResponseEntity.ok(orders);
     }
 
     @GetMapping("/by-date")
-    public ResponseEntity<List<OrderDTO>> getAllByRestaurantAndDate(@PathVariable String restaurantId, @RequestParam LocalDate date) {
-        List<OrderDTO> orders = orderService.getAllByRestaurantAndDate(restaurantId, date);
+    public ResponseEntity<List<OrderMinDTO>> getAllByRestaurantAndDate(@PathVariable String restaurantId, @RequestParam LocalDate date) {
+        List<OrderMinDTO> orders = orderService.getAllByRestaurantAndDate(restaurantId, date);
         return ResponseEntity.ok(orders);
     }
 
@@ -82,7 +80,7 @@ public class OrderController {
     }
 
     @PostMapping()
-    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody OrderSaveDTO saveDTO) {
+    public ResponseEntity<OrderDTO> saveOder(@PathVariable String restaurantId, @RequestBody @Valid OrderSaveDTO saveDTO) {
         OrderDTO order = createOrderUseCase.execute(saveDTO, restaurantId);
         return ResponseEntity.ok(order);
     }

@@ -57,6 +57,4 @@ public class Order {
     @ToString.Exclude
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<OrderItem> orderItems = new ArrayList<>();
-
-
 }
