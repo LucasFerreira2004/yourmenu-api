@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.order.mappers;
 import com.yourmenu.yourmenu_api.order.Order;
 
 import com.yourmenu.yourmenu_api.order.dto.OrderDTO;
+import com.yourmenu.yourmenu_api.order.dto.OrderMinDTO;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.orderAdress.OrderAdressMapper;
 import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
@@ -39,21 +40,26 @@ public class OrderMapper {
     }
 
     public OrderDTO toDTO(Order order) {
-        try {
-            return new OrderDTO(
-                    order.getId(),
-                    order.getRestaurant().getId(),
-                    order.getDateTime(),
-                    order.getPrice(),
-                    order.getStatus(),
-                    order.getNote(),
-                    order.getOrderItems().stream().map(x-> orderItemMapper.toDTO(x)).toList(),
-                    orderAdressMapper.toDTO(order.getOrderAdress()),
-                    orderClientMapper.toDTO(order.getOrderClient())
-            );
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new RuntimeException(e);
-        }
+        return new OrderDTO(
+                order.getId(),
+                order.getRestaurant().getId(),
+                order.getDateTime(),
+                order.getPrice(),
+                order.getStatus(),
+                order.getNote(),
+                order.getOrderItems().stream().map(x -> orderItemMapper.toDTO(x)).toList(),
+                orderAdressMapper.toDTO(order.getOrderAdress()),
+                orderClientMapper.toDTO(order.getOrderClient())
+        );
+    }
+
+    public OrderMinDTO toMinDTO(Order order){
+        return new OrderMinDTO(
+                order.getId(),
+                order.getStatus(),
+                order.getOrderItems().stream().map(x -> orderItemMapper.toDTO(x)).toList(),
+                orderAdressMapper.toDTO(order.getOrderAdress()),
+                order.getPrice()
+                );
     }
 }

@@ -6,6 +6,6 @@ import java.util.List;
 
 public record OrderByStatusDTO(
         OrderStatus status,
-        List<OrderDTO> orders
+        List<OrderMinDTO> orders
 ) {
 }
