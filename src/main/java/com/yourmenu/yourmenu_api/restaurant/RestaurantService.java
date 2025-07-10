@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorService;
 import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursService;
+import com.yourmenu.yourmenu_api.businessHours.services.DeleteBusinessHoursService;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
@@ -37,6 +38,9 @@ public class RestaurantService {
 
     @Autowired
     CreateBusinessHoursService createBusinessHoursService;
+
+    @Autowired
+    private DeleteBusinessHoursService deleteBusinessHoursService;
 
     @Autowired
     private S3Service s3Service;
@@ -110,6 +114,8 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurant not found with id: " + restaurantId));
         restaurantValidateService.validateAllToUpdate(restaurant, adminId);
+
+        deleteBusinessHoursService.deleteBusinessHours(restaurantId);
         restaurantRepository.delete(restaurant);
     }
 
