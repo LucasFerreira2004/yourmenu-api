@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursServi
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
+import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantLinkDto;
 import com.yourmenu.yourmenu_api.restaurant.mapper.RestaurantMapper;
 import com.yourmenu.yourmenu_api.shared.awss3.ImageDefaultsProperties;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
@@ -13,6 +14,7 @@ import com.yourmenu.yourmenu_api.shared.utils.SlugFormater;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,6 +43,9 @@ public class RestaurantService {
 
     @Autowired
     private ImageDefaultsProperties imageDefaultsProperties;
+
+    @Value("${yourmenu.base-url:https://localhost:5137}")
+    private String baseUrl;
 
     @Transactional
     public RestaurantDTO save(RestaurantSaveDTO dto, MultipartFile profilePictureUrl, MultipartFile bannerPictureUrl, String adminId) {
@@ -142,6 +147,11 @@ public class RestaurantService {
 
         restaurant.setBannerPicUrl(novaUrl);
         return restaurantMapper.toDTO(restaurantRepository.save(restaurant));
+    }
+
+    public RestaurantLinkDto gerarLink(String restaurantId) {
+        String link = baseUrl + "/" + restaurantId;
+        return new RestaurantLinkDto(link);
     }
 
     private boolean shouldGenerateSlug(Restaurant restaurant, String dtoRestaurantName){
