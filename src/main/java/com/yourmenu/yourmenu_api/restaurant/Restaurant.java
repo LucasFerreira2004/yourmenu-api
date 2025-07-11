@@ -40,7 +40,7 @@ public class Restaurant {
     private String profilePicUrl;
 
     @Column(columnDefinition = "text")
-    private String BannerPicUrl;
+    private String bannerPicUrl;
 
     @ToString.Exclude
     @OneToMany(mappedBy = "restaurant")
