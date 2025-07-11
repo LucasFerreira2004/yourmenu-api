@@ -2,9 +2,11 @@ package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.AdministratorService;
 import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursService;
+import com.yourmenu.yourmenu_api.businessHours.services.DeleteBusinessHoursService;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
+import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantLinkDto;
 import com.yourmenu.yourmenu_api.restaurant.mapper.RestaurantMapper;
 import com.yourmenu.yourmenu_api.shared.awss3.ImageDefaultsProperties;
 import com.yourmenu.yourmenu_api.shared.awss3.S3Service;
@@ -13,6 +15,7 @@ import com.yourmenu.yourmenu_api.shared.utils.SlugFormater;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,10 +40,16 @@ public class RestaurantService {
     CreateBusinessHoursService createBusinessHoursService;
 
     @Autowired
+    private DeleteBusinessHoursService deleteBusinessHoursService;
+
+    @Autowired
     private S3Service s3Service;
 
     @Autowired
     private ImageDefaultsProperties imageDefaultsProperties;
+
+    @Value("${yourmenu.base-url:https://localhost:5137}")
+    private String baseUrl;
 
     @Transactional
     public RestaurantDTO save(RestaurantSaveDTO dto, MultipartFile profilePictureUrl, MultipartFile bannerPictureUrl, String adminId) {
@@ -105,6 +114,8 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurant not found with id: " + restaurantId));
         restaurantValidateService.validateAllToUpdate(restaurant, adminId);
+
+        deleteBusinessHoursService.deleteBusinessHours(restaurantId);
         restaurantRepository.delete(restaurant);
     }
 
@@ -142,6 +153,11 @@ public class RestaurantService {
 
         restaurant.setBannerPicUrl(novaUrl);
         return restaurantMapper.toDTO(restaurantRepository.save(restaurant));
+    }
+
+    public RestaurantLinkDto gerarLink(String restaurantId) {
+        String link = baseUrl + "/" + restaurantId;
+        return new RestaurantLinkDto(link);
     }
 
     private boolean shouldGenerateSlug(Restaurant restaurant, String dtoRestaurantName){

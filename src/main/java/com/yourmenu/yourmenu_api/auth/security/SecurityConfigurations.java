@@ -9,6 +9,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,17 +25,31 @@ public class SecurityConfigurations {
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .cors(Customizer.withDefaults()) // habilita cors
-                .csrf(csrf -> csrf.disable())
+                .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers(HttpMethod.GET, "/h2-console/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/h2-console/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/restaurant/*/order").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/restaurant/*/order").permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/restaurant/**",
+                                "/restaurant/*/order",
+                                "/restaurant/*/category",
+                                "/business-hours/**",
+                                "/categories/**",
+                                "/dishes/**",
+                                "/delivery-zone",
+                                "/restaurantAdress/**"
+                        ).permitAll()
+                        .requestMatchers(HttpMethod.POST,
+                                "/restaurant/*/order"
+                        ).permitAll()
+                        .requestMatchers(       // Login e registro públicos (todos os métodos)
+                                "/auth/login",
+                                "/auth/register"
+                        ).permitAll()
+                        .requestMatchers(       // Swagger e H2
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/h2-console/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
