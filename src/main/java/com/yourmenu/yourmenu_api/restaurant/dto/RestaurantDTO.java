@@ -8,6 +8,6 @@ public record RestaurantDTO(
         Integer deliveryTimeMax,
         Boolean isOpen,
         String profilePicUrl,
-        String BannerPicUrl
+        String bannerPicUrl
 ) {
 }
