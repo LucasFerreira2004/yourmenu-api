@@ -55,7 +55,7 @@ public class RestaurantService {
     public RestaurantDTO save(RestaurantSaveDTO dto, MultipartFile profilePictureUrl, MultipartFile bannerPictureUrl, String adminId) {
         Restaurant restaurant = restaurantMapper.toEntity(dto);
         restaurantValidateService.validateAllToSave(adminId);
-        restaurant.setIsOpen(false);
+        restaurant.setIsOpen(true);
         restaurant.setSlug(restaurantSlugService.generateSlug(dto.name()));
         restaurant.setAdministrator(administratorService.findByid(adminId));
 
