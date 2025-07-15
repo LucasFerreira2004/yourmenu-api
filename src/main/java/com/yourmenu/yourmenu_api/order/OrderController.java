@@ -65,8 +65,8 @@ public class OrderController {
 
     @PatchMapping("/{orderId}")
     public ResponseEntity<OrderDTO> updateStatus(
-            @PathVariable(value = "orderId") Long orderId,
-            @RequestParam(value = "restaurantId") String restaurantId,
+            @PathVariable("restaurantId") String restaurantId,
+            @PathVariable("orderId") Long orderId,
             @RequestParam OrderStatus status) {
         OrderDTO order = orderService.updateStatus(restaurantId, orderId, status);
         return ResponseEntity.ok(order);
