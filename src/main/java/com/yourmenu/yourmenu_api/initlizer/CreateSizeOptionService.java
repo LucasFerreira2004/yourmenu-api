@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.services;
+package com.yourmenu.yourmenu_api.initlizer;
 
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.MeasureUnit;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;
@@ -45,5 +45,7 @@ public class CreateSizeOptionService {
                 sizeOptionRepository.save(sizeOption);
             }
         }
+        //garantir a inicialização correta
+
     }
 }
