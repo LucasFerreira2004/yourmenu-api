@@ -1,5 +1,6 @@
 package com.yourmenu.yourmenu_api.shared.globalExceptions;
 
+import com.yourmenu.yourmenu_api.order_client.exceptions.InvalidPhoneNumberException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.List;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -109,5 +111,15 @@ public class GlobalExceptionHandler {
                 status.getReasonPhrase()
         );
         return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(InvalidPhoneNumberException.class)
+    public ResponseEntity<?> handleInvalidPhoneNumber(InvalidPhoneNumberException ex) {
+        return ResponseEntity.badRequest().body(
+                Map.of(
+                        "error", "validation_error",
+                        "message", ex.getMessage()
+                )
+        );
     }
 }

@@ -7,9 +7,12 @@ import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
 import com.yourmenu.yourmenu_api.orderAdress.dto.OrderAdressPostDto;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
+import com.yourmenu.yourmenu_api.order_client.dto.OrderClientSaveDTO;
+import com.yourmenu.yourmenu_api.order_client.exceptions.InvalidPhoneNumberException;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
+import com.yourmenu.yourmenu_api.shared.utils.PhoneValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +41,7 @@ public class OrderValidateService {
     public void validateToSave(OrderSaveDTO saveDTO) {
         validateToDishSizeOption(saveDTO.orderItems());
         validateToDeliveryZone(saveDTO.orderAdress());
+        validationToPhone(saveDTO.orderClient());
     }
 
     private void validateToDishSizeOption(List<OrderItemSaveDTO> orderItens) {
@@ -52,6 +56,13 @@ public class OrderValidateService {
         Long deliveryZoneId = orderAdress.deliveryZoneId();
         deliveryZoneRepository.findById(deliveryZoneId)
                 .orElseThrow(() -> new ResourceNotFoundException("delivery_zone: " + deliveryZoneId + " not found"));
+    }
+
+    private void validationToPhone(OrderClientSaveDTO orderClient){
+        if (!PhoneValidator.isValidPhoneNumber(orderClient.phone(), "BR")) {
+            throw new InvalidPhoneNumberException();
+        }
+
     }
 
 }
