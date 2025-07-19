@@ -40,7 +40,6 @@ public class OrderService {
     @Autowired
     private OrderValidateService orderValidateService;
 
-
     public Order saveOrder(OrderSaveDTO saveDTO, String restaurantId) {
         Restaurant restaurant = restaurantRepository.findByid(restaurantId);
         if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
