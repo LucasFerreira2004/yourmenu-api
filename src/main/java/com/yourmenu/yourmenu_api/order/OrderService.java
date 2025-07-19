@@ -57,6 +57,8 @@ public class OrderService {
     }
 
     public List<OrderMinDTO> getAllByRestaurantAndDate(String restaurantId, LocalDate date){
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
@@ -73,6 +75,8 @@ public class OrderService {
     }
 
     public List<OrderByStatusDTO> getAlByRestaurantDateAndStatus(String restaurantId, LocalDate date){
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
@@ -100,6 +104,8 @@ public class OrderService {
     }
 
     public OrdersSumaryDTO getSummaryByDate(String restaurantId, LocalDate date, String adminsitratorId) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(restaurantId, adminsitratorId);
