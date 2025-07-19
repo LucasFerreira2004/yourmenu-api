@@ -1,9 +1,11 @@
 package com.yourmenu.yourmenu_api.order.validation;
 
+import com.yourmenu.yourmenu_api.deliveryZone.DeliveryZoneRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
 import com.yourmenu.yourmenu_api.order.Order;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
+import com.yourmenu.yourmenu_api.orderAdress.dto.OrderAdressPostDto;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
@@ -28,10 +30,14 @@ public class OrderValidateService {
     @Autowired
     DishSizeOptionRepository dishSizeOptionRepository;
 
+    @Autowired
+    DeliveryZoneRepository deliveryZoneRepository;
+
 
 
     public void validateToSave(OrderSaveDTO saveDTO) {
         validateToDishSizeOption(saveDTO.orderItems());
+        validateToDeliveryZone(saveDTO.orderAdress());
     }
 
     private void validateToDishSizeOption(List<OrderItemSaveDTO> orderItens) {
@@ -40,6 +46,12 @@ public class OrderValidateService {
             dishSizeOptionRepository.findById(dishSizeOptionId)
                     .orElseThrow(() -> new ResourceNotFoundException("dish_size_option: " + dishSizeOptionId + " not found"));
         }
+    }
+
+    private void validateToDeliveryZone(OrderAdressPostDto orderAdress){
+        Long deliveryZoneId = orderAdress.deliveryZoneId();
+        deliveryZoneRepository.findById(deliveryZoneId)
+                .orElseThrow(() -> new ResourceNotFoundException("delivery_zone: " + deliveryZoneId + " not found"));
     }
 
 }
