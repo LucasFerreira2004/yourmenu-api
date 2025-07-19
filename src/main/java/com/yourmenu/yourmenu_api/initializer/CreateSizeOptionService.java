@@ -1,4 +1,4 @@
-package com.yourmenu.yourmenu_api.initlizer;
+package com.yourmenu.yourmenu_api.initializer;
 
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.MeasureUnit;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.sizeOptions.SizeOption;

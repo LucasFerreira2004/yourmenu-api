@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.order;
 
 import com.yourmenu.yourmenu_api.order.dto.*;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
+import com.yourmenu.yourmenu_api.order.validation.OrderValidateService;
 import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
@@ -36,10 +37,14 @@ public class OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private OrderValidateService orderValidateService;
+
 
     public Order saveOrder(OrderSaveDTO saveDTO, String restaurantId) {
         Restaurant restaurant = restaurantRepository.findByid(restaurantId);
         if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
+        orderValidateService.validateToSave(saveDTO);
         Order order = orderMapper.toEntity(saveDTO, restaurant);
         orderRepository.save(order);
         return order;
