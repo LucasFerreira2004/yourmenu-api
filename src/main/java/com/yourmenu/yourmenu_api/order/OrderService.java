@@ -50,6 +50,8 @@ public class OrderService {
     }
 
     public List<OrderMinDTO> getAllByRestaurant(String restaurantId) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         List<Order> orders = orderRepository.findAllByRestaurantIdOrderByDateTime(restaurantId);
         return orders.stream().map(x -> orderMapper.toMinDTO(x)).toList();
     }
@@ -62,6 +64,8 @@ public class OrderService {
     }
 
     public OrderDTO getById(String restaurantId, Long orderId) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order"));
         if (!order.getRestaurant().getId().equals(restaurantId))
             throw new EntityDoesNotBelongToAnotherEntityException("Order", "Restaurant");
@@ -83,6 +87,8 @@ public class OrderService {
     }
 
     public OrderDTO updateStatus(String restaurantId, Long orderId, OrderStatus status) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         Order order = orderRepository.findByIdByRestaurant(orderId, restaurantId);
         if (order == null) {
             throw new ResourceNotFoundException("Id do pedido");
