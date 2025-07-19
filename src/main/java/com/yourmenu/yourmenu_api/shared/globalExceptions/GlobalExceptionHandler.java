@@ -1,12 +1,16 @@
 package com.yourmenu.yourmenu_api.shared.globalExceptions;
 
 import com.yourmenu.yourmenu_api.order_client.exceptions.InvalidPhoneNumberException;
+import org.springframework.core.convert.ConversionFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -122,4 +126,5 @@ public class GlobalExceptionHandler {
                 )
         );
     }
+
 }
