@@ -67,7 +67,7 @@ public class OrderController {
     public ResponseEntity<OrderDTO> updateStatus(
             @PathVariable("restaurantId") String restaurantId,
             @PathVariable("orderId") Long orderId,
-            @RequestParam OrderStatus status) {
+            @RequestBody @Valid UpdateOrderStatusDTO status) {
         OrderDTO order = orderService.updateStatus(restaurantId, orderId, status);
         return ResponseEntity.ok(order);
     }

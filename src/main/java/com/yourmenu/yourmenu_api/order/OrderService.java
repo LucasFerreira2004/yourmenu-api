@@ -86,14 +86,14 @@ public class OrderService {
         return ordersByStatus;
     }
 
-    public OrderDTO updateStatus(String restaurantId, Long orderId, OrderStatus status) {
+    public OrderDTO updateStatus(String restaurantId, Long orderId, UpdateOrderStatusDTO statusDTO) {
         Restaurant restaurant = restaurantRepository.findByid(restaurantId);
         if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         Order order = orderRepository.findByIdByRestaurant(orderId, restaurantId);
         if (order == null) {
             throw new ResourceNotFoundException("Id do pedido");
         }
-
+        OrderStatus status = statusDTO.status();
         order.setStatus(status);
         orderRepository.save(order);
         return orderMapper.toDTO(order);
