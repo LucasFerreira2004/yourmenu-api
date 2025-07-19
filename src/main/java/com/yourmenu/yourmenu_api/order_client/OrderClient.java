@@ -28,6 +28,6 @@ public class OrderClient {
     @Column(nullable = false, columnDefinition = "text")
     private String lastName;
 
-    @Column(nullable = false, columnDefinition = "NUMERIC(11)")
-    private Long phone;
+    @Column(nullable = false, columnDefinition = "VARCHAR(11)")
+    private String phone;
 }

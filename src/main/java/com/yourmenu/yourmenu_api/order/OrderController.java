@@ -8,6 +8,7 @@ import com.yourmenu.yourmenu_api.order_client.dto.OrderClientFullDTO;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,7 +35,9 @@ public class OrderController {
     }
 
     @GetMapping("/by-date")
-    public ResponseEntity<List<OrderMinDTO>> getAllByRestaurantAndDate(@PathVariable String restaurantId, @RequestParam LocalDate date) {
+    public ResponseEntity<List<OrderMinDTO>> getAllByRestaurantAndDate(
+            @PathVariable String restaurantId,
+            @RequestParam LocalDate date) {
         List<OrderMinDTO> orders = orderService.getAllByRestaurantAndDate(restaurantId, date);
         return ResponseEntity.ok(orders);
     }
@@ -58,7 +61,9 @@ public class OrderController {
     }
 
     @GetMapping("/status/by-date")
-    public ResponseEntity<List<OrderByStatusDTO>> getAllByRestaurantDateAndStatus(@PathVariable String restaurantId, @RequestParam LocalDate date) {
+    public ResponseEntity<List<OrderByStatusDTO>> getAllByRestaurantDateAndStatus(
+            @PathVariable String restaurantId,
+            @RequestParam LocalDate date) {
         List<OrderByStatusDTO> orders = orderService.getAlByRestaurantDateAndStatus(restaurantId, date);
         return ResponseEntity.ok(orders);
     }
@@ -67,14 +72,17 @@ public class OrderController {
     public ResponseEntity<OrderDTO> updateStatus(
             @PathVariable("restaurantId") String restaurantId,
             @PathVariable("orderId") Long orderId,
-            @RequestParam OrderStatus status) {
+            @RequestBody @Valid UpdateOrderStatusDTO status) {
         OrderDTO order = orderService.updateStatus(restaurantId, orderId, status);
         return ResponseEntity.ok(order);
     }
 
     //esse get não pode ser público, só pode ser feito por adm
     @GetMapping("/summary/by-date")
-    public ResponseEntity<OrdersSumaryDTO> getSummaryByDate(@PathVariable String restaurantId, @RequestParam LocalDate date, @CurrentUser Administrator currentUser) {
+    public ResponseEntity<OrdersSumaryDTO> getSummaryByDate(
+            @PathVariable String restaurantId,
+            @RequestParam LocalDate date,
+            @CurrentUser Administrator currentUser) {
         OrdersSumaryDTO summary = orderService.getSummaryByDate(restaurantId, date, currentUser.getId());
         return ResponseEntity.ok(summary);
     }
