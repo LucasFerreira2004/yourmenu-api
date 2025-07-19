@@ -10,7 +10,8 @@ public record OrderClientSaveDTO(
         @Size(min = 2, max = 255, message = "O nome deve ter entre 2 e 255 caracteres")
         String name,
 
-        @NotNull(message = "O telefone é obrigatório")
-        @Digits(integer = 11, fraction = 0, message = "O telefone deve ter até 11 dígitos e sem casas decimais")
-        Long phone
+        @NotBlank(message = "O telefone é obrigatório")
+        @Size(min = 10, max = 11, message = "O telefone deve ter entre 10 e 11 dígitos")
+        @Digits(integer = 11, fraction = 0, message = "O telefone deve conter apenas dígitos")
+        String phone
 ) {}
