@@ -80,4 +80,11 @@ public class CategoryService {
         return CategoryMapper.toDto(category);
     }
 
+    public void createCategoriesDefault(Restaurant restaurant) {
+        categoryRepository.save(new Category(null, restaurant, "Marmitas"));
+        categoryRepository.save(new Category(null, restaurant, "Hamburgueres"));
+        categoryRepository.save(new Category(null, restaurant, "Lanches"));
+        categoryRepository.save(new Category(null, restaurant, "Bebidas"));
+        categoryRepository.save(new Category(null, restaurant, "Sobremesas"));
+    }
 }

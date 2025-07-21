@@ -3,6 +3,7 @@ package com.yourmenu.yourmenu_api.restaurant;
 import com.yourmenu.yourmenu_api.administrator.AdministratorService;
 import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursService;
 import com.yourmenu.yourmenu_api.businessHours.services.DeleteBusinessHoursService;
+import com.yourmenu.yourmenu_api.category.services.CategoryService;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
@@ -48,6 +49,9 @@ public class RestaurantService {
     @Autowired
     private ImageDefaultsProperties imageDefaultsProperties;
 
+    @Autowired
+    private CategoryService categoryService;
+
     @Value("${yourmenu.base-url:https://localhost:5137}")
     private String baseUrl;
 
@@ -63,6 +67,7 @@ public class RestaurantService {
 
         restaurantRepository.save(restaurant);
         createBusinessHoursService.execute(restaurant);
+        categoryService.createCategoriesDefault(restaurant);
         return restaurantMapper.toDTO(restaurant);
     }
 
