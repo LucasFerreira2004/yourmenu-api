@@ -10,9 +10,8 @@ public record RestaurantAddressDTO(
     @NotBlank
     String restaurantId,
 
-    @NotNull
     @NotBlank
-    Integer cep,
+    String cep,
 
     @NotBlank
     String state,

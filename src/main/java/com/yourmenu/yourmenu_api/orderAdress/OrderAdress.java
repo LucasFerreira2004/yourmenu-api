@@ -22,21 +22,21 @@ public class OrderAdress {
     private Order order;
 
     @ManyToOne()
-    @JoinColumn(name = "delivery_zone_id", nullable = false)
+    @JoinColumn(columnDefinition = "varchar(30)", name = "delivery_zone_id", nullable = false)
     private DeliveryZone deliveryZone;
 
-    @Column(name = "cep", nullable = false, length = 8)
-    private Long cep;
+    @Column(columnDefinition = "varchar(8)", name = "cep", nullable = false, length = 8)
+    private String cep;
 
-    @Column(name = "street", nullable = false, columnDefinition = "text")
+    @Column(columnDefinition = "varchar(50)",name = "street", nullable = false)
     private String street;
 
-    @Column(name = "number", nullable = false, length = 20)
+    @Column(columnDefinition = "varchar(10)", name = "number", nullable = false, length = 20)
     private String number;
 
-    @Column(name = "complement", length = 100)
+    @Column(columnDefinition = "text", name = "complement", length = 100)
     private String complement;
 
-    @Column(name = "reference", length = 100)
+    @Column(columnDefinition = "text", name = "reference", length = 100)
     private String reference;
 }

@@ -10,7 +10,7 @@ public class RestaurantAddressMapper {
     public static RestaurantAddress toEntity(RestaurantAddressSaveDTO dto, Restaurant restaurant) {
         RestaurantAddress adress = new RestaurantAddress();
         adress.setRestaurant(restaurant);
-        adress.setCep(dto.cep());
+        adress.setCep(dto.cep().replace("-", ""));
         adress.setState(dto.state());
         adress.setCity(dto.city());
         adress.setStreet(dto.street());
