@@ -18,8 +18,8 @@ public class RestaurantAddress {
     @JoinColumn(name = "restaurant_id", nullable = false, unique = true)
     private Restaurant restaurant;
 
-    @Column(columnDefinition = "numeric(8)", nullable = false)
-    private Integer cep;
+    @Column(columnDefinition = "varchar(8)", nullable = false)
+    private String cep;
 
     @Column(nullable = false)
     private String state;
