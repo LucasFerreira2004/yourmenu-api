@@ -10,7 +10,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 12345678
     volumes:
-      - pgdata-dev:/var/lib/postgresql/data-dev
+      - pgdata-dev:/var/lib/postgresql/data
     networks:
       - yourmenu-network
 
@@ -22,7 +22,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     volumes:
-      - pgadmindata-dev:/var/lib/pgadmin/data-dev
+      - pgadmindata-dev:/var/lib/pgadmin/data
     depends_on:
       - postgres
     networks:
