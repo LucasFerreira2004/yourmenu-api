@@ -22,7 +22,7 @@ public class OrderAdress {
     private Order order;
 
     @ManyToOne()
-    @JoinColumn(columnDefinition = "varchar(30)", name = "delivery_zone_id", nullable = false)
+    @JoinColumn(columnDefinition = "bigint", name = "delivery_zone_id", nullable = false)
     private DeliveryZone deliveryZone;
 
     @Column(columnDefinition = "varchar(8)", name = "cep", nullable = false, length = 8)
