@@ -14,7 +14,7 @@ public class RestaurantAddress {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "restaurant_id", nullable = false, unique = true)
     private Restaurant restaurant;
 

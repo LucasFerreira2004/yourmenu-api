@@ -1,7 +1,9 @@
 package com.yourmenu.yourmenu_api.orderItem;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -28,4 +30,8 @@ public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
         JOIN order on order.id = :orderId;
     """)
     BigDecimal findOrderPriceByOrderId (Long orderId);
+    
+    @Modifying
+    @Query("DELETE FROM OrderItem oi WHERE oi.order.restaurant.id = :restaurantId")
+    void deleteAllByRestaurantId(@Param("restaurantId") String restaurantId);
 }

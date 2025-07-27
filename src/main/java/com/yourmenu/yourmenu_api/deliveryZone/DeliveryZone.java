@@ -23,7 +23,7 @@ public class DeliveryZone {
     @Column(name = "delivery_fee", nullable = false)
     private BigDecimal deliveryFee;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 }

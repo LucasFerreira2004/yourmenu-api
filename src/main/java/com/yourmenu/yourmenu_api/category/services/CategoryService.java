@@ -97,4 +97,9 @@ public class CategoryService {
         categoryRepository.save(new Category(null, restaurant, "Bebidas"));
         categoryRepository.save(new Category(null, restaurant, "Sobremesas"));
     }
+    
+    @Transactional
+    public void deleteAllByRestaurantId(String restaurantId) {
+        categoryRepository.deleteAllByRestaurantId(restaurantId);
+    }
 }

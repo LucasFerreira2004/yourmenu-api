@@ -1,7 +1,9 @@
 package com.yourmenu.yourmenu_api.order;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -40,4 +42,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
         where date_time between :startOfDay and :endOfDay;
     """)
     Long findQtdOrdersByRestaurantAndDate(String restaurantId, LocalDateTime startOfDay, LocalDateTime endOfDay);
+    
+    @Modifying
+    @Query("DELETE FROM Order o WHERE o.restaurant.id = :restaurantId")
+    void deleteAllByRestaurantId(@Param("restaurantId") String restaurantId);
 }
