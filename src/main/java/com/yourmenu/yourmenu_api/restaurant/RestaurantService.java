@@ -4,6 +4,12 @@ import com.yourmenu.yourmenu_api.administrator.AdministratorService;
 import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursService;
 import com.yourmenu.yourmenu_api.businessHours.services.DeleteBusinessHoursService;
 import com.yourmenu.yourmenu_api.category.services.CategoryService;
+import com.yourmenu.yourmenu_api.deliveryZone.DeliveryZoneRepository;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.DishRepository;
+import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
+import com.yourmenu.yourmenu_api.order.OrderRepository;
+import com.yourmenu.yourmenu_api.orderItem.OrderItemRepository;
+import com.yourmenu.yourmenu_api.restaurantAddress.RestaurantAddressRepository;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
@@ -51,6 +57,24 @@ public class RestaurantService {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private DeliveryZoneRepository deliveryZoneRepository;
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private DishRepository dishRepository;
+
+    @Autowired
+    private RestaurantAddressRepository restaurantAddressRepository;
+
+    @Autowired
+    private DishSizeOptionRepository dishSizeOptionRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
     @Value("${yourmenu.base-url:https://localhost:5137}")
     private String baseUrl;
@@ -119,8 +143,32 @@ public class RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(restaurantId)
                 .orElseThrow(() -> new ResourceNotFoundException("id", "Restaurant not found with id: " + restaurantId));
         restaurantValidateService.validateAllToUpdate(restaurant, adminId);
-
+        
+        // 1. Deleta horários de funcionamento
         deleteBusinessHoursService.deleteBusinessHours(restaurantId);
+        
+        // 2. Deleta endereço do restaurante
+        restaurantAddressRepository.deleteByRestaurantId(restaurantId);
+        
+        // 3. Deleta zonas de entrega
+        deliveryZoneRepository.deleteAllByRestaurantId(restaurantId);
+        
+        // 4. Deleta itens de pedidos (DEVE VIR ANTES DOS PEDIDOS)
+        orderItemRepository.deleteAllByRestaurantId(restaurantId);
+        
+        // 5. Deleta pedidos (que incluem OrderAddress, OrderClient automaticamente)
+        orderRepository.deleteAllByRestaurantId(restaurantId);
+        
+        // 6. Deleta opções de tamanho dos pratos (DEVE VIR ANTES DOS PRATOS)
+        dishSizeOptionRepository.deleteAllByRestaurantId(restaurantId);
+        
+        // 7. Deleta pratos
+        dishRepository.deleteAllByRestaurantId(restaurantId);
+        
+        // 8. Deleta categorias
+        categoryService.deleteAllByRestaurantId(restaurantId);
+        
+        // 9. Finalmente deleta o restaurante
         restaurantRepository.delete(restaurant);
     }
 
@@ -142,6 +190,7 @@ public class RestaurantService {
         return restaurantMapper.toDTO(restaurantRepository.save(restaurant));
     }
 
+    @Transactional
     public RestaurantDTO deleteImageBannerRestaurant(String restaurantId, String adminId) {
         Restaurant restaurant = findAndValidatePermission(restaurantId, adminId);
 

@@ -17,7 +17,7 @@ public class BusinessHours {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id_businessHours;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "restaurant_id", nullable = false)
     private Restaurant restaurant;
 

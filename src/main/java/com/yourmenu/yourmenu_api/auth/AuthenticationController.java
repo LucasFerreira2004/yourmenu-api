@@ -7,6 +7,7 @@ import com.yourmenu.yourmenu_api.administrator.dto.AdministratorRegisterDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginDTO;
 import com.yourmenu.yourmenu_api.auth.dto.LoginResponseDTO;
 import com.yourmenu.yourmenu_api.auth.token.TokenService;
+import com.yourmenu.yourmenu_api.shared.globalExceptions.UserNotFoundException;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,9 +33,15 @@ public class AuthenticationController {
     @Autowired
     private TokenService tokenService;
 
+    @Autowired
+    private AdministratorRepository administratorRepository;
+
     @Operation(summary = "Autentica um usuario e retorna um token de accesso")
     @PostMapping("/login")
     public LoginResponseDTO login(@RequestBody @Valid LoginDTO data){
+        if(!administratorRepository.existsByEmail(data.email()))
+            throw new UserNotFoundException("email", "Não existe um usuário com o e-mail informado");
+
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
 

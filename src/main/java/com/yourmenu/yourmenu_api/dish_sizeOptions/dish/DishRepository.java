@@ -1,7 +1,9 @@
 package com.yourmenu.yourmenu_api.dish_sizeOptions.dish;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
@@ -24,4 +26,8 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
     List<Dish> findAllAvailableByCategoryIdInRestaurant(Long categoryId, String restaurantId);
 
     Boolean existsByCategoryId(Long categoryId);
+    
+    @Modifying
+    @Query("DELETE FROM Dish d WHERE d.restaurant.id = :restaurantId")
+    void deleteAllByRestaurantId(@Param("restaurantId") String restaurantId);
 }

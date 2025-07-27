@@ -5,10 +5,12 @@ import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOption
 import com.yourmenu.yourmenu_api.order.Order;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
 import com.yourmenu.yourmenu_api.order.dto.OrderSaveDTO;
+import com.yourmenu.yourmenu_api.order.exceptions.RestaurantNotOperationException;
 import com.yourmenu.yourmenu_api.orderAdress.dto.OrderAdressPostDto;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
 import com.yourmenu.yourmenu_api.order_client.dto.OrderClientSaveDTO;
 import com.yourmenu.yourmenu_api.order_client.exceptions.InvalidPhoneNumberException;
+import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantRepository;
 import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import com.yourmenu.yourmenu_api.shared.globalExceptions.ResourceNotFoundException;
@@ -39,6 +41,7 @@ public class OrderValidateService {
 
 
     public void validateToSave(OrderSaveDTO saveDTO) {
+        validateRestaurantOperation(saveDTO.restaurantId());
         validateToDishSizeOption(saveDTO.orderItems());
         validateToDeliveryZone(saveDTO.orderAdress());
         validationToPhone(saveDTO.orderClient());
@@ -63,6 +66,20 @@ public class OrderValidateService {
             throw new InvalidPhoneNumberException();
         }
 
+    }
+
+    private void validateRestaurantOperation(String restaurantId) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+
+        if(restaurant == null)
+            throw new ResourceNotFoundException(
+                    "RestaurantId",
+                    "Restaurante nao encontrado como id " + restaurantId);
+
+        if(!restaurant.getIsOpen())
+            throw new RestaurantNotOperationException(
+                    "RestaurantId",
+                    "O Restaurante não esta aberto no momento para receber novos pedidos");
     }
 
 }
