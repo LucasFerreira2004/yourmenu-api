@@ -26,7 +26,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
-      - pgdata-staging:/var/lib/postgresql/data
+      - pgdata-staging:/var/lib/postgresql/data-staging
     networks:
       - yourmenu-network
 
@@ -38,7 +38,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
       PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
     volumes:
-      - pgadmindata-staging:/var/lib/pgadmin/data
+      - pgadmindata-staging:/var/lib/pgadmin/data-staging
     depends_on:
       - postgres
     networks:

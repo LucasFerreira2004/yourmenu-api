@@ -23,5 +23,5 @@ public interface DishRepository extends JpaRepository<Dish, Long> {
     """)
     List<Dish> findAllAvailableByCategoryIdInRestaurant(Long categoryId, String restaurantId);
 
-
+    Boolean existsByCategoryId(Long categoryId);
 }
