@@ -96,7 +96,6 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
         createBusinessHoursService.execute(restaurant);
         categoryService.createCategoriesDefault(restaurant);
-        deliveryzoneService.createDeliveryZonesDefault(restaurant);
         return restaurantMapper.toDTO(restaurant);
     }
 

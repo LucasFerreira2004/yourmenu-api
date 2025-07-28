@@ -73,10 +73,4 @@ public class DeliveryZoneService {
     public void delete(Long id) {
         deliveryZoneRepository.deleteById(id);
     }
-
-    public void createDeliveryZonesDefault(Restaurant restaurant) {
-        deliveryZoneRepository.save(
-                new DeliveryZone(null, "Balcão", new BigDecimal(0), restaurant)
-        );
-    }
 }
