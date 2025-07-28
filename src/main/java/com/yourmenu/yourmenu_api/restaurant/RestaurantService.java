@@ -5,6 +5,7 @@ import com.yourmenu.yourmenu_api.businessHours.services.CreateBusinessHoursServi
 import com.yourmenu.yourmenu_api.businessHours.services.DeleteBusinessHoursService;
 import com.yourmenu.yourmenu_api.category.services.CategoryService;
 import com.yourmenu.yourmenu_api.deliveryZone.DeliveryZoneRepository;
+import com.yourmenu.yourmenu_api.deliveryZone.DeliveryZoneService;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.DishRepository;
 import com.yourmenu.yourmenu_api.dish_sizeOptions.dish_sizeOption.DishSizeOptionRepository;
 import com.yourmenu.yourmenu_api.order.OrderRepository;
@@ -76,6 +77,9 @@ public class RestaurantService {
     @Autowired
     private OrderItemRepository orderItemRepository;
 
+    @Autowired
+    private DeliveryZoneService deliveryzoneService;
+
     @Value("${yourmenu.base-url:https://localhost:5137}")
     private String baseUrl;
 
@@ -92,6 +96,7 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
         createBusinessHoursService.execute(restaurant);
         categoryService.createCategoriesDefault(restaurant);
+        deliveryzoneService.createDeliveryZonesDefault(restaurant);
         return restaurantMapper.toDTO(restaurant);
     }
 

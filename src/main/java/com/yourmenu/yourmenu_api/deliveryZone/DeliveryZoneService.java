@@ -9,6 +9,7 @@ import com.yourmenu.yourmenu_api.restaurant.RestaurantValidateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -71,5 +72,11 @@ public class DeliveryZoneService {
 
     public void delete(Long id) {
         deliveryZoneRepository.deleteById(id);
+    }
+
+    public void createDeliveryZonesDefault(Restaurant restaurant) {
+        deliveryZoneRepository.save(
+                new DeliveryZone(null, "Balcão", new BigDecimal(0), restaurant)
+        );
     }
 }
