@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.deliveryZone;
 
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "delivery_zone")
 @Data
+@AllArgsConstructor
 @NoArgsConstructor
 public class DeliveryZone {
 
