@@ -8,4 +8,5 @@ import java.util.UUID;
 public interface BusinessHoursRepository extends JpaRepository<BusinessHours, UUID> {
     List<BusinessHours> findAllByRestaurantId(String restaurantId);
     BusinessHours findByRestaurantIdAndWeekday(String restaurantId, Weekday weekday);
+    void deleteByRestaurantId(String restaurantId);
 }

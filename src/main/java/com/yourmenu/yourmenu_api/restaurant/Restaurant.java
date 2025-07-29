@@ -20,7 +20,7 @@ public class Restaurant {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "administrator_id", nullable = false)
     private Administrator administrator;
 
@@ -40,10 +40,10 @@ public class Restaurant {
     private String profilePicUrl;
 
     @Column(columnDefinition = "text")
-    private String BannerPicUrl;
+    private String bannerPicUrl;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "restaurant")
+    @OneToMany(mappedBy = "restaurant", orphanRemoval = true)
     private List<Category> categories;
 
 }

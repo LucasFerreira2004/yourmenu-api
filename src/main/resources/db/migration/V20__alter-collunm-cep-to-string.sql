@@ -1,0 +1,7 @@
+ALTER TABLE restaurant_address
+    ALTER COLUMN cep TYPE VARCHAR(8)
+    USING cep::VARCHAR;
+
+ALTER TABLE order_adress
+    ALTER COLUMN cep TYPE VARCHAR(8)
+    USING cep::VARCHAR;

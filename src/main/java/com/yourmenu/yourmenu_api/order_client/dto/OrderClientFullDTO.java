@@ -5,5 +5,5 @@ public record OrderClientFullDTO(
         Long orderId,
         String firstName,
         String lastName,
-        Long phone
+        String phone
 ) {}

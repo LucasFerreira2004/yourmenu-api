@@ -2,9 +2,9 @@ package com.yourmenu.yourmenu_api.restaurant;
 
 import com.yourmenu.yourmenu_api.administrator.Administrator;
 import com.yourmenu.yourmenu_api.administrator.AdministratorService;
-import com.yourmenu.yourmenu_api.dish_sizeOptions.dish.dto.DishDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.OpenDTO;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantDTO;
+import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantLinkDto;
 import com.yourmenu.yourmenu_api.restaurant.dto.RestaurantSaveDTO;
 import com.yourmenu.yourmenu_api.shared.notations.currentUser.CurrentUser;
 import jakarta.validation.Valid;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
-import java.util.List;
 
 @RestController
 @RequestMapping(value="/restaurant")
@@ -31,7 +30,6 @@ public class RestaurantController {
             @RequestParam(required = false, name = "profilePictureUrl") MultipartFile profilePictureUrl,
             @RequestParam(required = false, name = "bannerPictureUrl") MultipartFile bannerPictureUrl,
             @CurrentUser Administrator currentUser) {
-//        logger.info("ID DO USER: " + currentUser.getId());
 
         RestaurantDTO createdRestaurant = restaurantService.save(dto, profilePictureUrl, bannerPictureUrl, currentUser.getId());
 
@@ -108,5 +106,12 @@ public class RestaurantController {
             @PathVariable String restaurantId,
             @CurrentUser Administrator administrator) {
         return ResponseEntity.ok().body(restaurantService.deleteImageBannerRestaurant(restaurantId, administrator.getId()));
+    }
+
+    @GetMapping("/{restaurantId}/link")
+    public ResponseEntity<RestaurantLinkDto> restaurantLink(
+            @PathVariable String restaurantId) {
+        RestaurantLinkDto link = restaurantService.gerarLink(restaurantId);
+        return ResponseEntity.ok(link);
     }
 }

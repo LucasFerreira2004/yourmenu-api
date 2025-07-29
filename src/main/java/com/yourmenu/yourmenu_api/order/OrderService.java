@@ -2,6 +2,7 @@ package com.yourmenu.yourmenu_api.order;
 
 import com.yourmenu.yourmenu_api.order.dto.*;
 import com.yourmenu.yourmenu_api.order.mappers.OrderMapper;
+import com.yourmenu.yourmenu_api.order.validation.OrderValidateService;
 import com.yourmenu.yourmenu_api.orderItem.OrderItemService;
 import com.yourmenu.yourmenu_api.orderItem.dto.OrderItemSaveDTO;
 import com.yourmenu.yourmenu_api.restaurant.Restaurant;
@@ -36,21 +37,28 @@ public class OrderService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private OrderValidateService orderValidateService;
 
     public Order saveOrder(OrderSaveDTO saveDTO, String restaurantId) {
         Restaurant restaurant = restaurantRepository.findByid(restaurantId);
         if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
+        orderValidateService.validateToSave(saveDTO);
         Order order = orderMapper.toEntity(saveDTO, restaurant);
         orderRepository.save(order);
         return order;
     }
 
     public List<OrderMinDTO> getAllByRestaurant(String restaurantId) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         List<Order> orders = orderRepository.findAllByRestaurantIdOrderByDateTime(restaurantId);
         return orders.stream().map(x -> orderMapper.toMinDTO(x)).toList();
     }
 
     public List<OrderMinDTO> getAllByRestaurantAndDate(String restaurantId, LocalDate date){
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
@@ -58,6 +66,8 @@ public class OrderService {
     }
 
     public OrderDTO getById(String restaurantId, Long orderId) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order"));
         if (!order.getRestaurant().getId().equals(restaurantId))
             throw new EntityDoesNotBelongToAnotherEntityException("Order", "Restaurant");
@@ -65,6 +75,8 @@ public class OrderService {
     }
 
     public List<OrderByStatusDTO> getAlByRestaurantDateAndStatus(String restaurantId, LocalDate date){
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         List<Order> orders = orderRepository.findAllByRestaurantAndDate(restaurantId, startOfDay, endOfDay);
@@ -78,18 +90,22 @@ public class OrderService {
         return ordersByStatus;
     }
 
-    public OrderDTO updateStatus(String restaurantId, Long orderId, OrderStatus status) {
+    public OrderDTO updateStatus(String restaurantId, Long orderId, UpdateOrderStatusDTO statusDTO) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         Order order = orderRepository.findByIdByRestaurant(orderId, restaurantId);
         if (order == null) {
             throw new ResourceNotFoundException("Id do pedido");
         }
-
+        OrderStatus status = statusDTO.status();
         order.setStatus(status);
         orderRepository.save(order);
         return orderMapper.toDTO(order);
     }
 
     public OrdersSumaryDTO getSummaryByDate(String restaurantId, LocalDate date, String adminsitratorId) {
+        Restaurant restaurant = restaurantRepository.findByid(restaurantId);
+        if (restaurant == null) throw new ResourceNotFoundException("Restaurant");
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         restaurantValidateService.validateAdministratorCanEditOrViewRestaurant(restaurantId, adminsitratorId);
